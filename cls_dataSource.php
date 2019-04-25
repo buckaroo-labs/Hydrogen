@@ -1,17 +1,41 @@
 <?php
+/* Including this class file will:
+set default db connection string values as defined in settings.php
+create an array for dataSource objects
+create an array for saved SQL objects
+define the dataSource class with several handy functions
+instantiate dataSource class with defaults and save as 'default' member of datasource array
+provide the short-name $dds reference to 'default' data source
+
+
+USAGE:
+STEP ONE
+(Assuming that this file has already been included)
+--The following (using the default data source) will specify that records should be returned in 'pages' of 50,
+--then send the query,
+--and then get back a page count so that the UI can display it.
+$result = $dds->setMaxRecs(50);
+$result = $dds->setSQL($sql);
+$page_count = $dds->getPageCount();
+
+STEP TWO
+--The following code will use the dataSource class as well as the HTMLTable class (defined elsewhere) 
+--to format the records fetched from the database into an HTML table
+--(See the appropriate class file for particulars on the HTMLTable class)
+$table=new HTMLTable($dds->getFieldNames(),$dds->getFieldTypes());
+$table->start();
+while ($result_row = $dds->getNextRow()){
+	$table->addRow($result_row);
+}
+$table->finish();
+
+*/
 
 include_once (dirname(__FILE__).'/debug.php');
 require_once (dirname(__FILE__).'/../settings.php');
 /*
 
-(all this should come from /settings.php)
-set default db connection string values
-create array for dataSource objects
-create array for saved SQL objects
-define SQL statement class
-define dataSource class with lots of easy interfaces
-instantiate dataSource class with defaults and save as 'default' array member
-provide short-name $dds reference to 'default' data source
+(all this should come from /settings.php):
 
 define ("DEFAULT_DB_TYPE","oracle"); 	// set default database type
 define ("DEFAULT_DB_USER","scott"); 	// set default database user
@@ -23,16 +47,14 @@ define ("DEFAULT_MAX_RECS",150);
 
 */
 
-
-
 $dataSource=array();
 $savedSQL=array();
 
-//echo "Connected.";
-//oci_free_statement($stmt);
-//oci_close($conn);
-
 class dataSource {
+	//This class provides common functionality for various database brands. 
+	//1. The constructor provides connectivity
+	//2. Function "setSQL" parses a SQL statement and retrieves metadata
+	//Known and tested database types: Oracle, MySQL.
 
 	protected $dbconn;
 	protected $maxRecs;
@@ -48,9 +70,14 @@ class dataSource {
 	protected $page_num;
 
 	function limitSQL($sql) {
+		//This function will take a SQL statement and append a clause limiting the 
+		//number of rows returned, starting at the appropriate offset.
+				
+		//INSERT, UPDATE, and DELETE statements will be unaffected
 		if (strpos('.'.strtoupper($sql),'INSERT')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'UPDATE')==1) return $sql;
+		
 		if (!isset($this->page_num)) $this->page_num=1;
 		debug("Page num: $this->page_num");
 		if (isset($this->page_count)) {
@@ -195,6 +222,8 @@ class dataSource {
 	}
 
 	public function getInt($sql) {
+		//Assuming the SQL has already been set with an integer as the expected return type,
+		//Grab the next row and return that integer
 		if ($result_row=$this->getNextRow()) {
 				$int=(int)$result_row[0] or die ("Data type conversion error");
 				return $int;
@@ -202,6 +231,8 @@ class dataSource {
 	}
 
 	public function getString($sql) {
+		//Assuming the SQL has already been set with a string as the expected return type,
+		//Grab the next row and return that string
 		if ($result_row=$this->getNextRow()) {
 				$str=(string)$result_row[0] or die ("Data type conversion error");
 				return $str;

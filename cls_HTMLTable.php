@@ -9,6 +9,50 @@ Usage is a five-step process
 5. finish() adds the </table> tag.
 
 
+EXAMPLE:
+//Define a table based on the names and types of fields in a SQL query
+//(See class file for dataSource class for more detail)
+$table=new HTMLTable($dds->getFieldNames(),$dds->getFieldTypes());
+unset($address_classes);
+unset($linkURLs);
+unset($linkTargets);
+unset($keycols);
+unset($invisible);
+
+//Clicking on the first TD element in the row should send the user to page x, using a GET variable to be defined below
+$linkURLs[0] = '/page_x.php?id=';
+//Clicking on the next TD element in the row should send the user to page y, using a GET variable to be defined below
+$linkURLs[1] = '/page_y.php?id=';
+//Clicking on the next TD element in the row should send the user to the current page, using a GET variable to be defined below  
+$linkURLs[2] = $_SERVER['SCRIPT_NAME'] .'?id=';
+
+//Clicking on the first element in the row should open a new page
+$linkTargets[0]="_blank";
+//Clicking on the next element in the row should open a new page
+$linkTargets[1]="_blank";
+
+//If a $linkURL for the element is set, the default is to use each element's own data as the GET variable in the link
+//But in the following case, the data in the second [1] element should be used as a GET variable for the link in the third [2] TD element
+$keycols[2]=1;
+
+//TD elements are visible by default
+//In the following case, the second [1] TD element in the row should be invisible
+$invisible[1]=1;
+
+//Classes can be used by css or javascript to change the appearance of the link
+//The address tag in the first element in the row should have a class of "class_x" 
+$address_classes[0]='class_x';
+//The address tag in the next element in the row should have a class of "class_y"
+$address_classes[1]='class_y';
+
+//And now we are ready to start generating the HTML for the table:
+$table->defineRows($linkURLs,$keycols,$invisible,$address_classes,$linkTargets);
+$table->start();
+while ($result_row = $dds->getNextRow()){
+	$table->addRow($result_row);
+}
+$table->finish();
+
 */
 
 class HTMLTable {
