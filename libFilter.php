@@ -1,9 +1,11 @@
 <?php
 
+//This library is for formatting and filtering text
 function sanitizeGetVar($varname) {
 	if (isset($_GET[$varname])) return filter_var($_GET[$varname],FILTER_SANITIZE_ENCODED);
 }
 
+//You would't necessarily call this function in your app. But it produces useful testing output.
 function showExampleTable($unfilteredtext) {
 	echo("<table>");
 	$tabledata[1][0]="<tr><td>FILTER_SANITIZE_EMAIL</td><td>";				$tabledata[1][1]=filter_var($unfilteredtext,FILTER_SANITIZE_EMAIL); 			$tabledata[1][2]="</td></tr>";

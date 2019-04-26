@@ -1,12 +1,28 @@
+<?php 
+
+//$logo_image = "/images/logo.jpg";
+//$headline = "My Page"
+
+?>
 <table>
 <tbody>
 <tr>
 <td>
-<div id="logo"><img style="width: 120px; height: 120px;" alt="mem" src="/images/mem.jpg"></div>
+<?php 
+if (isset($logo_image)) {
+
+echo '<div id="logo"><img style="width: 120px; height: 120px;" alt="mem" src="' . $logo_image .'"></div>';
+}
+?>
+
 </td>
 <td>
 
-<?php echo $headline; ?>
+<?php 
+if (isset($headline)) {
+echo $headline; 
+}
+?>
 
 </td>
 </tr>

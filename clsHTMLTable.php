@@ -1,9 +1,9 @@
 <?php
 
 /*
-Usage is a five-step process
-1. The table is constructed with arrays of field names and data types.
-2. (optional) The table can be further defined (defineRows) by setting visibility and links for each field.
+USAGE:
+1. The table is constructed from arrays of field names and data types.
+2. (optional) The table can be further defined (defineRows()) by setting visibility and links for each field.
 3. start() adds the <table> tag and sets up the header row.
 4. addRow() takes an array of column values.
 5. finish() adds the </table> tag.
@@ -11,7 +11,7 @@ Usage is a five-step process
 
 EXAMPLE:
 //Define a table based on the names and types of fields in a SQL query
-//(See class file for dataSource class for more detail)
+//(See clsDataSource.php for more detail)
 $table=new HTMLTable($dds->getFieldNames(),$dds->getFieldTypes());
 unset($address_classes);
 unset($linkURLs);

@@ -1,11 +1,13 @@
+<?php
+//A footer for consistent look and feel sitewide
+?>
+
 <table class="footer">
 <tbody>
 <tr>
 <td>
 <ul class="footer">
 <li class="footer"><a class="footer_item" href="http://en.wikipedia.org/wiki/Main_Page">Donate here:</a></li>
-
-<li class="footer"><a class="footer_item" href="http://www.namebase.org/">Public Information Research</a></li>
 <li class="footer"><a class="footer_item" href="http://en.wikipedia.org/wiki/Main_Page">Wikipedia</a></li>
 </ul>
 </td>

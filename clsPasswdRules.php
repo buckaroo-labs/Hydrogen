@@ -1,4 +1,11 @@
 <?php
+
+//This class enforces rules for password length and conplexity.
+
+//NOTE: I honestly can't remember whether I wrote this or downloaded it :-(
+//It sort of looks like my work and I can't find matching text on Google,
+//So I will hope that if I have stolen it, I can be pardoned.
+
 //Assumptions:
 //(1) Passwords will never be stored as unencrypted text
 //		nor returned to the user in any form (lost passwords cannot
@@ -9,7 +16,7 @@
 
 
 
-class myPasswordRules{
+class PasswordRules{
 
 	protected $_rules;
 

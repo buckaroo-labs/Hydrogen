@@ -1,14 +1,14 @@
 <?php
 
-//Always set 'referring_page' AFTER including statusbar.php
-//It is made blank below to prevent it having stale information from some other page
+//Always set 'referring_page' AFTER including elemLoginStatusbar.php
+//It can be made blank below to prevent it having stale information from some other page
 //unset($_SESSION['referring_page']);
 
 function showLoginStatus() {
 	if (isset($_SESSION['username'])) {
 		showUsername();
 	} else {
-	echo ('<a href="/lib/login.php" class="statusbar_item">Log in</a>');
+	echo ('<a href="/Hydrogen/login.php" class="statusbar_item">Log in</a>');
 	}
 }
 
@@ -17,7 +17,7 @@ function showUsername() {
 }
 
 function showLogoutButton() {
-	echo ('	<li class="statusbar"><form class="access" id="logout" action="/lib/login.php" method="post">');
+	echo ('	<li class="statusbar"><form class="access" id="logout" action="/Hydrogen/login.php" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
 	echo ('	</form></li>');

@@ -11,17 +11,17 @@ provide the short-name $dds reference to 'default' data source
 USAGE:
 STEP ONE
 (Assuming that this file has already been included)
---The following (using the default data source) will specify that records should be returned in 'pages' of 50,
---then send the query,
---and then get back a page count so that the UI can display it.
+--The following example code(using the default data source) will specify that records should be returned in 'pages' of 50,
 $result = $dds->setMaxRecs(50);
+--then send the query,
 $result = $dds->setSQL($sql);
+--and then get back a page count so that the UI can display it.
 $page_count = $dds->getPageCount();
 
 STEP TWO
 --The following code will use the dataSource class as well as the HTMLTable class (defined elsewhere) 
 --to format the records fetched from the database into an HTML table
---(See the appropriate class file for particulars on the HTMLTable class)
+--(See clsHTMLTable.php for particulars on the HTMLTable class)
 $table=new HTMLTable($dds->getFieldNames(),$dds->getFieldTypes());
 $table->start();
 while ($result_row = $dds->getNextRow()){
@@ -31,8 +31,8 @@ $table->finish();
 
 */
 
-include_once (dirname(__FILE__).'/debug.php');
-require_once (dirname(__FILE__).'/../settings.php');
+include_once ('/Hydrogen/libDebug.php');
+require_once ('/settings.php');
 /*
 
 (all this should come from /settings.php):
