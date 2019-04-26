@@ -26,7 +26,7 @@
 
 <?php
 if (isset($facebook_page)) {
-echo ('<div class="sidebar_item" id="Facebook">')
+echo ('<div class="sidebar_item" id="Facebook">');
 echo ('<a target="_blank" href="' . $facebook_page . '">');
 echo ('<img src="/images/facebook.jpg" alt="Facebook" height="90" width="90"></a>');
 echo ('<div class="desc">Follow us on <br>');
