@@ -1,30 +1,16 @@
-<?php 
 
-//$logo_image = "/images/logo.jpg";
-//$headline = "My Page"
-
-?>
-<table>
-<tbody>
-<tr>
-<td>
-<?php 
+<div class="w3-row w3-padding-64">
+  
+ <?php 
 if (isset($logo_image)) {
-
-echo '<div id="logo"><img style="width: 120px; height: 120px;" alt="mem" src="' . $logo_image .'"></div>';
+echo '<div class="w3-third w3-container"><p class="w3-padding-large w3-padding-32 w3-center"><img src="' . $logo_image .'"></p></div>';
 }
 ?>
 
-</td>
-<td>
-
-<?php 
+ <?php 
 if (isset($headline)) {
-echo $headline; 
+echo '<div class="w3-third w3-container"><p class="w3-padding-large w3-padding-32 w3-center">'. $headline .'</div>';
 }
 ?>
 
-</td>
-</tr>
-</tbody>
-</table>
+</div>
