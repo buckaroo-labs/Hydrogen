@@ -1,29 +1,38 @@
 
 <?php
 /*****************************************************
------- login.php----------------------------
 
-2015 by Kent Heiner 
-
-Customizable access control for browser-based
-applications
+EXAMPLE USAGE:
+<?php 
+$pagetitle="Log In | MySite";
+$headline = '<h1>My Site</h1><h3>Please log in</h3>' ;
+include "Hydrogen/pgTemplate.php";
+include "Hydrogen/pgLogin.php"; 
+?>
+</body></html>
 
 ******************************************************/
 
-//Code in this file (login.php) is independent of authentication method as long as
-//the method can be implemented as a function which takes a username and password
-//as arguments and returns a "1" for success. This function goes in the following file:
-require_once('login_authenticate.php');
+// Define a login page URL in settingsLogin.php or use the default defined there.
+// Your login page may INCLUDE or REQUIRE Hydrogen/pgLogin.php but should not BE this file, as
+//    doing that either in PHP code or in a hyperlink will put the user in the Hydrogen 
+//    subdirectory rather than the directory for your app and then links will break.
+require_once ("Hydrogen/settingsLogin.php");
+
+//Code in this file (pgLogin.php) is independent of authentication method as long as
+//  the method can be implemented as a function which takes a username and password
+//  as arguments and returns a "1" (one) for success. This function goes in the following file:
+require_once('Hydrogen/libAuthenticate.php');
 
 //The following file contains settings to be customized.
-require_once('login_settings.php');
+require_once('Hydrogen/settingsLogin.php');
 
 session_start();
 
 function showUsernameAndLogoutButton() {
 	echo ('<table><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . "</td></tr></table>");
 	echo "<br><br>";
-	echo ('	<form class="access" id="logout" action="login.php" method="post">');
+	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
 	echo ('	</form>');
@@ -135,18 +144,13 @@ if ($settings['prompt_reg']==1) {
 <?php //showDebugInfo(); ?>
 
 <?php
-//to minimize clutter in this code and maximize flexibility,
-//add content in header.html to appear before the form element
-include('login_header.html');
-
 
 //We are about to put a POST variable back in the user's browser, so it is
 //necessary to sanitize it first to prevent XSS attacks, etc.
 $sanitized_uname=filter_var($_POST['uname'],FILTER_SANITIZE_ENCODED);
+echo '<form class="access" id="login" action="' . $settings['login_page'] . '" method="post">';
 ?>
 
-
-<form class="access" id="login" action="login.php" method="post">
 <table><tr><td>
 Username </td><td><input type="text" name="uname" id="id" value="
 <?php echo $sanitized_uname; ?>
@@ -160,11 +164,7 @@ Password </td><td><input type="password" name="passwd" id="pwd"><br>
 if (isset($_SESSION['errMsg'])) {
 echo ('<td class="error">' . $_SESSION['errMsg'] . "</td>");
 }
-
-
-
 ?>
-
 
 </tr></table>
 </form>
@@ -172,14 +172,8 @@ echo ('<td class="error">' . $_SESSION['errMsg'] . "</td>");
 <?php
 if ($settings['prompt_reg']==1) {
 	echo("<h2>Not a registered user?</h2>");
-	echo('<p>Register <a href="login_register.php">here</a>.</p>');
+	echo('<p>Register <a href="' . $settings['registration_page'] . '">here</a>.</p>');
 }
-
-//to minimize clutter in this code and maximize flexibility,
-//add content in footer.html to appear after the form element
-include('login_footer.html');
-
 ?>
 
-</body>
-</html>
+</body></html>

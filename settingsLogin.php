@@ -10,6 +10,8 @@ $settings['prompt_reg']='1';
 /* Include link to account maint page on login page or status bar, 1=yes; 0=no */
 $settings['account_maint']='1';
 
+if (!isset($settings['login_page'])) $settings['login_page']="login.php";
+if (!isset($settings['registration_page'])) $settings['registration_page']="register.php";
 
 ?>
 

@@ -20,6 +20,5 @@
 Remind yourself to take regular breaks from browsing
 using a free plug-in from&nbsp;<a href="http://www.stretchclock.com/"><img src="images/stretchclock-logo-dark-cropped.png" alt="StretchClock.com"></a> </td><td></td></tr></tbody></table>
 
-</body></html>
 
 
