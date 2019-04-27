@@ -1,0 +1,137 @@
+body {
+    background-color: #D1CA80;
+    margin-left: 20px;
+    font-size: 100%;
+        }
+    
+h1 {
+    color: #8C4147;
+    font-family: Verdana, Geneva, sans-serif;}
+
+h2 {
+    color: #8C4147;
+    font-family: Verdana, Geneva, sans-serif;}
+    
+p {
+    font-family: Verdana, Geneva, sans-serif;}
+
+.desc {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+/* unvisited link */
+a:link {    font-family: Verdana, Geneva, sans-serif;    color: #BB4E1C;}
+
+/* visited link */
+a:visited {    font-family: Verdana, Geneva, sans-serif;    color: #000000;}
+
+/* mouse over link */
+a:hover {    font-family: Verdana, Geneva, sans-serif;    color: #FF0000;}
+
+/* selected link */
+a:active {    font-family: Verdana, Geneva, sans-serif;    color: #FF0000;}
+
+#logo {float: left;    margin-right: 30px;}
+
+#sidebar {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	float: left;
+	text-align: center;
+	max-width: 140px;
+	background-color: #ffffff;
+}
+
+.sidebar_item {
+    margin-top: 0px;
+    margin-bottom: 40px;
+    
+}
+
+
+#footer {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 150px;
+    margin-left: 250px;
+}
+
+div {
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+#main {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 150px;
+    margin-left: 250px;
+    }
+
+table.menubar { background-color: #000000; width: 100%;}
+    
+a.menubar_item:link, a.menubar_item:visited {
+    display: block;
+    width: 120px;
+    font-weight: bold;
+    color: #FFFF66;
+    background-color: #000000;
+    text-align: center;
+    padding: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+a.menubar_item:hover, a.menubar_item:active {
+    background-color: #777777;
+}   
+
+ul.menubar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li.menubar {    float: left;}
+
+
+table.footer { background-color: #000000; width: 100%; float: bottom;}
+
+a.footer_item:link, a.footer_item:visited {
+    display: block;
+    color: #FFFF66;
+    background-color: #000000;
+    text-align: center;
+    padding: 4px;
+    text-decoration: none;
+}
+
+a.footer_item:hover, a.footer_item:active {
+    background-color: #777777;
+} 
+
+table.courselist {
+    font-family:  Verdana, Geneva, sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+    }
+
+table.courselist th {     font-size: 1.1em;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #000000;
+    color: #ffff77;}
+
+table.courselist td {    font-size: 1em;
+    border: 1px solid #888888;
+    padding: 3px 7px 2px 7px;
+    background-color: #F3F3F3;}
+    
+    
+tr.alt td {
+    color: #000000;
+    background-color: #EEEECC;
+}    
+
+table.crawler td {  font-family: Verdana, Geneva, sans-serif; float: bottom; }
