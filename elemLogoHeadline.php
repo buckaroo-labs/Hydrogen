@@ -3,7 +3,7 @@
   
  <?php 
 if (isset($logo_image)) {
-echo '<div class="w3-third w3-container"><p class="w3-padding-large w3-padding-32 w3-center"><img src="' . $logo_image .'"></p></div>';
+echo '<div class="w3-third w3-container w3-hide-medium w3-hide-small"><p class="w3-padding-large w3-padding-32 w3-center "><img src="' . $logo_image .'"></p></div>';
 }
 ?>
 

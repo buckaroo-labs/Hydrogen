@@ -24,9 +24,6 @@ require_once ("Hydrogen/settingsLogin.php");
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
 require_once('Hydrogen/libAuthenticate.php');
 
-//The following file contains settings to be customized.
-require_once('Hydrogen/settingsLogin.php');
-
 session_start();
 
 function showUsernameAndLogoutButton() {
@@ -53,18 +50,6 @@ function logOut() {
 	//clear the session variables to log them out
 	$_SESSION=array();
 }
-
-?>
-
-<html>
-<head>
-<title>Login page</title>
-<link rel="stylesheet" type="text/css" href="/style.css">
-</head>
-<body>
-
-
-<?php
 
 //showDebugInfo();
 
@@ -176,4 +161,3 @@ if ($settings['prompt_reg']==1) {
 }
 ?>
 
-</body></html>

@@ -15,40 +15,27 @@ function showLoginStatus() {
 	if (isset($_SESSION['username'])) {
 		showUsername();
 	} else {
-	echo ('<a href="' . $settings['login_page'] . '" class="statusbar_item">Log in</a>');
+	echo ('<a href="' . $settings['login_page'] . '" class="w3-bar-item w3-button w3-hover-white">Log in</a>');
 	}
 }
 
 function showUsername() {
-	echo ('<div class="loginStatus">Logged in as ' . $_SESSION['username'] . "</div> ");
+	echo ('<a href="#" class="w3-bar-item w3-button w3-medium w3-hide-small w3-hover-white">Logged in as ' . $_SESSION['username'] . "</a>");
 }
 
 function showLogoutButton() {
 	global $settings;
-	echo ('	<li class="statusbar"><form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
+	echo ('	<span class="w3-bar-item w3-button w3-medium"><form id="logout" action="' . $settings['login_page'] . '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
-	echo ('	</form></li>');
+	echo ('	</form></span>');
 }
 
 ?>
 
-<table class="statusbar">
-<tbody>
-<tr>
-<td>
-<ul class="statusbar">
-<li class="statusbar">
-<?php showLoginStatus() ?>
-</li>
-
-<?php if (isset($_SESSION['username'])) {
+<?php 
+showLoginStatus(); 
+if (isset($_SESSION['username'])) {
 	showLogoutButton() ;
 }
- ?>
-
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+?>

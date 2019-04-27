@@ -7,11 +7,9 @@
     <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Values</a>
     <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>
     <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Clients</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Partners</a>
 	<?php 
-		//include('Hydrogen/elemSearchForm.php');  
-		//include('Hydrogen/elemLoginStatusbar.php'); 
+		include('Hydrogen/elemSearchForm.php');  
+		include('Hydrogen/elemLoginStatusbar.php'); 
 	?>
   </div>
 </div>
