@@ -5,10 +5,25 @@
 EXAMPLE USAGE:
 <?php 
 $pagetitle="Log In | MySite";
-$headline = '<h1>My Site</h1><h3>Please log in</h3>' ;
 include "Hydrogen/pgTemplate.php";
-include "Hydrogen/pgLogin.php"; 
 ?>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+
+	<?php include "Hydrogen/pgLogin.php"; ?>
+
+    </div>
+    <div class="w3-third w3-container">
+    </div>
+  </div>
+
+</div>
+
+<?php include "Hydrogen/elemFooter.php"; ?>
 </body></html>
 
 ******************************************************/
@@ -23,9 +38,6 @@ require_once ("Hydrogen/settingsLogin.php");
 //  the method can be implemented as a function which takes a username and password
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
 require_once('Hydrogen/libAuthenticate.php');
-
-//The following file contains settings to be customized.
-require_once('Hydrogen/settingsLogin.php');
 
 session_start();
 
@@ -53,18 +65,6 @@ function logOut() {
 	//clear the session variables to log them out
 	$_SESSION=array();
 }
-
-?>
-
-<html>
-<head>
-<title>Login page</title>
-<link rel="stylesheet" type="text/css" href="/style.css">
-</head>
-<body>
-
-
-<?php
 
 //showDebugInfo();
 
@@ -176,4 +176,3 @@ if ($settings['prompt_reg']==1) {
 }
 ?>
 
-</body></html>

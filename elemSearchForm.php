@@ -1,9 +1,6 @@
-<td><ul class="menubar" id="searchform">
-<li class="menubar">
-<form  action="search.php">
+<span class="w3-bar-item w3-button w3-medium w3-hide-small">
+<form action="search.php">
 <input type="text" name="q" >
 <input type="submit" value="Search">
 </form>
-</li>
-</ul>
-</td>
+</span>

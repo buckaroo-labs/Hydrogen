@@ -1,6 +1,8 @@
-<?php 
+<?php
+//This file and the "Hydrogen/elem*.php" includes are a PHP adapatation of the HTML/CSS template at
+// https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_webpage&stacked=h
 
-// This is a template to include in your app's pages if you want
+//Include this file in your app's pages if you want
 // a consistent look (menu bar, sidebar, etc.) from page to page
 
 //EXAMPLE PAGE:
@@ -10,44 +12,81 @@ $pagetitle="Home | MySite";
 $headline = '<h1>My Site</h1><h3>My super awesome tagline</h3>' ;
 include "Hydrogen/pgTemplate.php";
 ?>
-<div id="main"><P>This is the home page for my new site.</P></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+<?php include 'Hydrogen/elemLogoHeadline.php';  	 ?>
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Heading</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
+        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+    </div>
+  </div>
+
+  <!-- Pagination 
+  <div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+      <a class="w3-button w3-black" href="#">1</a>
+      <a class="w3-button w3-hover-black" href="#">2</a>
+      <a class="w3-button w3-hover-black" href="#">»</a>
+    </div>
+  </div>
+   -->
+
+<!-- END MAIN -->
+</div>
+
 <?php include "Hydrogen/elemFooter.php"; ?>
 </body></html>
 */
+
    
 if(!isset($_SESSION)) session_start(); 
-require_once 'settings.php';
+require_once 'settings.php';  
+
 ?>
 
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="Hydrogen/style.css">
-<meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<?php  if (isset($pagetitle)) {
+<!DOCTYPE html>
+<html lang="en">
+<?php
+
+if (isset($pagetitle)) {
 echo "<title>" . $pagetitle . "</title>";
 //to prevent unintentionally setting the same title on subsequent pages using this template
 unset ($pagetitle);
 }
 ?>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
 <body>
 
-<?php
+<?php 
+	include 'Hydrogen/elemNavbar.php';  
+	include 'Hydrogen/elemSidebar.php'; 
+// include 'Hydrogen/elemAnalytics.php';
 
-//Any of these elements can be switched off at the template level
-
-// include 'Hydrogen/elemAnalytics.php';  
-include 'Hydrogen/elemMenubar.php';  
-include 'Hydrogen/elemLogoHeadline.php';  
-include 'Hydrogen/elemSidebar.php'; 
-
-//This template does NOT include the footer template (elemFooter.php) 
-//or ending </BODY> or </HTML> tags.
-//These should appear AFTER the individual page content.
-
-?>
-
+?> 
 
 
