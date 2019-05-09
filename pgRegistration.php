@@ -24,14 +24,7 @@ if (isset($_POST['pwd'])) {
 $rules=$rules . implode('<br>',$myPR->showRules());
 ?>
 
-<html>
-<head>
-<title>Registration Form</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="style.css" rel="stylesheet" type="text/css">
-</head>
 
-<body>
       <h2>Registration form</h2>
       <p>Registration is quick and free! All fields below are required.</p>
 	  <p>
@@ -80,5 +73,4 @@ $rules=$rules . implode('<br>',$myPR->showRules());
           <input name="btnRegister" type="submit" id="Register" value="Register">
         </p>
       </form>
-</body>
-</html>
+

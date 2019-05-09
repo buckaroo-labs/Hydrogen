@@ -3,6 +3,8 @@
 //$facebook_page = "https://www.facebook.com/pages/MyPageName/1234567890";
 
 if (!isset($sidebar_links)) {
+	//These are the (demo) defaults. Override them in an included settings file and/or page template.
+
 	$sidebar_links[0]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
 	$sidebar_links[1]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
 	$sidebar_links[2]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
@@ -15,7 +17,7 @@ if (!isset($sidebar_links)) {
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
     <i class="fa fa-remove"></i>
   </a>
-
+ <h4 class="w3-bar-item"><b>Menu</b></h4>
 <?php  
 
 $arrlength=count($sidebar_links);

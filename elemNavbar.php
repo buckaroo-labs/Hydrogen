@@ -1,5 +1,7 @@
 <?php 
 if (!isset($navbar_links)) {
+	//These are the (demo) defaults. Override them in an included settings file and/or page template.
+
 	$navbar_links[0]=array("name"=>'Logo',"href"=>"#","class"=>"w3-theme-l1");
 	//Put your log image here below in place of "Logo" text above
 	//$navbar_links[0]=array("name"=>'<img src="images/logo_thumbnail.jpg">',"href"=>"#","class"=>"w3-theme-l1");
@@ -16,13 +18,15 @@ if (!isset($navbar_links)) {
 
 <?php 
 
-$arrlength=count($navbar_links);
-for($x=0;$x<$arrlength;$x++)   {
-  echo '<a href="' . $navbar_links[$x]['href'] . '" class="w3-bar-item w3-button ' . $navbar_links[$x]['class'] . '">' . $navbar_links[$x]['name'] . '</a>';
-  echo "";
-}
-if (isset($hideSearchForm)) include('Hydrogen/elemSearchForm.php');  
-if (isset($hideLoginStatus)) include('Hydrogen/elemLoginStatusbar.php'); 
+	$arrlength=count($navbar_links);
+	for($x=0;$x<$arrlength;$x++)   {
+	  echo '<a href="' . $navbar_links[$x]['href'] . '" class="w3-bar-item w3-button ' . $navbar_links[$x]['class'] . '">' . $navbar_links[$x]['name'] . '</a>';
+	  echo "";
+	}
+	//default behavior is to show the search form and login status.
+		
+	if (isset($hideSearchForm)) include('Hydrogen/elemSearchForm.php');  
+	if (isset($hideLoginStatus)) include('Hydrogen/elemLoginStatusbar.php'); 
 ?>
   </div>
 </div>
