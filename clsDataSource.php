@@ -32,7 +32,7 @@ $table->finish();
 */
 
 include_once ('Hydrogen/libDebug.php');
-require_once ('settings.php');
+require_once ('settingsHydrogen.php');
 /*
 
 (all this should come from /settings.php):

@@ -1,6 +1,6 @@
 <?php
 //Debug output path DEBUG_PATH is defined in settings.php
-require_once ('settings.php');
+require_once ('settingsHydrogen.php');
 function debug($info){
 	if (DEBUG) {
 

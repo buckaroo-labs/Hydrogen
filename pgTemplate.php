@@ -49,8 +49,8 @@ include "Hydrogen/pgTemplate.php";
 
    
 if(!isset($_SESSION)) session_start(); 
-require_once 'settings.php';  
-
+require_once 'settingsHydrogen.php';  
+require_once 'settingsPasswords.php';
 ?>
 
 
