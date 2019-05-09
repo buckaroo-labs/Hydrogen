@@ -31,8 +31,8 @@ $table->finish();
 
 */
 
-include_once ('/Hydrogen/libDebug.php');
-require_once ('/settings.php');
+include_once ('Hydrogen/libDebug.php');
+require_once ('settings.php');
 /*
 
 (all this should come from /settings.php):
