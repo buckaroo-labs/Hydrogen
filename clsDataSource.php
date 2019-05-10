@@ -222,21 +222,25 @@ class dataSource {
 	}
 
 	public function getInt($sql) {
-		//Assuming the SQL has already been set with an integer as the expected return type,
+		//Assuming the SQL has an integer as the expected return type,
 		//Grab the next row and return that integer
-		if ($result_row=$this->getNextRow()) {
-				$int=(int)$result_row[0] or die ("Data type conversion error");
+		$result = $this->setSQL($sql);
+		//if ($result_row=$this->getNextRow()) {
+				$result_row=$this->getNextRow();
+				$int=(int)$result_row[0]; //or die ("getInt: Data type conversion error with SQL: " .$sql . " and result data:" . $result_row[0] );
 				return $int;
-		}
+		//}
 	}
 
 	public function getString($sql) {
-		//Assuming the SQL has already been set with a string as the expected return type,
+		//Assuming the SQL has  a string as the expected return type,
 		//Grab the next row and return that string
-		if ($result_row=$this->getNextRow()) {
-				$str=(string)$result_row[0] or die ("Data type conversion error");
+		$result = $this->setSQL($sql);
+		//if ($result_row=$this->getNextRow()) {
+				$result_row=$this->getNextRow();
+				$str=(string)$result_row[0]; //or die ("getString: Data type conversion error with SQL: " . $sql);
 				return $str;
-		}
+		//}
 	}
 
 	public function getNextRow($arraytype="indexed") {

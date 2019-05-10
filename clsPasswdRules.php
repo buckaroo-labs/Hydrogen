@@ -15,6 +15,15 @@
 //NOTE: HTML encoding changes the length of the password string!
 
 
+//USAGE: 
+/*
+$myPR=new PasswordRules(false);
+$myPR->addRule("min",12,"/\S/","character");
+$pw_result=$myPR->checkPassword($_POST['pwd']);
+
+
+
+*/
 
 class PasswordRules{
 
@@ -33,10 +42,11 @@ class PasswordRules{
 		return$retval;
 	}
 
-	public function __construct() {
+	public function __construct($useDefaults=true) {
 	//modify this function to turn rules on/off or to change their criteria
+		if ($useDefaults) {
 		$this->_rules = array(
-			//active (1/0), type, value, search pattern, explanation, satisfied (true/false)
+			//active (1/0), type, value, search pattern, description, satisfied (true/false)
 			array(1, 'min', 8,	'/\S/',					'character', 			false),
 			array(1, 'min', 1,	'/[A-Z]/',				'upper case letter', 	false),
 			array(1, 'min', 1,	'/[a-z]/',				'lower case letter', 	false),
@@ -44,7 +54,16 @@ class PasswordRules{
 			array(1, 'min', 1,	'/[^a-zA-Z0-9]/',		'non-alphanumeric character', false),
 			array(1, 'max', 99,	'/\S/',					'character', 			false)
 			);
+		}
 	}
+	
+	public function addRule($type,$value,$pattern,$description) {
+		$index=count($this->_rules);
+		if ($type=="min") $this->_rules[$index]=array(1,'min',$value,$pattern,$description,false);
+		if ($type=="max") $this->_rules[$index]=array(1,'max',$value,$pattern,$description,false);
+		return 1;
+	}
+	
 
 	public function filterPassword($password) {
 		//This function has no connection to what goes on in the rest of the class!

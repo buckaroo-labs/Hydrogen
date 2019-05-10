@@ -60,31 +60,8 @@ class SQLBuilder{
 		SQLBuilder1.addColumn("column_name", "6");
 		//column for select with alias
 		SQLBuilder1.addColumn("column_name", "column_alias");
-		//NOTE: Use literal marks for case-sensitive or multi-word aliases
-		SQLBuilder1.addColumn("column_name", "'column alias'");
-		
-		//NOTE: Add literal marks for string insert/update
-		SQLBuilder1.addColumn("MyStringColumn", "'string value'");
-		//NOTE: not sure if this will work
-		SQLBuilder1.addColumn("MyStringColumn", '"string value"');
-		//NOTE: or this
-		SQLBuilder1.addColumn("MyStringColumn", '"string's value"');
-		
-		
-		ON SECOND THOUGHT . . . test for integer cast and then enclose non-ints in single-ticks
-		$colValue will have to be HTML- or url-encoded if it contains any quotation marks.
-		
-		
-		//column for select  
-		SQLBuilder1.addColumn("column_name");	
-		//(Number) column for insert/update
-		SQLBuilder1.addColumn("column_name", "6");
-		//column for select with alias
-		SQLBuilder1.addColumn("column_name", "column_alias");
 		//NOTE: Use url encoding for multi-word aliases
 		SQLBuilder1.addColumn("column_name", "column%20alias");
-		
-		what about numeric input to be stored as string?
 		
 		
 		*/
