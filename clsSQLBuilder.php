@@ -77,6 +77,11 @@ class SQLBuilder{
 			//$colValue = "'" . $colValue . "'";
 		}
 		
+		
+		//HTML encode quotation marks
+		 $colValue = str_replace("'","&rsquo;",$colValue);
+		 $colValue = str_replace('"',"&quot;",$colValue);
+		
 		//check for illegal characters
 		//the following will be regarded as harmless
 		$test = str_replace(' ', '', $colValue);
