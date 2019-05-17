@@ -1,5 +1,6 @@
 # Hydrogen
-Library of basic building blocks for a LAMP app with responsive web design.
+=======
+Library of basic building blocks for an xAMP app.
 
 Clone or copy the files into a "Hydrogen" folder in the web root.
 

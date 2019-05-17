@@ -7,6 +7,7 @@ if (!isset($footer_text)) $footer_text="<h4>Default footer text</h4>";
   <footer id="myFooter">
     <div class="w3-container w3-theme-l2 w3-padding-32">
       <?php echo $footer_text; ?>
+
     </div>
 
     <div class="w3-container w3-theme-l1">

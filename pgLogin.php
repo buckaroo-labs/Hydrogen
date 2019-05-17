@@ -41,6 +41,7 @@ require_once('Hydrogen/libAuthenticate.php');
 
 if (!isset($_SESSION['username'])) session_start();
 
+
 function showUsernameAndLogoutButton() {
 	echo ('<table><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . "</td></tr></table>");
 	echo "<br><br>";
