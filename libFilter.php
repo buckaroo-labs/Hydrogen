@@ -1,8 +1,12 @@
 <?php
 
 //This library is for formatting and filtering text
-function sanitizeGetVar($varname) {
-	if (isset($_GET[$varname])) return filter_var($_GET[$varname],FILTER_SANITIZE_ENCODED);
+function sanitizeGetVar($varname, $method=FILTER_SANITIZE_ENCODED) {
+	if (isset($_GET[$varname])) return filter_var($_GET[$varname],$method);  else return '';
+}
+
+function sanitizePostVar($varname, $method=FILTER_SANITIZE_ENCODED) {
+	if (isset($_POST[$varname])) return filter_var($_POST[$varname],$method); else return '';
 }
 
 //You would't necessarily call this function in your app. But it produces useful testing output.

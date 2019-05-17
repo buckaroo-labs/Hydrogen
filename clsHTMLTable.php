@@ -69,8 +69,8 @@ class HTMLTable {
 	}
 
 	public function start() {
-		echo ('<table class="sortable"><tr>');
-
+		//echo ('<table class="sortable"><tr>');
+		echo ('<table class="sortable w3-table-all"><tr>');
 		$arraylength=count($this->fieldNames);
 		//echo ('<th>array length: '.$arraylength.'</th>');
 		for ($field =0; $field < $arraylength; $field++) {

@@ -49,7 +49,10 @@ include "Hydrogen/pgTemplate.php";
 
    
 if(!isset($_SESSION)) session_start(); 
-require_once 'settings.php';  
+require_once 'settingsHydrogen.php';  
+require_once 'settingsPasswords.php';
+if(!isset( $settings['search_page'])) $settings['search_page']="/";
+if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
 ?>
 
@@ -80,6 +83,9 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   height: inherit;
 }
 </style>
+<script src="/scripts/sorttable.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <body>
 
 <?php 

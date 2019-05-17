@@ -1,11 +1,11 @@
 <?php
-include_once ('/Hydrogen/libFilter.php');
+include_once ('Hydrogen/libFilter.php');
 
 //This library is used to maintain state between page clicks.
 //See e.g. libPagination.php
 
 //declare a list of GET variables to be maintained and sanitized
-$stateVarList=array('sortorder','userid','productid');
+if (!isset($stateVarList)) $stateVarList=array('sortorder','userid','productid');
 $arrlength = count($stateVarList);
 $stateVar=array();
 
@@ -25,7 +25,7 @@ function newVars($pg,$oldvar=array()) {
 	$retval="?pagenum=" . $pg;
 	foreach ($oldvar as $key => $value) {
 		if (isset($value)) {
-			$retval=$retval . "&" . $key  . "=" . $value ;
+			if ($value!="") $retval=$retval . "&" . $key  . "=" . $value ;
 		}
 	}
 	return $retval;

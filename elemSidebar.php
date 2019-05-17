@@ -1,6 +1,15 @@
 <?php
 //A sidebar for consistent look and feel sitewide
 //$facebook_page = "https://www.facebook.com/pages/MyPageName/1234567890";
+
+if (!isset($sidebar_links)) {
+	//These are the (demo) defaults. Override them in an included settings file and/or page template.
+
+	$sidebar_links[0]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
+	$sidebar_links[1]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
+	$sidebar_links[2]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
+	$sidebar_links[3]=array("name"=>"Link","href"=>"#","class"=>"w3-hide-small w3-hover-black");
+}
 ?>
 
 <!-- Sidebar -->
@@ -8,12 +17,17 @@
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
     <i class="fa fa-remove"></i>
   </a>
-  <h4 class="w3-bar-item"><b>Menu</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-<?php  if (isset($facebook_page)) {
+ <h4 class="w3-bar-item"><b>Menu</b></h4>
+<?php  
+
+$arrlength=count($sidebar_links);
+for($x=0;$x<$arrlength;$x++)   {
+  echo '<a href="' . $sidebar_links[$x]['href'] . '" class="w3-bar-item w3-button ' . $sidebar_links[$x]['class'] . '">' . $sidebar_links[$x]['name'] . '</a>';
+  echo "";
+}
+
+
+if (isset($facebook_page)) {
 echo ('<a target="_blank" class="w3-bar-item w3-button w3-hover-black" href="' . $facebook_page . '"><img src="/images/facebook.jpg" alt="Facebook" height="90" width="90"></a>');
 }
 ?>
@@ -39,6 +53,7 @@ function w3_open() {
     overlayBg.style.display = "block";
   }
 }
+
 
 // Close the sidebar with the close button
 function w3_close() {
