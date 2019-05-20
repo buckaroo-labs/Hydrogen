@@ -3,7 +3,7 @@
 /*****************************************************
 
 EXAMPLE USAGE:
-<?php 
+<?php
 $pagetitle="Log In | MySite";
 include "Hydrogen/pgTemplate.php";
 ?>
@@ -30,7 +30,7 @@ include "Hydrogen/pgTemplate.php";
 
 // Define a login page URL in settingsLogin.php or use the default defined there.
 // Your login page may INCLUDE or REQUIRE Hydrogen/pgLogin.php but should not BE this file, as
-//    doing that either in PHP code or in a hyperlink will put the user in the Hydrogen 
+//    doing that either in PHP code or in a hyperlink will put the user in the Hydrogen
 //    subdirectory rather than the directory for your app and then links will break.
 require_once ("Hydrogen/settingsLogin.php");
 
@@ -39,7 +39,7 @@ require_once ("Hydrogen/settingsLogin.php");
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
 require_once('Hydrogen/libAuthenticate.php');
 
-if (!isset($_SESSION['username'])) session_start();
+if (session_status() == PHP_SESSION_NONE) session_start();
 
 
 function showUsernameAndLogoutButton() {
@@ -87,7 +87,7 @@ if (isset($_SESSION['username'])) {
 
 
 
-//-------------all IF blocks have completed by this point-------------------- 
+//-------------all IF blocks have completed by this point--------------------
 
 
 
