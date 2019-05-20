@@ -43,7 +43,7 @@ if (!isset($_SESSION['username'])) session_start();
 
 
 function showUsernameAndLogoutButton() {
-	echo ('<table><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . "</td></tr></table>");
+	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . "</td></tr></table>");
 	echo "<br><br>";
 	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
@@ -86,11 +86,10 @@ if (isset($_SESSION['username'])) {
 }
 
 
-?>
 
-<!-- //-------------all IF blocks have completed by this point-------------------- -->
+//-------------all IF blocks have completed by this point-------------------- 
 
-<?php
+
 
 //The user is not logged in, so figure out if the user has supplied credentials
 //(i.e. whether this page has called itself from the login form submit button)
@@ -158,7 +157,7 @@ Username </td><td><input type="text" name="uname" id="id" value="
 "</td></tr><tr><td>
 Password </td><td><input type="password" name="passwd" id="pwd"><br>
 <tr><td>
-<input type="submit" value="Log in">
+<input name="btnSubmit" type="submit" value="Log in">
 </td>
 
 <?php
