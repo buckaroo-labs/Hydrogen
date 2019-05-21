@@ -5,6 +5,7 @@ require_once ('Hydrogen/clsDataSource.php');
 //The default behavior is to disallow usernames 
 //	which would match if forced to same case
 if (!isset($caseSensitiveUsernames)) $caseSensitiveUsernames = false;
+if (!isset($settings['DATAFILE_PATH'])) $settings['DATAFILE_PATH'] = dirname(__file__);
 
 function lookUpUsername($username) {
 	global $dds;
@@ -26,7 +27,7 @@ function lookUpUsername($username) {
 
 function authenticate($username, $password) {
 $success=0;
-
+global $settings;
 	//this is dumb but simple
 /*
 	if ($username=="test" and $password=="foo") {		
@@ -54,14 +55,14 @@ $success=0;
 		$intResult = $dds->getInt($sql);
 		if ($intResult > 0) {
 			$success=1;
-			$filepath=DATAFILE_PATH . '/user_login.log';
+			$filepath=$settings['DATAFILE_PATH'] . '/user_login.log';
 			$fp = fopen($filepath, 'a');
 			fwrite($fp,  $username . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
 			fclose($fp);
 		} 
 	} else {
 		$_SESSION['errMsg']='Invalid username/password.';
-		$filepath=DATAFILE_PATH . '/failed_login_attempts.log';
+		$filepath=$settings['DATAFILE_PATH'] . '/failed_login_attempts.log';
 		$fp = fopen($filepath, 'a');
 		fwrite($fp,  $username . ',' . $password . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
 		fclose($fp);
