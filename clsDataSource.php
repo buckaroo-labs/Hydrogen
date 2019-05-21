@@ -32,20 +32,17 @@ $table->finish();
 */
 
 include_once ('Hydrogen/libDebug.php');
-require_once ('settingsHydrogen.php');
-/*
+include_once ('settingsHydrogen.php');
 
-(all this should come from /settings.php):
+//(all this should come from settingsHydrogen.php):
+if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "oracle";
+if (!isset($settings['DEFAULT_DB_USER'])) $settings['DEFAULT_DB_USER'] = "scott";
+if (!isset($settings['DEFAULT_DB_PASS'])) $settings['DEFAULT_DB_PASS'] = "tiger";
+if (!isset($settings['DEFAULT_DB_HOST'])) $settings['DEFAULT_DB_HOST'] = "localhost";
+if (!isset($settings['DEFAULT_DB_PORT'])) $settings['DEFAULT_DB_PORT'] = "1521";
+if (!isset($settings['DEFAULT_DB_INST'])) $settings['DEFAULT_DB_INST'] = "XE";
+if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 150;
 
-define ("DEFAULT_DB_TYPE","oracle"); 	// set default database type
-define ("DEFAULT_DB_USER","scott"); 	// set default database user
-define ("DEFAULT_DB_PASS","tiger"); // set default database password
-define ("DEFAULT_DB_HOST","localhost"); // set default database host
-define ("DEFAULT_DB_PORT","1521"); 	// set default database port
-define ("DEFAULT_DB_INST","XE"); 		// set default database name/instance/schema
-define ("DEFAULT_MAX_RECS",150);
-
-*/
 
 $dataSource=array();
 $savedSQL=array();
@@ -100,13 +97,22 @@ class dataSource {
 	}
 
 	public function __construct(
-		$dbType=DEFAULT_DB_TYPE,
-		$dbUser=DEFAULT_DB_USER,
-		$dbPass=DEFAULT_DB_PASS,
-		$dbHost=DEFAULT_DB_HOST,
-		$dbPort=DEFAULT_DB_PORT,
-		$dbInst=DEFAULT_DB_INST) {
+		$dbType="xNULLx",
+		$dbUser="xNULLx",
+		$dbPass="xNULLx",
+		$dbHost="xNULLx",
+		$dbPort="xNULLx",
+		$dbInst="xNULLx") {
+		global $settings;
 		debug("Constructing dataSource class");
+		
+		if($dbType=="xNULLx") $dbType=$settings['DEFAULT_DB_TYPE'];
+		if($dbUser=="xNULLx") $dbUser=$settings['DEFAULT_DB_USER'];
+		if($dbPass=="xNULLx") $dbPass=$settings['DEFAULT_DB_PASS'];
+		if($dbHost=="xNULLx") $dbHost=$settings['DEFAULT_DB_HOST'];
+		if($dbPort=="xNULLx") $dbPort=$settings['DEFAULT_DB_PORT'];
+		if($dbInst=="xNULLx") $dbInst=$settings['DEFAULT_DB_INST'];
+		
 		$this->setMaxRecs();
 		$this->dbType=$dbType;
 		switch ($this->dbType) {
@@ -128,7 +134,9 @@ class dataSource {
 		}
 	}
 
-	public function setMaxRecs($int=DEFAULT_MAX_RECS) {
+	public function setMaxRecs($int=0) {
+		global $settings;
+		if($int==0) $int=$settings['DEFAULT_DB_MAXRECS'];
 		$this->maxRecs=$int;
 	}
 
