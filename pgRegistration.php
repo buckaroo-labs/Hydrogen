@@ -87,35 +87,35 @@ if (isset($_POST['email'])) {
 	  
          <table>
           <tr>
-            <td>Choose your username</td>
+            <td>Choose your username: </td>
             <td><input name="username" type="text" id="user_name" minlength="4" maxlength="30" size="25" value="<?php if(isset($_POST['username'])) echo $username; ?>">
 			
 			<?php if($registration_message != $registration_success)
-				echo '<input name="btnAvailable" type="button" id="btnAvailable" 		  value="Check Availability">';
+				//echo '<input name="btnAvailable" type="button" id="btnAvailable" 		  value="Check Availability">';
 			?>
 			
               </td>
           </tr>
           <tr>
-		    <td>first_name</td>
+		    <td>First name: </td>
             <td><input name="first_name" type="text" id="fname"  maxlength="30" size="25" value="<?php if(isset($_POST['username'])) echo $first_name; ?>"></td>
 		  </tr>
 		  <tr>
-		     <td>last_name</td>
+		     <td>Last name: </td>
 		     <td><input name="last_name" type="text" id="lname"  maxlength="30" size="25" value="<?php if(isset($_POST['username'])) echo $last_name; ?>"></td>
 		  </tr>
           <tr>
           <tr>
-            <td>E-mail</td>
+            <td>E-mail: </td>
             <td><input name="email" type="text" id="usr_email"  maxlength="30" size="25" value="<?php if(isset($_POST['username'])) echo $email; ?>"></td>
           </tr>
 		  
           <tr>
-            <td>Password</td>
+            <td>Password: </td>
             <td><input name="password" type="password" id="pwd"  maxlength="30" size="25"></td>
           </tr>
           <tr>
-            <td>Re-enter password</td>
+            <td>Re-enter password: </td>
             <td><input name="password2"  id="pwd2" type="password"  maxlength="30" size="25" equalto="#password"></td>
           </tr>
           <tr>
