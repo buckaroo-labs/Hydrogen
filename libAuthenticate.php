@@ -5,7 +5,7 @@ require_once ('Hydrogen/clsDataSource.php');
 //The default behavior is to disallow usernames 
 //	which would match if forced to same case
 if (!isset($caseSensitiveUsernames)) $caseSensitiveUsernames = false;
-if (!isset($settings['DATAFILE_PATH'])) $settings['DATAFILE_PATH'] = dirname(__file__);
+if (!isset($settings['DATAFILE_PATH'])) $settings['DATAFILE_PATH'] = dirname(__FILE__);
 
 function lookUpUsername($username) {
 	global $dds;
