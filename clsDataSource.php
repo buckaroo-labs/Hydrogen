@@ -72,8 +72,9 @@ class dataSource {
 				
 		//INSERT, UPDATE, and DELETE statements will be unaffected
 		if (strpos('.'.strtoupper($sql),'INSERT')==1) return $sql;
-		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
+		if (strpos('.'.strtoupper($sql),'DELETE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'UPDATE')==1) return $sql;
+		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
 		
 		if (!isset($this->page_num)) $this->page_num=1;
 		debug("Page num: $this->page_num");
@@ -177,6 +178,7 @@ class dataSource {
 
 				if (strpos(strtoupper($sql),'INSERT')===0) return $sql;
 				else if (strpos(strtoupper($sql),'UPDATE')===0) return $sql;
+				else if (strpos(strtoupper($sql),'DELETE')===0) return $sql;
 				else {
 
 

@@ -43,7 +43,12 @@ include "Hydrogen/pgTemplate.php";
 <!-- END MAIN -->
 </div>
 
-<?php include "Hydrogen/elemFooter.php"; ?>
+<?php 
+	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle - 
+	//   so include it at the end and then let it float to the top
+	include 'Hydrogen/elemNavbar.php';  
+	include "Hydrogen/elemFooter.php"; 
+?>
 </body></html>
 */
 
@@ -89,9 +94,9 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <body>
 
 <?php 
-	include 'Hydrogen/elemNavbar.php';  
+	 
 	include 'Hydrogen/elemSidebar.php'; 
-// include 'Hydrogen/elemAnalytics.php';
+	// include 'Hydrogen/elemAnalytics.php';
 
 ?> 
 
