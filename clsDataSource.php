@@ -32,7 +32,8 @@ $table->finish();
 */
 
 include_once ('Hydrogen/libDebug.php');
-include_once ('settingsHydrogen.php');
+include ('settingsHydrogen.php');
+include ('settingsPasswords.php');
 
 //(all this should come from settingsHydrogen.php):
 if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "oracle";
