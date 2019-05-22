@@ -117,10 +117,11 @@ class HTMLTable {
 	}
 
 
-	public function addRow($rowdata) {
+	public function addRow($rowdata,$style="") {
 		$this->rownum++;
 		echo '<tr';
 		if ($this->rownum%2 == "1") {echo ' class="alt"';}
+		if ($style!="") echo ' style="' . $style . '"';
 		echo '>';
 
 		$arraylength=count($rowdata);
