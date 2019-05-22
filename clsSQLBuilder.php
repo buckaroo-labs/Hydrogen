@@ -50,6 +50,12 @@ class SQLBuilder{
 		
 	}
 
+	public function addNullColumn($colName) {
+		$elementNumber=count($this->_columns);
+		$this->_columns[$elementNumber]['name'] = $colName;
+		$this->_columns[$elementNumber]['value'] = 'null';
+	}
+	
 	public function addColumn($colName, $colValue="") {
 		//USAGE:
 		/*
