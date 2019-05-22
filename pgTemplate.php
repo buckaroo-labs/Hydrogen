@@ -54,8 +54,8 @@ include "Hydrogen/pgTemplate.php";
 
    
 if(!isset($_SESSION)) session_start(); 
-include_once 'settingsHydrogen.php';  
-include_once 'settingsPasswords.php';
+include 'settingsHydrogen.php';  
+include 'settingsPasswords.php';
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
