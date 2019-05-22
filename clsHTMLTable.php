@@ -62,6 +62,7 @@ class HTMLTable {
 	protected $a_classes;
 	protected $keycols;
 	protected $invisible;
+	protected $hide_headers;
 
 	public function __construct($fieldNames,$fieldTypes) {
 		$this->fieldNames=$fieldNames;
@@ -74,7 +75,7 @@ class HTMLTable {
 		$arraylength=count($this->fieldNames);
 		//echo ('<th>array length: '.$arraylength.'</th>');
 		for ($field =0; $field < $arraylength; $field++) {
-			//if ($this->invisible[$field]==0) {
+			if ($this->invisible[$field]==0) {
 				echo '<th';
 				if (isset($this->fieldTypes[$field])) {
 					switch ($this->fieldTypes[$field]) {
@@ -85,8 +86,9 @@ class HTMLTable {
 							echo ' class="sorttable_alpha"';
 					}
 				}
-				echo '>'.$this->fieldNames[$field] . '</th>';
-			//}
+				if ($this->hide_headers[$field]==0) $header = $this->fieldNames[$field]; else $header ='';
+				echo '>' . $header . '</th>';
+			}
 		}
 		echo '</tr>';
 		$rownum=1;
@@ -97,7 +99,8 @@ class HTMLTable {
 		$keycols=array(),
 		$invisible=array(),
 		$a_classes=array(),
-		$linkTargets=array()	){
+		$linkTargets=array(),
+		$hide_headers=array()	){
 
 		$fields=count($this->fieldNames);
 		for ($i=0; $i <= $fields; $i++) {
@@ -107,12 +110,16 @@ class HTMLTable {
 			if (!isset($invisible[$i]))	{
 				$invisible[$i]=0;
 			}
+			if (!isset($hide_headers[$i]))	{
+				$hide_headers[$i]=0;
+			}
 		}
 
 		$this->linkURLs=$linkURLs;
 		$this->linkTargets=$linkTargets;
 		$this->keycols=$keycols;
 		$this->invisible=$invisible;
+		$this->hide_headers=$hide_headers;
 		$this->a_classes=$a_classes;
 	}
 
