@@ -273,12 +273,14 @@ class dataSource {
 		return $result_row;
 	}
 
-	function getDataset() {
+	function getDataset($arraytype="indexed") {
 			$rownum=0;
-			while ($result_rows[$rownum] = $this->getNextRow()){
+			$return=array();
+			while ($result_rows[$rownum] = $this->getNextRow($arraytype)){
+					$return[$rownum]=$result_rows[$rownum];
 					$rownum++;
 			}
-			return $result_rows;
+			return $return;
 	}
 
 
