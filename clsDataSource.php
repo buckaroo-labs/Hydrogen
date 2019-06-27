@@ -31,9 +31,11 @@ $table->finish();
 
 */
 
+//set this to true to enable debug output from this PHP file
+$debug[__FILE__]=true;
 include_once ('Hydrogen/libDebug.php');
-include ('settingsHydrogen.php');
-include ('settingsPasswords.php');
+include_once ('settingsHydrogen.php');
+include_once ('settingsPasswords.php');
 
 //(all this should come from settingsHydrogen.php):
 if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "oracle";
@@ -78,7 +80,7 @@ class dataSource {
 		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
 		
 		if (!isset($this->page_num)) $this->page_num=1;
-		debug("Page num: $this->page_num");
+		debug("Page num: $this->page_num",__FILE__);
 		if (isset($this->page_count)) {
 			if ($this->page_num > $this->page_count) $this->page_num=$this->page_count;
 		}
@@ -106,7 +108,7 @@ class dataSource {
 		$dbPort="xNULLx",
 		$dbInst="xNULLx") {
 		global $settings;
-		debug("Constructing dataSource class");
+		debug("Constructing dataSource class",__FILE__);
 		
 		if($dbType=="xNULLx") $dbType=$settings['DEFAULT_DB_TYPE'];
 		if($dbUser=="xNULLx") $dbUser=$settings['DEFAULT_DB_USER'];
@@ -119,14 +121,14 @@ class dataSource {
 		$this->dbType=$dbType;
 		switch ($this->dbType) {
 			case 'oracle':
-				debug("Connecting to Oracle");
+				debug("Connecting to Oracle",__FILE__);
 			    $dbstring=$dbHost . ":" . $dbPort . "/" . $dbInst;
 				$this->dbconn = oci_connect($dbUser, $dbPass, $dbstring) or die("Connection to DB failed." . oci_error());
 				$this->setSQL("alter session SET NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS'" );
 				break;
 			default:
 				//mysql
-				debug("Connecting to mysql");
+				debug("Connecting to mysql",__FILE__);
 				$this->mysqli=new mysqli($dbHost, $dbUser, $dbPass,$dbInst);
 				if (mysqli_connect_errno()) {
 				    die ("Connect failed: ".  mysqli_connect_error());
@@ -156,7 +158,7 @@ class dataSource {
 		$sql=$this->limitSQL($unlimited_sql);
 		$this->colNames=array();
 		$this->colTypes=array();
-		debug("class-limited SQL: $sql");
+		debug("class-limited SQL: $sql",__FILE__);
 			switch ($this->dbType) {
 
 			case 'oracle':
@@ -174,7 +176,8 @@ class dataSource {
 				break;
 			default:
 				//mysql
-				$result = $this->mysqli->query($sql) or die ("Error querying DB with SQL:" . $sql . " Message: " . $this->mysqli->error);
+				$result = $this->mysqli->query($sql) ;
+				if (!$result) die ("Error querying DB with SQL:" . $sql . " Message: " . $this->mysqli->error);
 				$this->mysqli_result=$result;
 
 				if (strpos(strtoupper($sql),'INSERT')===0) return $sql;
@@ -186,7 +189,7 @@ class dataSource {
 					//get metadata
 					$finfo = $result->fetch_fields();
 					$ncols=count($finfo);
-					debug ("MySQL result set column count: ".$ncols);
+					debug ("MySQL result set column count: ".$ncols,__FILE__);
 					$i=1;
 					foreach ($finfo as $val) {
 							$this->colNames[$i-1] = $val->name;
@@ -198,7 +201,7 @@ class dataSource {
 	}
 
 	function paginate() {
-		debug ("function: cls_dataSource:pagination");
+		debug ("function: cls_dataSource:pagination",__FILE__);
 		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimited_sql . ")";
 		switch ($this->dbType) {
 			case 'oracle':
@@ -264,6 +267,7 @@ class dataSource {
 				}
 				break;
 			default:
+				if (!$this->mysqli_result) die ("FATAL ERROR: Invalid cursor. This may be due to having updated the underlying dataset between fatching rows.");
 				if ($arraytype=="indexed") {
 					$result_row = $this->mysqli_result->fetch_array(MYSQLI_NUM);
 				} else {
@@ -287,7 +291,7 @@ class dataSource {
 }
 
 if (!isset($dataSource['default'])) {
-	debug("Creating default data source");
+	debug("Creating default data source",__FILE__);
 	$dataSource['default']=new dataSource();
 }
 	$dds = $dataSource['default'];
