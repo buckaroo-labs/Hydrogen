@@ -132,9 +132,9 @@ class HTMLTable {
 		echo '>';
 
 		$arraylength=count($rowdata);
-		debug("Arraylength: " . $arraylength);
+		//debug("Arraylength: " . $arraylength);
 		for ($field =0; $field < $arraylength; $field++) {
-			debug("Field number: " . $field);
+			//debug("Field number: " . $field);
 			if ($this->invisible[$field]==0) {
 				echo '<td>';
 				if (isset($this->linkURLs[$field])) {
