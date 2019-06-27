@@ -56,7 +56,7 @@ class SQLBuilder{
 		$this->_columns[$elementNumber]['value'] = 'null';
 	}
 	
-	public function addColumn($colName, $colValue="") {
+	public function addColumn($colName, $colValue="", $strict=false) {
 		//USAGE:
 		/*
 		
@@ -115,11 +115,25 @@ class SQLBuilder{
 		//for URL encoding	
 		$test = str_replace('%', '', $test);
 
-		
-		if (!ctype_alnum($test)) {
-				if ($test!="") die("clsSQLBuilder: Illegal character in test string: " . $test . " (length " . strlen($test) . ") for colValue:" . $colValue . " for column name: " . $colName);
+		//$strict means characters must be explicitly allowed as in the lines above. 
+		//Otherwise, we just reject single quotation marks  . . . which should already 
+		//have been replaced above, but we want to be extra sure in any case
+		$error_message="";
+		if ($strict and !ctype_alnum($test)) {
+			$error_message="(Strict mode)";
 		}
 		
+		if ($colValue!=str_replace("'","",$colValue)) {
+			$error_message='Single-quote mark not allowed here.'; 
+
+		}
+		
+		if ($error_message!="") {
+				$error_message .="clsSQLBuilder: Illegal character in test string: " . $test . " (length " . strlen($test) . ") for colValue (length " . strlen($colValue) . "):" . $colValue . " for column name: " . $colName . ' stripped value="' . str_replace("'","",$colValue) . '"';
+				debug ($error_message);
+				if ($test!="") die($error_message);
+		}
+
 		//Non-numeric input must be enclosed in single quotes both
 		//for correct SQL parsing AND to prevent injection
 		if(!$numeric) $colValue = "'" . $colValue . "'";
