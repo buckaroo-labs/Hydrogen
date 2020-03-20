@@ -138,7 +138,10 @@ class HTMLTable {
 			if ($this->invisible[$field]==0) {
 				echo '<td>';
 				if (isset($this->linkURLs[$field])) {
-					echo '<a href="' . $this->linkURLs[$field] . urlencode($rowdata[$this->keycols[$field]]) . '"';
+					
+					//urlencode will change any "/" in the row data to "%2F". We must change it back if the data is used as a path
+					echo '<a href="' . $this->linkURLs[$field] . str_replace('%2F','/',urlencode($rowdata[$this->keycols[$field]])) . '"';
+
 					if (isset($this->a_classes[$field])) {
 						echo ' class="' . $this->a_classes[$field] . '"';
 					}
