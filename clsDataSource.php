@@ -204,7 +204,7 @@ class dataSource {
 		switch ($this->dbType) {
 			case 'oracle':
 				//Parse the statement
-				$stmt = getStatement($this->dbconn,$count_sql) ;
+				$stmt = getOCIStatement($this->dbconn,$count_sql) ;
 				//execute the query
 				$result= getOCIResult($stmt);
 				$result_row = fetchOCIIndexedRow($stmt);
