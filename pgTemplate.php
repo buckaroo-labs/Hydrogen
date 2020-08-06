@@ -7,7 +7,7 @@
 
 //EXAMPLE PAGE:
 /*
-<?php 
+<?php
 $pagetitle="Home | MySite";
 $headline = '<h1>My Site</h1><h3>My super awesome tagline</h3>' ;
 include "Hydrogen/pgTemplate.php";
@@ -30,7 +30,7 @@ include "Hydrogen/pgTemplate.php";
     </div>
   </div>
 
-  <!-- Pagination 
+  <!-- Pagination
   <div class="w3-center w3-padding-32">
     <div class="w3-bar">
       <a class="w3-button w3-black" href="#">1</a>
@@ -43,19 +43,18 @@ include "Hydrogen/pgTemplate.php";
 <!-- END MAIN -->
 </div>
 
-<?php 
-	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle - 
+<?php
+	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle -
 	//   so include it at the end and then let it float to the top
-	include 'Hydrogen/elemNavbar.php';  
-	include "Hydrogen/elemFooter.php"; 
+	include 'Hydrogen/elemNavbar.php';
+	include "Hydrogen/elemFooter.php";
 ?>
 </body></html>
 */
 
-   
-if(!isset($_SESSION)) session_start(); 
-include 'settingsHydrogen.php';  
-include 'settingsPasswords.php';
+
+if(!isset($_SESSION)) session_start();
+include_once 'settingsHydrogen.php';
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
@@ -93,11 +92,11 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <body>
 
-<?php 
-	 
-	include 'Hydrogen/elemSidebar.php'; 
+<?php
+
+	include 'Hydrogen/elemSidebar.php';
 	// include 'Hydrogen/elemAnalytics.php';
 
-?> 
+?>
 
 
