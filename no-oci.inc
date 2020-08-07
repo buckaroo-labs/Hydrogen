@@ -1,6 +1,5 @@
 <?php
-//dummy functions provided to match functions in oci.inc when the OCI extension is not loaded
-
+//dummy class provided to match functions in oci.inc when the OCI extension is not loaded
 
 class OCIDataSource {
 		public function __construct($dbUser="xNULLx",
