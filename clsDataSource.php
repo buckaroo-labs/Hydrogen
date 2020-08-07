@@ -91,13 +91,6 @@ class dataSource {
 		$end_rec=$start_rec+$this->maxRecs-1;
 
 		switch ($this->dbType) {
-			case 'oracle':
-				//ugh  . . .
-				//http://www.oracle.com/technetwork/issue-archive/2006/06-sep/o56asktom-086197.html
-				$prepend="select * from ( select /*+ FIRST_ROWS(n) */   a.*, ROWNUM rnum from ( ";
-				$append=") a where ROWNUM <=  " . ($start_rec + $this->maxRecs - 1) . ")  where rnum  >= $start_rec";
-				return $prepend . " " . $sql . " " . $append;
-				break;
 			default:
 				return $sql . " " . " limit " . ($start_rec - 1) . " , " . $this->maxRecs;
 		}
@@ -123,12 +116,6 @@ class dataSource {
 		$this->setMaxRecs();
 		$this->dbType=$dbType;
 		switch ($this->dbType) {
-			case 'oracle':
-				debug("Connecting to Oracle",__FILE__);
-			    $dbstring=$dbHost . ":" . $dbPort . "/" . $dbInst;
-				$this->dbconn = getOCIConnection($dbUser, $dbPass, $dbstring)  ;
-				$this->setSQL("alter session SET NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS'" );
-				break;
 			default:
 				//mysql
 				debug("Connecting to mysql",__FILE__);
@@ -158,20 +145,6 @@ class dataSource {
 		$this->colTypes=array();
 		debug("class-limited SQL: $sql",__FILE__);
 			switch ($this->dbType) {
-
-			case 'oracle':
-				//Parse the statement
-				$stmt = getOCIStatement($this->dbconn,$sql);
-				//execute the query
-				$result= getOCIResult($stmt);
-				$this->stmt=$stmt;
-				//get metadata
-				$ncols=getOCIFieldCount($this->stmt);
-				for ($i = 1; $i <= $ncols; $i++) {
-					$this->colNames[$i-1] = getFieldName($stmt, $i);
-					$this->colTypes[$i-1] = getFieldType($stmt, $i);
-				}
-				break;
 			default:
 				//mysql
 				$result = $this->mysqli->query($sql) ;
@@ -202,13 +175,6 @@ class dataSource {
 		debug ("function: cls_dataSource:pagination",__FILE__);
 		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimited_sql . ")";
 		switch ($this->dbType) {
-			case 'oracle':
-				//Parse the statement
-				$stmt = getOCIStatement($this->dbconn,$count_sql) ;
-				//execute the query
-				$result= getOCIResult($stmt);
-				$result_row = fetchOCIIndexedRow($stmt);
-				break;
 			default:
 				//mysql
 				$count_sql=$count_sql . " as aggr";
@@ -257,13 +223,6 @@ class dataSource {
 
 	public function getNextRow($arraytype="indexed") {
 		switch ($this->dbType) {
-			case "oracle":
-				if ($arraytype=="indexed") {
-					$result_row = fetchOCIIndexedRow($this->stmt);
-				} else {
-					$result_row = fetchOCINonIndexedRow($this->stmt);
-				}
-				break;
 			default:
 				if (!$this->mysqli_result) die ("FATAL ERROR: Invalid cursor. This may be due to having updated the underlying dataset between fetching rows.");
 				if ($arraytype=="indexed") {
@@ -290,7 +249,9 @@ class dataSource {
 
 if (!isset($dataSource['default'])) {
 	debug("Creating default data source",__FILE__);
-	$dataSource['default']=new dataSource();
+	global $settings;
+	if ($settings['DEFAULT_DB_TYPE']=="oracle") $dataSource['default']=new OCIDataSource();
+	if ($settings['DEFAULT_DB_TYPE']=="mysql") $dataSource['default']=new dataSource();
 }
 	$dds = $dataSource['default'];
 ?>

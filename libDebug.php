@@ -11,6 +11,10 @@ function debug($info,$source=""){
 	if (!isset($debug[$source])) $debug[$source]=true;
 	if ($settings['DEBUG'] and $debug[$source]) {
 
+		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+
 		$output[0]=date("Y-m-d H:i:s");
 		//'if' test is for command-line usage
 		if (isset($_SERVER['REMOTE_ADDR'])) $output[1]=$_SERVER['REMOTE_ADDR']; else $output[1]="command line";
