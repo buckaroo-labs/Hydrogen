@@ -19,7 +19,7 @@ $result = $dds->setSQL($sql);
 $page_count = $dds->getPageCount();
 
 STEP TWO
---The following code will use the dataSource class as well as the HTMLTable class (defined elsewhere) 
+--The following code will use the dataSource class as well as the HTMLTable class (defined elsewhere)
 --to format the records fetched from the database into an HTML table
 --(See clsHTMLTable.php for particulars on the HTMLTable class)
 $table=new HTMLTable($dds->getFieldNames(),$dds->getFieldTypes());
@@ -46,12 +46,15 @@ if (!isset($settings['DEFAULT_DB_PORT'])) $settings['DEFAULT_DB_PORT'] = "1521";
 if (!isset($settings['DEFAULT_DB_INST'])) $settings['DEFAULT_DB_INST'] = "XE";
 if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 150;
 
+if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc');
+if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc'); else include_once ('Hydrogen/no-oci.inc');
+
 
 $dataSource=array();
 $savedSQL=array();
 
 class dataSource {
-	//This class provides common functionality for various database brands. 
+	//This class provides common functionality for various database brands.
 	//1. The constructor provides connectivity
 	//2. Function "setSQL" parses a SQL statement and retrieves metadata
 	//Known and tested database types: Oracle, MySQL.
@@ -70,15 +73,15 @@ class dataSource {
 	protected $page_num;
 
 	function limitSQL($sql) {
-		//This function will take a SQL statement and append a clause limiting the 
+		//This function will take a SQL statement and append a clause limiting the
 		//number of rows returned, starting at the appropriate offset.
-				
+
 		//INSERT, UPDATE, and DELETE statements will be unaffected
 		if (strpos('.'.strtoupper($sql),'INSERT')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'DELETE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'UPDATE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
-		
+
 		if (!isset($this->page_num)) $this->page_num=1;
 		debug("Page num: $this->page_num",__FILE__);
 		if (isset($this->page_count)) {
@@ -109,32 +112,27 @@ class dataSource {
 		$dbInst="xNULLx") {
 		global $settings;
 		debug("Constructing dataSource class",__FILE__);
-		
+
 		if($dbType=="xNULLx") $dbType=$settings['DEFAULT_DB_TYPE'];
 		if($dbUser=="xNULLx") $dbUser=$settings['DEFAULT_DB_USER'];
 		if($dbPass=="xNULLx") $dbPass=$settings['DEFAULT_DB_PASS'];
 		if($dbHost=="xNULLx") $dbHost=$settings['DEFAULT_DB_HOST'];
 		if($dbPort=="xNULLx") $dbPort=$settings['DEFAULT_DB_PORT'];
 		if($dbInst=="xNULLx") $dbInst=$settings['DEFAULT_DB_INST'];
-		
+
 		$this->setMaxRecs();
 		$this->dbType=$dbType;
 		switch ($this->dbType) {
 			case 'oracle':
 				debug("Connecting to Oracle",__FILE__);
 			    $dbstring=$dbHost . ":" . $dbPort . "/" . $dbInst;
-				$this->dbconn = oci_connect($dbUser, $dbPass, $dbstring) or die("Connection to DB failed." . oci_error());
+				$this->dbconn = getOCIConnection($dbUser, $dbPass, $dbstring)  ;
 				$this->setSQL("alter session SET NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS'" );
 				break;
 			default:
 				//mysql
 				debug("Connecting to mysql",__FILE__);
-				$this->mysqli=new mysqli($dbHost, $dbUser, $dbPass,$dbInst);
-				if (mysqli_connect_errno()) {
-				    die ("Connect failed: ".  mysqli_connect_error());
-				}
-				//$this->dbconn = mysql_connect($dbHost, $dbUser, $dbPass) or die("Connection to DB failed." . mysql_error());
-				//$result = mysql_select_db($dbInst, $this->dbconn) or die("Error selecting DB." . mysql_error());
+				$this->mysqli=getDBConnection($dbHost, $dbUser, $dbPass,$dbInst);
 		}
 	}
 
@@ -163,15 +161,15 @@ class dataSource {
 
 			case 'oracle':
 				//Parse the statement
-				$stmt = oci_parse($this->dbconn,$sql) or die ( oci_error($this->dbconn));
+				$stmt = getOCIStatement($this->dbconn,$sql);
 				//execute the query
-				$result= oci_execute($stmt) or die ("Error querying DB with SQL:" . $sql . " Error message: " . oci_error($this->dbconn));
+				$result= getOCIResult($stmt);
 				$this->stmt=$stmt;
 				//get metadata
-				$ncols=oci_num_fields($this->stmt);
+				$ncols=getOCIFieldCount($this->stmt);
 				for ($i = 1; $i <= $ncols; $i++) {
-					$this->colNames[$i-1] = oci_field_name($stmt, $i);
-					$this->colTypes[$i-1] = oci_field_type($stmt, $i);
+					$this->colNames[$i-1] = getFieldName($stmt, $i);
+					$this->colTypes[$i-1] = getFieldType($stmt, $i);
 				}
 				break;
 			default:
@@ -206,10 +204,10 @@ class dataSource {
 		switch ($this->dbType) {
 			case 'oracle':
 				//Parse the statement
-				$stmt = oci_parse($this->dbconn,$count_sql) or die ( oci_error($this->dbconn));
+				$stmt = getOCIStatement($this->dbconn,$count_sql) ;
 				//execute the query
-				$result= oci_execute($stmt) or die ("Error querying DB with SQL:" . $count_sql . " Error message: " . oci_error($this->dbconn));
-				$result_row = oci_fetch_array($stmt,OCI_NUM+OCI_RETURN_NULLS);
+				$result= getOCIResult($stmt);
+				$result_row = fetchOCIIndexedRow($stmt);
 				break;
 			default:
 				//mysql
@@ -261,13 +259,13 @@ class dataSource {
 		switch ($this->dbType) {
 			case "oracle":
 				if ($arraytype=="indexed") {
-					$result_row = oci_fetch_array($this->stmt,OCI_NUM+OCI_RETURN_NULLS);
+					$result_row = fetchOCIIndexedRow($this->stmt);
 				} else {
-					$result_row = oci_fetch_array($this->stmt,OCI_ASSOC+OCI_RETURN_NULLS);
+					$result_row = fetchOCINonIndexedRow($this->stmt);
 				}
 				break;
 			default:
-				if (!$this->mysqli_result) die ("FATAL ERROR: Invalid cursor. This may be due to having updated the underlying dataset between fatching rows.");
+				if (!$this->mysqli_result) die ("FATAL ERROR: Invalid cursor. This may be due to having updated the underlying dataset between fetching rows.");
 				if ($arraytype=="indexed") {
 					$result_row = $this->mysqli_result->fetch_array(MYSQLI_NUM);
 				} else {
