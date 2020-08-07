@@ -4,7 +4,7 @@ include_once ('settingsHydrogen.php');
 
 if (!isset($settings['DEBUG_PATH'])) $settings['DEBUG_PATH'] = dirname(__FILE__) . "/debug.txt" ;
 if (!isset($settings['DEBUG'])) $settings['DEBUG'] = false;
-//error_log ("DEBUG set to " . $settings['DEBUG'] . "; DEBUG_PATH=".$settings['DEBUG_PATH']);
+error_log ("DEBUG set to " . $settings['DEBUG'] . "; DEBUG_PATH=".$settings['DEBUG_PATH']);
 function debug($info,$source=""){
 	global $settings;
 	global $debug;
