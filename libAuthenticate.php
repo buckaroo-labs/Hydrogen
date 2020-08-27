@@ -12,10 +12,10 @@ function lookUpUsername($username) {
 	global $caseSensitiveUsernames;
 	$where=" upper(username)='" . strtoupper($username) . "'";
 	if ($caseSensitiveUsernames) $where = " username='" . $username . "'";
-	$sql = "select count(*) from user where " . $where;
+	$sql = "select count(*) from users where " . $where;
 	$intResult = $dds->getInt($sql);
 	if ($intResult > 0) {
-		$sql = "select username from user where " . $where;
+		$sql = "select username from users where " . $where;
 		$strResult = $dds->getString($sql);
 	} else {
 		$strResult="";
@@ -28,29 +28,13 @@ function lookUpUsername($username) {
 function authenticate($username, $password) {
 $success=0;
 global $settings;
-	//this is dumb but simple
-/*
-	if ($username=="test" and $password=="foo") {		
-		$success=1;
-		$filepath=DATAFILE_PATH . '/user_login.log';
-		$fp = fopen($filepath, 'a');
-		fwrite($fp,  $username . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
-		fclose($fp);
-	} else {
-		$_SESSION['errMsg']='Invalid username/password.';
-		$filepath=DATAFILE_PATH . '/failed_login_attempts.log';
-		$fp = fopen($filepath, 'a');
-		fwrite($fp,  $username . ',' . $password . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
-		fclose($fp);
-	}
-*/	
 
 	if (lookUpUsername($username) != '') {
 		global $dds;
 		global $caseSensitiveUsernames;
 		$where=" upper(username)='" . strtoupper($username) . "'";
 		if ($caseSensitiveUsernames) $where = " username='" . $username . "'";
-		$sql = "select count(*) from user where " . $where;
+		$sql = "select count(*) from users where " . $where;
 		$where .= " and password='" . password_hash($password,PASSWORD_BCRYPT). "'";
 		$intResult = $dds->getInt($sql);
 		if ($intResult > 0) {

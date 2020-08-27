@@ -25,7 +25,7 @@ class OCIDataSource {
 		if (strpos('.'.strtoupper($sql),'DELETE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'UPDATE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
-
+		if (strpos('.'.strtoupper($sql),'BEGIN')==1) return $sql;
 		if (!isset($this->page_num)) $this->page_num=1;
 		debug("Page num: $this->page_num",__FILE__);
 		if (isset($this->page_count)) {
@@ -36,8 +36,8 @@ class OCIDataSource {
 
 				//ugh  . . .
 				//http://www.oracle.com/technetwork/issue-archive/2006/06-sep/o56asktom-086197.html
-				$prepend="select * from ( select /*+ FIRST_ROWS(n) */   a.*, ROWNUM rnum from ( ";
-				$append=") a where ROWNUM <=  " . ($start_rec + $this->maxRecs - 1) . ")  where rnum  >= $start_rec";
+				$prepend="select * from ( select /*+ FIRST_ROWS(n) */   a.*, ROWNUM as row# from ( ";
+				$append=") a where ROWNUM <=  " . ($start_rec + $this->maxRecs - 1) . ")  where row#  >= $start_rec";
 				return $prepend . " " . $sql . " " . $append;
 
 	}
@@ -171,5 +171,4 @@ class OCIDataSource {
 	}
 
 }//end class
-
 ?>

@@ -82,7 +82,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 .w3-sidebar {
   z-index: 3;
   width: 250px;
-  top: 43px;
+  top: 55px;
   bottom: 0;
   height: inherit;
 }
@@ -95,7 +95,15 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <?php
 
 	include 'Hydrogen/elemSidebar.php';
-	// include 'Hydrogen/elemAnalytics.php';
+  // include 'Hydrogen/elemAnalytics.php';
+  if (isset($settings['page_usage_tracking'])) {
+    if ($settings['page_usage_tracking']==true)
+    $pageUser="unauthenticated";
+    if (isset($_SESSION['username'])) $pageUser=$_SESSION['username'];
+      $sql="INSERT INTO OVERDRIVE.PAGE_USAGE (server,ip,remote_host,URI,username) VALUES ('". $_SERVER['SERVER_NAME']."','". $_SERVER['REMOTE_ADDR']."','". $_SERVER['REMOTE_HOST']."','". $_SERVER['REQUEST_URI']."','". $pageUser."')";
+      $dds->setSQL ($sql);
+
+  }
 
 ?>
 

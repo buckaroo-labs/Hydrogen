@@ -18,11 +18,14 @@ if (!isset($sidebar_links)) {
     <i class="fa fa-remove"></i>
   </a>
  <h4 class="w3-bar-item"><b>Menu</b></h4>
+ <table>
 <?php  
 
 $arrlength=count($sidebar_links);
 for($x=0;$x<$arrlength;$x++)   {
-  echo '<a href="' . $sidebar_links[$x]['href'] . '" class="w3-bar-item w3-button ' . $sidebar_links[$x]['class'] . '">' . $sidebar_links[$x]['name'] . '</a>';
+  echo '<tr><td><a href="' . $sidebar_links[$x]['href'];
+  if (isset($_GET['menu'])) echo "?menu=" . $stateVar['menu'];
+  echo '" class="w3-bar-item w3-button ' . $sidebar_links[$x]['class'] . '">' . $sidebar_links[$x]['name'] . '</a></td></td></tr>';
   echo "";
 }
 
@@ -31,6 +34,7 @@ if (isset($facebook_page)) {
 echo ('<a target="_blank" class="w3-bar-item w3-button w3-hover-black" href="' . $facebook_page . '"><img src="/images/facebook.jpg" alt="Facebook" height="90" width="90"></a>');
 }
 ?>
+</table>
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->

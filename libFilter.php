@@ -1,12 +1,33 @@
 <?php
 
 //This library is for formatting and filtering text
-function sanitizeGetVar($varname, $method=FILTER_SANITIZE_ENCODED) {
-	if (isset($_GET[$varname])) return filter_var($_GET[$varname],$method);  else return '';
+function sanitizeGetVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
+	if (isset($_GET[$varname])) {
+		$retVal=filter_var($_GET[$varname],$method);
+		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		return $retVal;
+
+	  }
+	else return '';
 }
 
-function sanitizePostVar($varname, $method=FILTER_SANITIZE_ENCODED) {
-	if (isset($_POST[$varname])) return filter_var($_POST[$varname],$method); else return '';
+function sanitizeGetVar2($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
+	if (isset($_GET[$varname])) {
+		$retVal=filter_var($_GET[$varname],$method);
+		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		if ($retVal!='') return $retVal; else return false;
+
+	  }
+	else return false;
+}
+
+function sanitizePostVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
+	if (isset($_POST[$varname])) {
+		$retVal=filter_var($_POST[$varname],$method);
+		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		return $retVal;
+	}
+	else return '';
 }
 
 //You would't necessarily call this function in your app. But it produces useful testing output.

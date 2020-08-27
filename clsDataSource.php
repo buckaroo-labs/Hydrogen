@@ -77,11 +77,12 @@ class dataSource {
 		//number of rows returned, starting at the appropriate offset.
 
 		//INSERT, UPDATE, and DELETE statements will be unaffected
+		debug ("Original SQL (limit_sql):" . $sql);
 		if (strpos('.'.strtoupper($sql),'INSERT')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'DELETE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'UPDATE')==1) return $sql;
 		if (strpos('.'.strtoupper($sql),'ALTER')==1) return $sql;
-
+		if (strpos('.'.strtoupper($sql),'BEGIN')==1) return $sql;
 		if (!isset($this->page_num)) $this->page_num=1;
 		debug("Page num: $this->page_num",__FILE__);
 		if (isset($this->page_count)) {

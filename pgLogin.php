@@ -147,7 +147,7 @@ if (isset($_SESSION['username'])) {
 		$sanitized_uname=filter_var($_POST['uname'],FILTER_SANITIZE_ENCODED);
 		echo '<form class="access" id="login" action="' . $settings['login_page'] . '" method="post">';
 
-		echo '<table><tr><td>Username </td><td><input type="text" name="uname" id="id" value="';
+		echo '<table><tr><td>'. $settings['uname_label']. '</td><td><input type="text" name="uname" id="id" value="';
 		echo $sanitized_uname; 
 		echo '"></td></tr><tr><td>Password </td><td><input type="password" name="passwd" id="pwd"><br><tr><td><input name="btnSubmit" type="submit" value="Log in"></td>';
 
@@ -160,8 +160,8 @@ if (isset($_SESSION['username'])) {
 		echo"</tr></table></form>";
 
 		if ($settings['prompt_reg']==1) {
-			echo("<h2>Not a registered user?</h2>");
-			echo('<p>Register <a href="' . $settings['registration_page'] . '">here</a>.</p>');
+			echo("<h2>New user or forgotten password?</h2>");
+			echo('<p>Reset or request password <a href="' . $settings['registration_page'] . '">here</a>.</p>');
 		}
 	}
 }
