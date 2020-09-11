@@ -77,12 +77,12 @@ class SQLBuilder{
 		//$test = str_replace('.', '', $colValue);
 		$test = preg_replace("/[^0-9.]/", "", $colValue);
 		if ($test==$colValue AND strlen($colValue) > 0) {
-		//if ((int) $test==$test) {
 			$numeric=true;
 			//don't do this until after checking for illegal chars
 			//$colValue = "'" . $colValue . "'";
 		}
-		
+		//update 2020-09-09: allow null (for updates)
+		if ($colValue=="null")	 $numeric=true	;
 		
 		//HTML encode quotation marks
 		 $colValue = str_replace("'","&rsquo;",$colValue);

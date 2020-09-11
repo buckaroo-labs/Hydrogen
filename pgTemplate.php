@@ -54,7 +54,7 @@ include "Hydrogen/pgTemplate.php";
 
 
 if(!isset($_SESSION)) session_start();
-include_once 'settingsHydrogen.php';
+require_once 'settingsHydrogen.php';
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
@@ -100,8 +100,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     if ($settings['page_usage_tracking']==true)
     $pageUser="unauthenticated";
     if (isset($_SESSION['username'])) $pageUser=$_SESSION['username'];
-      $sql="INSERT INTO OVERDRIVE.PAGE_USAGE (server,ip,remote_host,URI,username) VALUES ('". $_SERVER['SERVER_NAME']."','". $_SERVER['REMOTE_ADDR']."','". $_SERVER['REMOTE_HOST']."','". $_SERVER['REQUEST_URI']."','". $pageUser."')";
-      $dds->setSQL ($sql);
+      $sql="INSERT INTO PAGE_USAGE (server,ip,remote_host,URI,username) VALUES ('". $_SERVER['SERVER_NAME']."','". $_SERVER['REMOTE_ADDR']."','". $_SERVER['REMOTE_HOST']."','". $_SERVER['REQUEST_URI']."','". $pageUser."')";
+      //$dds->setSQL ($sql);
 
   }
 
