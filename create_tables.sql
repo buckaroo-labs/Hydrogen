@@ -94,6 +94,9 @@ CREATE TABLE `user` (
   `last_login` datetime DEFAULT NULL,
   `ins_user` varchar(30) NOT NULL DEFAULT 'system',
   `ins_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+    , PRIMARY KEY (`id`),
+ UNIQUE KEY `username` (`username`),
+UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -137,13 +140,7 @@ ALTER TABLE `privilege`
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
+
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -207,7 +204,7 @@ PRIMARY KEY (`id`)
 );
 
 --test/foo
-insert into user(username,email,first_name,last_name,password) VALUES ('Test','y@x.com','John','Doe','$2y$10$JA6W8MpTPLlwt4nXg7yJKeZYF15L3qmFDXJ42hKBc9fHWmBKKzxv6');
+insert into user(username,email,first_name,last_name,password_hash) VALUES ('Test','y@x.com','John','Doe','$2y$10$JA6W8MpTPLlwt4nXg7yJKeZYF15L3qmFDXJ42hKBc9fHWmBKKzxv6');
 
 
 
