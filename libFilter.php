@@ -1,5 +1,5 @@
 <?php
-
+/*
 //This library is for formatting and filtering text
 function sanitizeGetVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
 	if (isset($_GET[$varname])) {
@@ -11,6 +11,17 @@ function sanitizeGetVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=
 	else return '';
 }
 
+function sanitizeGetVarEmail($varname, $method=FILTER_SANITIZE_EMAIL, $allowSpaces=false) {
+	if (isset($_GET[$varname])) {
+		$retVal=filter_var($_GET[$varname],$method);
+		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		return $retVal;
+
+	  }
+	else return '';
+}
+
+
 function sanitizeGetVar2($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
 	if (isset($_GET[$varname])) {
 		$retVal=filter_var($_GET[$varname],$method);
@@ -21,7 +32,18 @@ function sanitizeGetVar2($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces
 	else return false;
 }
 
+
 function sanitizePostVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces=true) {
+	if (isset($_POST[$varname])) {
+		$retVal=filter_var($_POST[$varname],$method);
+		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		return $retVal;
+	}
+	else return '';
+}
+ 
+
+function sanitizePostVarEmail($varname, $method=FILTER_SANITIZE_EMAIL, $allowSpaces=false) {
 	if (isset($_POST[$varname])) {
 		$retVal=filter_var($_POST[$varname],$method);
 		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
@@ -58,5 +80,10 @@ function formatPhone($phone_string) {
 	if (strlen($retval)==10) $retval= substr($retval,0,3) . '-' . substr($retval,3,3) . '-' . substr($retval,6,4) ;
 	return $retval;
 }
- ?>
+
+*/
+
+include_once('Hydrogen/libState.php');
+
+?>
 

@@ -45,7 +45,7 @@ if (session_status() == PHP_SESSION_NONE) session_start();
 
 function showUsernameAndLogoutButton() {
 	global $settings;
-	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . "</td></tr></table>");
+	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . '</td></tr></table><br>Click the "Home" link in the upper left to reload the menu. ');
 	echo "<br><br>";
 	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
@@ -144,7 +144,7 @@ if (isset($_SESSION['username'])) {
 
 		//We are about to put a POST variable back in the user's browser, so it is
 		//necessary to sanitize it first to prevent XSS attacks, etc.
-		$sanitized_uname=filter_var($_POST['uname'],FILTER_SANITIZE_ENCODED);
+		$sanitized_uname=filter_var($_POST['uname'],FILTER_SANITIZE_EMAIL);
 		echo '<form class="access" id="login" action="' . $settings['login_page'] . '" method="post">';
 
 		echo '<table><tr><td>'. $settings['uname_label']. '</td><td><input type="text" name="uname" id="id" value="';

@@ -39,17 +39,56 @@ if (isset($password) and $password!="") $useCase=4;
 debug ("Use Case: " . $useCase);
 
 
-function validateMail ($email_address) {
+function validateMail ($email_address,$captcha=false) {
 	global $emailValid;
-	global $dds;
+	global $settings;
 	global $username;
 	$emailValid=false;
-	$sql="select count(*),max(username) from users where email='" . $email_address . "'";
-	$result=$dds->setSQL($sql);
-	$row=$dds->getNextRow();
-	if ($row[0]=1) 	{
-		$emailValid=true;
-		$username=$row[1];
+
+	//validate the CAPTCHA first
+	if ($captcha) {
+		include_once 'securimage/securimage.php';
+		$securimage = new Securimage();
+	}
+
+	if ($captcha) {
+			  // if the captcha code is incorrect
+			  // you should handle the error so that the form processor doesn't continue
+			  // or you can use the following code if there is no validation or you do not know how
+			  
+			  //echo "The security code entered was incorrect.<br /><br />";
+			  //echo "Please go <a href='javascript:history.go(-1)'>back</a> and try again.";
+			  //exit;
+			  if ($securimage->check($_POST['captcha_code']) == false) $emailValid=false;
+	} else {
+
+		//if CAPTCHA is validated, check if the email is in the DB
+		$sql="select count(*) ucount, max(username) max_name from user where email=?";
+		$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+		$stmt=$conn->prepare($sql); 
+		if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
+		$rc=$stmt->bind_param("s", $email_address);  
+		if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+		$stmt->execute();
+		$stmt->bind_result($uCount, $uname);
+		while ($stmt->fetch()) {
+			if ($uCount==1) {
+				$emailValid=true;
+				$username=$uname;
+			}
+		}
+		if (!$emailValid) {
+			$sql = "INSERT INTO user (username,email) values (?,?)";
+			$stmt=$conn->prepare($sql); 
+			if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
+			$rc=$stmt->bind_param("ss", $email_address, $email_address); 
+			if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+			$stmt->execute();
+			if ($stmt->affected_rows==1) {
+				$emailValid=true;
+				$username=$email_address;
+			}
+		}
 	}
 	return $emailValid;
 }

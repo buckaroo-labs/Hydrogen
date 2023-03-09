@@ -57,6 +57,22 @@ if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
+/*
+if (isset($_SESSION['username'])) {
+
+  $sql="select access_token from user where username='" . $_SESSION['username'] . "'";
+  $accessToken = $dds->getString($sql);
+
+  $_SESSION['cookieSet']="no";
+  setcookie("accessToken",$accessToken, time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
+  $success=setcookie("username",$_SESSION['username'], time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
+  if ($success) $_SESSION['cookieSet']="yes";
+} else {
+  //Unset cookies on logout -- issue #46DT
+  setcookie("accessToken","", time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
+  setcookie("username","", time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
+}
+*/
 
 ?>
 
