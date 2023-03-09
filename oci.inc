@@ -101,6 +101,23 @@ class OCIDataSource {
 				}
 
 	}
+	public function getSQLID() {
+		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimited_sql);
+		$insert_sql="INSERT INTO saved_sql (session_id,sqltext) values ('". session_id() ."','".$sqlstring ."')";
+		//Parse the statement
+		$stmt = oci_parse($this->dbconn,$insert_sql) or die ( oci_error($this->dbconn));
+		//execute the query
+		$result= oci_execute($stmt) or die ("Error executing SQL:" . $insert_sql . " Error message: " . oci_error($this->dbconn));
+
+		$select_sql="SELECT max(id) FROM saved_sql WHERE session_id='". session_id() ."'";
+		//Parse the statement
+		$stmt = oci_parse($this->dbconn,$select_sql) or die ( oci_error($this->dbconn));
+		//execute the query
+		$result= oci_execute($stmt) or die ("Error executing SQL:" . $select_sql . " Error message: " . oci_error($this->dbconn));
+
+		$result_row = oci_fetch_array($stmt,OCI_NUM+OCI_RETURN_NULLS);
+		return $result_row[0];
+	}
 
 	function paginate() {
 		debug ("function: cls_dataSource:pagination",__FILE__);

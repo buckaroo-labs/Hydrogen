@@ -65,11 +65,11 @@ function validateResetCode ($code_value,$user_name) {
 	return $validated;
 }
 
-function sendMail($mailTo, $resetLink) {
+function sendMail_oracle($mailTo, $resetLink) {
 	global $dds;
 	$sql ="BEGIN
-	EXECUTE IMMEDIATE 'ALTER SESSION SET smtp_out_server = ''mailrelay.nw1.nwestnetwork.com'''; 
-	UTL_MAIL.send(sender => 'oss-db@ziply.com',
+	EXECUTE IMMEDIATE 'ALTER SESSION SET smtp_out_server = ''mailrelay.foo.com'''; 
+	UTL_MAIL.send(sender => 'compass@foo.com',
 	recipients => '". $mailTo . "',
 	subject => 'Password reset',
 	message => '<html>
@@ -87,9 +87,9 @@ function sendMail($mailTo, $resetLink) {
 	END;";
 	$dds->setSQL($sql);
 }
-function sendMail_old ($mailTo, $resetLink) {
+function sendMail ($mailTo, $resetLink) {
 	//For Windows only
-	ini_set('SMTP','mailrelay.nw1.nwestnetwork.com');
+	ini_set('SMTP','mailrelay.foo.com');
 	ini_set('smtp_port',25);
 
 	$to = $mailTo;
@@ -112,8 +112,8 @@ function sendMail_old ($mailTo, $resetLink) {
 	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	
 	// More headers
-	$headers .= 'From: OSS Core DB Team <oss-db@ziply.com>' . "\r\n";
-	//$headers .= 'bcc: user@ziply.com' . "\r\n";
+	$headers .= 'From: Compass App <compass@foo.com>' . "\r\n";
+	//$headers .= 'bcc: user@foo.com' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
 

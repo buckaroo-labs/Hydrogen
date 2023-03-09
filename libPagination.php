@@ -11,7 +11,7 @@ function paginate($dataSource,$page_num=1) {
 //a newVars($pg) function is required in every page that calls this function
 //to keep track of whatever GET variables have been processed including the page number
 
-function showPagination($dataSource,$scriptName) {
+function showPagination($dataSource,$scriptName,$CSVLink=false) {
 	global $page_num;
 	if (!isset($page_num)) $page_num=1;
 	debug ("pagination.php: function: showPagination");
@@ -19,7 +19,7 @@ function showPagination($dataSource,$scriptName) {
 	echo '<ul class="pagination">';
 
 	if ($page_count >1) {
-
+		if ($CSVLink) echo '<a target="_blank" href="CSVExport.php?id=' .$dataSource->getSQLID() . '">Export to CSV</a><br>';
 		if ($page_num > 1) {
 			//show 'prev'
 			$prev_link=$scriptName . newVars($page_num - 1);
@@ -36,6 +36,7 @@ function showPagination($dataSource,$scriptName) {
 		}
 	}
 	echo '</ul>';
+
 }
 
 

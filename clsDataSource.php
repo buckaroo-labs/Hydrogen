@@ -46,6 +46,15 @@ if (!isset($settings['DEFAULT_DB_PORT'])) $settings['DEFAULT_DB_PORT'] = "1521";
 if (!isset($settings['DEFAULT_DB_INST'])) $settings['DEFAULT_DB_INST'] = "XE";
 if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 150;
 
+//Here we do some complicated gymnastics to make this code less platform-dependent.
+//We define an "OCIDataSource" class using one of the files included below. If the oci extension is not loaded, 
+//  we create it as a dummy ('Hydrogen/no-oci.inc'). otherwise we build it to call real OCI functions 
+//  ('Hydrogen/oci.inc'). If the default DB type is oracle, 
+//  at the end of THIS file we will instantiate an OCIDataSource class and make it the default. If mysql, we will 
+//  instantiate the "dateSource" class defined below as the default.
+//The function names for both classes are the same (for platform independence), but the GOTCHA 
+//  is that when changes are made to THIS file, they may also have to be made in oci.inc; and when troubleshooting, 
+//  you should double-check that you are actually looking at the right class definition.
 if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc');
 if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc'); else include_once ('Hydrogen/no-oci.inc');
 
@@ -128,6 +137,18 @@ class dataSource {
 		global $settings;
 		if($int==0) $int=$settings['DEFAULT_DB_MAXRECS'];
 		$this->maxRecs=$int;
+	}
+
+	public function getSQLID() {
+		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimited_sql);
+		$insert_sql="INSERT INTO saved_sql (session_id,sqltext) values ('". session_id() ."','".$sqlstring ."')";
+		$result = $this->mysqli->query($insert_sql) ;
+		if (!$result) die ("Error executing SQL:" . $insert_sql . " Message: " . $this->mysqli->error);
+		$select_sql="SELECT max(id) FROM saved_sql WHERE session_id='". session_id() ."'";
+		$result = $this->mysqli->query($select_sql) ;
+		if (!$result) die ("Error querying DB with SQL:" . $select_sql . " Message: " . $this->mysqli->error);
+		$result_row = $result->fetch_array(MYSQLI_NUM);
+		return $result_row[0];
 	}
 
 	public function setPageNum($page_num) {
