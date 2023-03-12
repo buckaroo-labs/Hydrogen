@@ -110,7 +110,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <?php
 
-	include 'Hydrogen/elemSidebar.php';
+	if (!isset($settings['SIDEBAR_DISPLAY']) ) $settings['SIDEBAR_DISPLAY']=1;
+  if ( $settings['SIDEBAR_DISPLAY']==1) include 'Hydrogen/elemSidebar.php';
   // include 'Hydrogen/elemAnalytics.php';
   if (isset($settings['page_usage_tracking'])) {
     if ($settings['page_usage_tracking']==true)
