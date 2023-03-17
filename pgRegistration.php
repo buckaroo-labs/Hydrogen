@@ -97,7 +97,7 @@ function validateMail ($email_address,$captcha=false) {
 function validateResetCode ($code_value,$user_name) {
 	global $dds;
 	$validated=false;
-	$sql = "select count(*) from users where username='" . $user_name . "' and reset_code='" . $code_value . "' and session_id='" . session_id() . "'";
+	$sql = "select count(*) from user where username='" . $user_name . "' and reset_code='" . $code_value . "' and session_id='" . session_id() . "'";
 	$result=$dds->setSQL($sql);
 	$row=$dds->getNextRow();
 	if ($row[0]=1) 	$validated=true;
@@ -151,7 +151,7 @@ function sendMail ($mailTo, $resetLink) {
 	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	
 	// More headers
-	$headers .= 'From: Compass App <compass@foo.com>' . "\r\n";
+	$headers .= 'From: App name <app@foo.com>' . "\r\n";
 	//$headers .= 'bcc: user@foo.com' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
@@ -167,7 +167,7 @@ function createResetCode ($email_address) {
 	$new_code = substr(str_shuffle($strKeyspace),0,25);
 
 	//debug ("Creating reset code for " . $email_address . ", Session ID " . session_id() . ": " . $new_code);
-	$sql = "update users set reset_code='" . $new_code . "', session_id='" . session_id() . "' where email='" . $email_address . "'";
+	$sql = "update user set reset_code='" . $new_code . "', session_id='" . session_id() . "' where email='" . $email_address . "'";
 	$dds->setSQL($sql);
 
 	$reset_link= 'http://' . $_SERVER['SERVER_NAME'];
@@ -188,8 +188,8 @@ if ($useCase==1 or $useCase==3) {
 	<table>';
 
 	if (!isset($password_reset)) {
-		echo '<tr><td>Ziply e-mail (address@ziply.com): </td>';
-		echo '<td><input name="email" type="text" id="usr_email"  maxlength="30" size="25" value="';
+		echo '<tr><td>Your e-mail address: </td>';
+		echo '<td><input name="email" type="email" id="usr_email"  maxlength="30" size="25" value="';
 		if(isset($_POST["email"])) echo $email; 
 		echo '"></td></tr>';
 	}
@@ -262,8 +262,8 @@ if ($useCase==2 or $useCase==4) {
 					//register the user (in the database) with hashed password
 					// and delete the reset code
 					$hash =password_hash($password,PASSWORD_BCRYPT);
-					$sql="update users set session_id=null, reset_code=null, password='". $hash . "' where username='" . $username . "'";
-					//$sql="update users set password='". $hash . "' where username='" . $resetPostUsername . "'";
+					$sql="update user set session_id=null, reset_code=null, password='". $hash . "' where username='" . $username . "'";
+					//$sql="update user set password='". $hash . "' where username='" . $resetPostUsername . "'";
 					$dds->setSQL($sql);
 					$registration_message = $registration_success;
 			} else {
