@@ -1,17 +1,19 @@
 <?php
 //A footer for consistent look and feel sitewide
-if (!isset($footer_text)) $footer_text="<h4>Default footer text</h4>";
+
+if (!isset($settings['color1']))  $settings['color1']="w3-green";
+if (!isset($settings['color2']))  $settings['color2']="w3-blue";
 ?>
 <!-- shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main" style="margin-left:250px">
   <footer id="myFooter">
-    <div class="w3-container w3-green w3-padding-32">
-      <?php echo $footer_text; ?>
+    <div class="w3-container <?php echo $settings['color1'] ?> w3-padding-32">
+      <?php if (isset($settings['footer_text1'])) echo $settings['footer_text1']; ?>
 
     </div>
 
-    <div class="w3-container w3-blue">
-      <p><a href="mailto:user@domain.com" target="_blank">mail your feedback</a></p>
+    <div class="w3-container <?php echo $settings['color2'] ?>">
+       <?php if (isset($settings['footer_text2'])) echo $settings['footer_text2']; ?>
     </div>
   </footer>
 </div>
