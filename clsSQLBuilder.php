@@ -12,6 +12,8 @@ class SQLBuilder{
 
 	public function __construct($SQLType="SELECT") {
 		$this->_SQLType = $SQLType;
+		$this->_conditions=array();
+                $this->_columns=array();
 	}
 
 	public function addWhere($whereCondition) {
