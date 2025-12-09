@@ -64,21 +64,34 @@ function showDebugInfo() {
 	echo "<br>";
 };
 
-function logOut() {
-	//clear the session variables to log them out
-	$_SESSION=array();
-}
+
 
 //showDebugInfo();
 
 
+
+//2025-12-08 moving this code to pgTemplate.php to be able to process cookies
+
 //check if this page was called by the click of the "log out" button
+/*
 if (isset($_POST['flow'])) {
 //echo "flow=" . $_POST['flow'];
 	if ($_POST['flow']="logOut"){
 			logOut();;
 	}
 }
+
+function logOut() {
+	global $settings;
+	//clear the session variables to log them out
+	$_SESSION=array();
+
+	//2025-12-08
+	//remove the persistent login cookie data and expire it
+	//setcookie($settings['JWTTokenName'], "", time() - 3600);
+
+}
+*/
 
 //We define status of "logged in" as a non-empty $_SESSION['username'} token.
 //If the user has already successfully logged in, notify them and offer to log them out
@@ -92,18 +105,9 @@ if (isset($_SESSION['username'])) {
 
 	//The user is not logged in, so figure out if the user has supplied credentials
 	//(i.e. whether this page has called itself from the login form submit button)
+	//2025-12-08 move much of this to pgTemplate to handle cookies
 
 	if (isset($_POST['uname']) and isset($_POST['passwd'])) {
-
-		//the credentials are there, so attempt to authenticate
-		//using whatever method is defined in libAuthenticate.php
-		if (authenticate($_POST['uname'],$_POST['passwd'])==1) {
-			$_SESSION['username']=$_POST['uname'];
-			//the user is now logged in
-			$_SESSION['password']=$_POST['passwd'];
-			unset($_SESSION['errMsg']);
-		}
-
 
 		//Now instead of the authenticate() function we will just
 		//use the 'username' token to check login status

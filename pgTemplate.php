@@ -1,4 +1,5 @@
 <?php
+ob_start();
 //This file and the "Hydrogen/elem*.php" includes are a PHP adapatation of the HTML/CSS template at
 // https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_webpage&stacked=h
 
@@ -55,25 +56,65 @@ include "Hydrogen/pgTemplate.php";
 
 if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
+require_once 'Hydrogen/libAuthenticate.php';
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
-/*
-if (isset($_SESSION['username'])) {
 
-  $sql="select access_token from user where username='" . $_SESSION['username'] . "'";
-  $accessToken = $dds->getString($sql);
 
-  $_SESSION['cookieSet']="no";
-  setcookie("accessToken",$accessToken, time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
-  $success=setcookie("username",$_SESSION['username'], time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
-  if ($success) $_SESSION['cookieSet']="yes";
-} else {
-  //Unset cookies on logout -- issue #46DT
-  setcookie("accessToken","", time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
-  setcookie("username","", time() + (86400 * 5), "/","foo.com"); // 86400 = 1 day
+if (!isset($_SESSION['username']) && isset($_COOKIE[$settings['JWTTokenName']])) {
+
+  if ($tokenUser=validateJWT($_COOKIE[$settings['JWTTokenName']])) {
+    debug ("Validated JWT token for " . $tokenUser);
+    $_SESSION['username'] = $tokenUser;
+  }
+
 }
-*/
 
+//Handle LogOut
+function logOut() {
+	global $settings;
+	//clear the session variables to log them out
+	$_SESSION=array();
+
+	//2025-12-08
+	//remove the persistent login cookie data and expire it
+	setcookie($settings['JWTTokenName'], "", time() - 3600);
+
+}
+
+if (isset($_POST['flow'])) {
+	if ($_POST['flow']="logOut"){
+      debug ("Logging out");
+			logOut();;
+	}
+}
+
+
+//Handle LogIn
+	if (isset($_POST['uname']) and isset($_POST['passwd'])) {
+
+		//the credentials are there, so attempt to authenticate
+		//using whatever method is defined in libAuthenticate.php
+		if (authenticate($_POST['uname'],$_POST['passwd'])==1) {
+			$_SESSION['username']=$_POST['uname'];
+			//the user is now logged in
+			$_SESSION['password']=$_POST['passwd'];
+			unset($_SESSION['errMsg']);
+		}
+
+
+		//Now instead of the authenticate() function we will just
+		//use the 'username' token to check login status
+		if (isset($_SESSION['username'])) {
+
+
+			$done_authenticating=true;
+		} // end IF (authenticated)
+
+	} else {$_POST['uname']="";  //define the variable so we can populate the form with it regardless of whether it was blank
+	} // end IF (post:username)
+debug ("Template output begins");
+ob_end_flush();
 ?>
 
 
