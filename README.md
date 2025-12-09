@@ -16,3 +16,4 @@ Reusable code for page layout, building and executing SQL statements, creating d
 
 ### Changes planned for release 1.0.4:
 * Use JWT cookie for persistent login
+* Add external stylesheet link to page template
