@@ -33,9 +33,10 @@ if (!isset($_GET['menu'])) {
 }
 $active_menu_class="w3-hide-small w3-black";
 $other_menu_class="w3-hide-small w3-hover-black";
-$navbar_links[0]=array("name"=>'<img src="../images/icon2.png" height="20">',"href"=>"index.php","class"=>"w3-theme-l2");
+$navbar_links[0]=array("name"=>'<img src="../images/icon.png" height="20">',"href"=>"index.php","class"=>"w3-theme-l2");
 $navbar_links[1]=array("name"=>"Home","href"=>"index.php","class"=>"w3-hide-small w3-hover-white");
-$navbar_links[2]=array("name"=>"Dashboard","href"=>"dashboard.php","class"=>"w3-hover-white");
+$navbar_links[2]=array("name"=>"Navbar item A","href"=>"a.php","class"=>"w3-hover-white");
+$navbar_links[3]=array("name"=>"Navbar item B","href"=>"b.php","class"=>"w3-hover-white");
 
 
 ?>
