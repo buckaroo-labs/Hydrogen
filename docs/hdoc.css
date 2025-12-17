@@ -1,0 +1,76 @@
+h1, h2 {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  padding: 10px;
+}
+
+#HDocTOC {
+    margin-top: 0px;
+    margin-bottom: 50px;
+}
+h1 {
+    background-color: blue;
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+h2 {
+    background-color: rgb(134, 134, 230);
+    color: white;
+    padding-left: 30px;
+    margin-top: 0px;
+}
+
+h3 {
+   padding-left: 30px; 
+}
+
+h4 {
+    color: blue;
+}
+
+.contentsL2 {
+    margin-bottom: 60px;
+}
+.contentsL2 p {
+    padding-left: 30px;
+    padding-right: 20px;
+}
+
+.contentsL3 p {
+    padding-left: 30px;
+    padding-right: 20px;
+}
+
+.HDocTOCli2 {
+    margin-left: 30px;
+
+}
+#HDocFooter {
+    margin-top: 50px;
+    margin-right: 20px;
+    text-align: right;
+}
+
+#topBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: rgb(92, 74, 193);
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#topBtn:hover {
+  background-color: #555;
+}

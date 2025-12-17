@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HDoc Meta-documentation</title>
+
+    <!--Bootstrap and JQuery-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <!--Hydrogen Documentation Template CSS-->
+    <link rel="stylesheet" href="hdoc.css">
+    <!--Document-Specific CSS-->
+    <link rel="stylesheet" href="style.css">
+
+    <script src="hdoc.js"></script>
+  </head>
+  <body>
+
+    <div class="contentsL2" id="Introduction">
+        <p>HDoc is short for <q>Hydrogen Documentation,</q> a template for creating technical documentation with HTML, CSS and Javascript.</p>
+        <p>HDoc was originally designed to support the documentation of the <a target="_blank" href="https://github.com/buckaroo-labs/Hydrogen">Hydrogen</a> framework for web applications, and the contraction <q>HDoc</q> serves to distinguish the documentation for the application development framework from the <q>meta-documentation</q>. 
+        </p>
+    </div>
+    <div class="contentsL2" id="Functional_Requirements">
+        <p>Before getting into how HDoc works, it would be best to document what it is supposed to do. Going from generalities to specifics, HDoc aims to:</p>
+        <ul>
+            <li>Provide a useful template</li>
+            <li>Reduce redundancies in the editing process</li>
+            <li>Automatically generate a table of contents with hyperlinks to document headings</li>
+            
+        </ul>
+        
+    </div>
+    <div class="contentsL2" id="Nonfunctional_Requirements">
+        <p>
+            The general idea is to avoid proprietary document formats and editing software. MS Word is a fine product, but I prefer the control that comes with using HTML. My chief disappointment with Word is that even though it offers an HTML option, it is so bloated as to make the document source unreadable.
+        </p>
+
+        <p>
+           Because I feel that the template provided by HDoc should readily support customization, I have made it so.
+        </p>
+
+        <p>
+            To improve both the user experience and ease of development, the Bootstrap library will be included in the document template.      
+        </p>
+
+        <p>
+            For ease of navigation, the document will have a top-of-page link that is always visible in the browser.
+        </p>
+
+        <p>
+            I&apos;m not a fan of deep nesting of outlined elements on a single page. If you need to go more than two levels deep, create links from your index page to more specific documents. In a future release, HDoc will provide the user with navigation buttons to go to the index page or back up the heirarchy if you define one or more <i>A</i> elements (a link or links) on these specific documents with the <i>ID</i> attribute of <q>HDocHome</q> or <q>HDocUp</q>.
+        </p>
+
+    </div>
+
+    <div class="contentsL2" id="Implementation">
+        <div class="contentsL3" id="Template_appearance">
+            <p>A default visual style of the document will be defined in the file <cite>hdoc.css</cite>.</p>
+        </div>
+        <div class="contentsL3" id="Document_headings">
+            <p>To reduce redundancy, an H1 heading will be created from the document&apos;s title tag.</p>
+            <p>H2 headings will be created automatically from the <i>id</i> attributes of top-level document elements. Top-level elements are defined by using the DIV tag with a class attribute of <q>contentsL2</q> (The <q>top</q> level is level two, because the Title element is shown as an H1; too bad that HTML heading levels aren't numbered starting with zero).</p>
+            <p>These H2 headings will be automatically added to a table-of-contents element which will be added to the document&apos;s beginning. </p>
+            <p>Indexed content that is lower in the document heirarchy will be nested in the top-level element as another DIV element with the class <q>contentsL3</q>. H3 headings will be generated for these in the same manner as H2 headings, and will also be added to the table of contents. </p>
+            <p>Heading generation will be accomplished via Javascript in the file <cite>hdoc.js</cite>. </p>
+        </div>
+        <div class="contentsL3" id="Customization">
+            <p>The file <cite>style.css</cite>, which is provided as a blank, will be linked so that the document&apos;s default style can be overridden without alterations to the file <cite>hdoc.css</cite>.</p>
+            <p>Automatically generated page content will have CSS classes (beginning with the letters <q>HDoc</q> ) so that this content can be selected and customized using the <cite>styles.css</cite> file.</p>
+        </div>
+        <div class="contentsL3" id="Navigation">
+            <p>The file <cite>hdoc.js</cite> will add a top-of-page link to the bottom of the browser window.</p>
+        </div>
+        <div class="contentsL3" id="Credits">
+            <p>Code for the top-of-page button is adapted from <a href="https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top"> https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top</a> . </p>
+            
+        </div>
+    </div>
+    
+    <div class="contentsL2" id="Testing"></div>
+    <ul>
+        <li>Non-alphanumeric characters as headings seem to work just fine, at least in the Firefox browser, but I would use them only cautiously.</li>
+        <!--li>Navigation buttons ( <q>Up</q> and <q>Home</q> ) for secondary pages have not been implemented yet.</li-->
+
+    </ul>
+
+    <div class="contentsL2" id="Usage">
+        <p>To create your own content using HDoc:</p>
+        <ol>
+            <li>Copy this file.</li>
+            <li>Modify the page title in the &lt;head&gt;.</li>
+            <li>Delete the content between the &lt;body&gt; tags.</li>
+            <li>For each top-level section of your document, add a DIV element to the body with a <i>class</i> attribute of <q>contentsL2</q> and an <i>id</i> attribute containing the section&apos;s intended title. Replace any spaces in the ID/title with an underscore character.</li>
+            <li>For each lower-level section of your document, add a DIV element within the relevant top-level element with a <i>class</i> attribute of <q>contentsL3</q> and an <i>id</i> attribute containing the section&apos;s intended title. Replace any spaces in the ID/title with an underscore character.</li>
+            <li>Customize the document&apos;s appearance by adding your own CSS in the <i>style.css</i> file.</li>
+        </ol>
+        <p>You may have two different document sections that you want to give the same subheading, but you want them to have unique IDs for bookmarking in the table of contents. Set the element IDs to the text you want, and then give each ID a unique suffix starting with two underscore characters. This suffix will not be displayed in the heading.</p>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hydrogen documentation</title>
+
+    <!--Bootstrap and JQuery-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <!--Hydrogen Documentation Template CSS-->
+    <link rel="stylesheet" href="hdoc.css">
+    <!--Document-Specific CSS-->
+    <link rel="stylesheet" href="style.css">
+
+    <script src="hdoc.js"></script>
+
+  </head>
+  <body>
+
+    <div class="contentsL2" id="Introduction">
+      <p>
+        <a target="_blank" href="https://github.com/buckaroo-labs/Hydrogen">Hydrogen</a> is a Framework for development and documentation of responsive web applications. It is based on a <a target="_blank" href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_home">w3schools example</a>, using <a target="_blank" href="https://www.w3schools.com/w3css/default.asp">w3.css</a>, and has been in sporadic development since 2014. 
+      </p>
+      <p>Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include SQLite, MySQL, and Oracle.</p>
+    </div>
+
+    <div class="contentsL2" id="Functional_Requirements">
+      <p>Hydrogen is designed to support the following high-level functional requirements:</p>
+      <ul>
+        <li>Consistent look for multi-page applications</li>
+        <li>Dynamic menu and navigation bars</li>
+        <li>Simple identity and access management with role-based access control</li>
+        <li>Persistent login through the use of token cookies (JWT)</li>
+        <li>Simplified creation of HTML tables from SQL data sources</li>
+        <li>Pagination of table data</li>
+        <li>Logging of debugging output</li>
+      </ul>
+
+    </div>
+
+    <div class="contentsL2" id="Nonfunctional_Requirements">
+      <p>Hydrogen is designed to support the following high-level non-functional requirements:</p>
+      <ul>
+        <li>Usability on both desktop and mobile browsers</li>
+        <li>Ease of setup</li>
+        <li>Security</li>
+        <li>Extensibility via APIs</li>
+        <li>Customization via CSS, JS, PHP</li>
+        <li>Clearly-structured and -commented code</li>
+        <li>Up-to-date library compatibility</li>
+
+      </ul>
+      <p>Regarding documentation, see <a href="metadoc.html">HDoc</a>.</p>
+      <div class="contentsL3" id="Responsive_Design__Requirements"></div>
+      <div class="contentsL3" id="Easy_Setup__Requirements">
+        <ul>
+          <li>Avoid the need for manually configuring a database connection</li>
+        </ul>
+      </div>
+      <div class="contentsL3" id="Security__Requirements">
+        <p>User registration</p>
+        <ul>
+          <li>Optionally prevent bot traffic</li>
+        </ul>
+        <p>Password Authentication</p>
+        <ul>
+          <li>Support password age, reuse, length and complexity requirements</li> 
+        </ul>
+        <p>JWT Authentication</p>
+        <ul>
+          <li>Configurable expiration</li>
+          <li>
+            Be sure to check privileges and account status in the database no matter what a token says
+          </li>
+
+
+        </ul>
+        <p>SQLite database security</p>
+      </div>
+      <div class="contentsL3" id="Extensibility__Requirements">
+
+      </div>
+      <div class="contentsL3" id="Customization__Requirements">
+        <ul>
+          <li>Easily add Google Fonts to page template</li>
+        </ul>
+      </div>
+      <div class="contentsL3" id="Compatibility__Requirements">
+        <ul>
+          <li>PHP Version</li>
+          <li>mysqli rather than PDO</li>
+          <li>Bootstrap</li>
+        </ul>
+      </div>
+    </div>
+    <div class="contentsL2" id="Implementation">
+      <div class="contentsL3" id="Page_templates">
+        <ul>
+          <li>Have default stylesheet in Hydrogen directory which can be overridden by separate stylesheet file at web root</li>
+          <li>Set nav- menu-bar sizes in global settings; have template CSS driven by PHP to set margins, widths, and heights accordingly</li>
+        </ul>
+
+      </div>
+      <div class="contentsL3" id="Easy_Setup__Design">
+        <ul>
+          <li>Use SQLite as the default RDBMS</li>
+        </ul>
+      </div>
+      <div class="contentsL3" id="Security__Design">
+          <p>User registration</p>
+          <ul>
+            <li>Use reCAPTCHA for preventing bot usage</li>
+          </ul>
+          <p>Password Authentication</p>
+          <p>JWT Authentication</p>
+          <ul>
+            <li>
+               Add a status column to the users table; populate on registration and check it on login or cookie authent
+            </li>
+            <li>
+              Use a <q>Remember Me</q> checkbox
+            </li>
+
+          </ul>
+          <p>SQLite database security</p>
+      </div>
+      <div class="contentsL3" id="Extensibility__Design">
+
+      </div>
+      <div class="contentsL3" id="Customization__Design">
+        <ul>
+          <li>Easily add Google Fonts to page template</li>
+        </ul>
+      </div>
+    </div>
+    <div class="contentsL2" id="Testing"></div>
+    <div class="contentsL2" id="Usage"></div>
+
+  </body>
+</html>
