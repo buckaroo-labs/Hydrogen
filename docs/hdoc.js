@@ -1,11 +1,11 @@
 
 $(document).ready(function(){
 
-    btn=document.createElement("button");
-    btn.id="topBtn";
-    btn.innerHTML="top";
-    btn.title="Go to top";
-    $("body").prepend(btn);
+
+
+    /******************************************** 
+     * THIS SECTION: TABLE-OF-CONTENTS GENERATION
+    *********************************************/
 
     //The document title is considered level 1 and is shown in an H1 heading
     heading1=document.createElement( "h1");
@@ -66,12 +66,24 @@ $(document).ready(function(){
     $("body").prepend(TOCDiv);
     $("body").prepend(heading1);
 
+    /******************************************** 
+     * THIS SECTION: FOOTER GENERATION
+    *********************************************/
+
     //Credit where credit is due
     footer=document.createElement("footer");
     footer.id="HDocFooter";
     footer.innerHTML='Powered by <a href="metadoc.html">HDoc</a>';
     $("body").append(footer);
 
+    /******************************************** 
+     * THIS SECTION: TOP-OF-DOCUMENT BUTTON GENERATION
+    *********************************************/
+    btn=document.createElement("button");
+    btn.id="topBtn";
+    btn.innerHTML="top";
+    btn.title="Go to top";
+    $("body").prepend(btn);
 
     // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function() {scrollFunction()};
@@ -88,5 +100,56 @@ $(document).ready(function(){
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
     });
+
+
+    /******************************************** 
+     * THIS SECTION: CITATIONS and INLINE-NOTES
+    *********************************************/
+    var citations = document.querySelectorAll("q,blockquote,span");
+    var endNotes = document.createElement("div");
+    endNotes.classList.add("HDocEndNotes");
+
+    var j=1;
+    for (var i=0; i<citations.length; i++) {
+        if (citations[i].hasAttribute("cite")) {
+            if (citations[i].id=="") {citations[i].id="_citation_" + j}
+            if (citations[i].tagName=="Q") {
+                $('<a class="citation" target="_blank" href="' + citations[i].cite + '"><sup>' + j + '</sup></a>&nbsp; ').insertAfter("#" + citations[i].id);
+                var newNote=document.createElement("p");
+                newNote.innerHTML=j + ". " + citations[i].cite ;
+                endNotes.appendChild(newNote);
+            } else {
+                var citationLink = document.createElement("a");
+                citationLink.href= citations[i].attributes["cite"].value ;
+                citationLink.target="_blank";
+                var superscr = document.createElement("sup");
+                superscr.innerHTML=j;
+                citationLink.appendChild(superscr);
+                citations[i].appendChild(citationLink);
+                var newNote=document.createElement("p");
+                newNote.innerHTML=j + ". " + citations[i].attributes["cite"].value ;
+                endNotes.appendChild(newNote);
+            }
+            j++;
+        }
+    }
+    $("body").appendChild(endNotes);
+
+    var inlineNotes =  document.querySelectorAll("inline-note");
+
+    for (var i=0; i<inlineNotes.length; i++) {
+        inlineNotes[i].innerHTML ="";
+        if (inlineNotes[i].hasAttribute("id")===false) {
+            inlineNotes[i].id="_inline_note_" + i;
+        }
+        //var inlineNoteID = inlineNotes[i].id;
+        var asterisk=document.createElement("span");
+        asterisk.innerHTML="**";
+        asterisk.style.fontStyle="bold";
+        asterisk.style.color="#FF0000"
+        asterisk.id = "_inline_note_inner_span_" + i;
+        inlineNotes[i].appendChild(asterisk);
+        inlineNotes[i].addEventListener("click", function() {this.innerHTML= " " + this.title;});
+    }
 
 });
