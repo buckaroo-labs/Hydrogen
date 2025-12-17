@@ -14,10 +14,16 @@ if (!isset($navbar_links)) {
 	$navbar_links[3]=array("name"=>"News","href"=>"#","class"=>"w3-hide-small " . $settings['color3']);
 	$navbar_links[4]=array("name"=>"Contact","href"=>"#","class"=>"w3-hide-small " . $settings['color3'] );
 }
+if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
+    $layout='iframe';
+}
+if ($layout!='iframe') {
+	echo '<div class="w3-top">';
+} else {
+	echo '<div class="w3-top" style="display:none;">';
+}
 ?>
-
 <!-- Navbar -->
-<div class="w3-top">
   <div class="w3-bar  <?php echo $settings['color1'] ?> w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large  <?php echo $settings['color1'] ?>" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
 <?php 

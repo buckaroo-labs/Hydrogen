@@ -53,6 +53,13 @@ include "Hydrogen/pgTemplate.php";
 </body></html>
 */
 
+$layout='default';
+if(isset($_POST['layout']) && $_POST['layout']=='iframe') {
+    $layout='iframe';
+}
+if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
+    $layout='iframe';
+}
 
 if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
@@ -134,29 +141,27 @@ unset ($pagetitle);
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link rel="stylesheet" href="styles.css">
 <?php 
 echo $settings['head_content'];
 ?>
-<style>
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 55px;
-  bottom: 0;
-  height: inherit;
-}
-</style>
 <script src="Hydrogen/sorttable.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<body>
+<body class="bg-light">
 
 <?php
 
 	if (!isset($settings['SIDEBAR_DISPLAY']) ) $settings['SIDEBAR_DISPLAY']=1;
-  if ( $settings['SIDEBAR_DISPLAY']==1) include 'Hydrogen/elemSidebar.php';
+  if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
+    $layout='iframe';
+  }
+  if ( $settings['SIDEBAR_DISPLAY']==1 && $layout !='iframe') {
+    include 'Hydrogen/elemSidebar.php';
+  }
   // include 'Hydrogen/elemAnalytics.php';
   if (isset($settings['page_usage_tracking'])) {
     if ($settings['page_usage_tracking']==true)
