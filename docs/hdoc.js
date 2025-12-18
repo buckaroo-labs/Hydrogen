@@ -105,9 +105,10 @@ $(document).ready(function(){
     endH2.id="HDocEnd";
     endNotes.appendChild(endH2);
 
-    var j=1;
+    var j=0; //footnote sequential number
     for (var i=0; i<citations.length; i++) {
         if (citations[i].hasAttribute("cite") || citations[i].tagName=="END-NOTE") {
+			j++;
             if (citations[i].id=="") {citations[i].id="_citation_" + j}
             //console.log(citations[i].tagName);
             if (citations[i].tagName=="Q") {
@@ -138,10 +139,10 @@ $(document).ready(function(){
                 newNote.innerHTML=j + ". " + citations[i].attributes["cite"].value ;
                 endNotes.appendChild(newNote);
             }
-            j++;
+
         }
     }
-    if (citations.length>0) {
+    if (j>0) {
         $("body").append(endNotes);
     }
 
