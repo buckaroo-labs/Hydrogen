@@ -102,12 +102,16 @@ $(document).ready(function(){
     });
 
 
+   
     /******************************************** 
      * THIS SECTION: CITATIONS and INLINE-NOTES
     *********************************************/
     var citations = document.querySelectorAll("q,blockquote,span");
     var endNotes = document.createElement("div");
     endNotes.classList.add("HDocEndNotes");
+    var endH2=document.createElement("H2");
+    endH2.innerHTML="End Notes";
+    endNotes.appendChild(endH2);
 
     var j=1;
     for (var i=0; i<citations.length; i++) {
@@ -127,13 +131,16 @@ $(document).ready(function(){
                 citationLink.appendChild(superscr);
                 citations[i].appendChild(citationLink);
                 var newNote=document.createElement("p");
+                newNote.classList.add("HDocEndNoteItem")
                 newNote.innerHTML=j + ". " + citations[i].attributes["cite"].value ;
                 endNotes.appendChild(newNote);
             }
             j++;
         }
     }
-    $("body").appendChild(endNotes);
+    if (citations.length>0) {
+        $("body").append(endNotes);
+    }
 
     var inlineNotes =  document.querySelectorAll("inline-note");
 

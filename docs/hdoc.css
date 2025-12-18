@@ -78,3 +78,32 @@ h4 {
 #topBtn:hover {
   background-color: #555;
 }
+
+.HDocEndNoteItem {
+    margin-left: 80px;
+}
+
+code {
+    background-color: rgb(204, 203, 203);
+    color: black;
+}
+.alert {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+table {
+    margin-left: 40px;
+}
+
+.incomplete {
+    color: yellow;
+    background-color: black;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.inprogress {
+    background-color: rgb(251, 235, 17);
+
+}
