@@ -118,7 +118,7 @@ $(document).ready(function(){
     for (var i=0; i<citations.length; i++) {
         if (citations[i].hasAttribute("cite") || citations[i].tagName=="END-NOTE") {
             if (citations[i].id=="") {citations[i].id="_citation_" + j}
-            console.log(citations[i].tagName);
+            //console.log(citations[i].tagName);
             if (citations[i].tagName=="Q") {
                 $('<a class="citation" target="_blank" href="' + citations[i].cite + '"><sup>' + j + '</sup></a>&nbsp; ').insertAfter("#" + citations[i].id);
                 var newNote=document.createElement("p");
