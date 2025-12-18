@@ -66,15 +66,6 @@ $(document).ready(function(){
     $("body").prepend(TOCDiv);
     $("body").prepend(heading1);
 
-    /******************************************** 
-     * THIS SECTION: FOOTER GENERATION
-    *********************************************/
-
-    //Credit where credit is due
-    footer=document.createElement("footer");
-    footer.id="HDocFooter";
-    footer.innerHTML='Powered by <a href="metadoc.html">HDoc</a>';
-    $("body").append(footer);
 
     /******************************************** 
      * THIS SECTION: TOP-OF-DOCUMENT BUTTON GENERATION
@@ -172,4 +163,13 @@ $(document).ready(function(){
     }
 
 
+    /******************************************** 
+     * THIS SECTION: FOOTER GENERATION
+    *********************************************/
+
+    //Credit where credit is due
+    footer=document.createElement("footer");
+    footer.id="HDocFooter";
+    footer.innerHTML='Powered by <a href="metadoc.html">HDoc</a>';
+    $("body").append(footer);
 });
