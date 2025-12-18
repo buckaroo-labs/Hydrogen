@@ -30,7 +30,7 @@
       <p>
         <a target="_blank" href="https://github.com/buckaroo-labs/Hydrogen">Hydrogen</a> is a Framework for development and documentation of responsive web applications. It is based on a <a target="_blank" href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_home">w3schools example</a>, using <a target="_blank" href="https://www.w3schools.com/w3css/default.asp">w3.css</a>, and has been in sporadic development since 2014. 
       </p>
-      <p>Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include SQLite, MySQL, and Oracle.</p>
+      <p>Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include <span class="inprogress">SQLite</span>, MySQL, and Oracle.</p>
     </div>
 
     <div class="contentsL2" id="Functional_Requirements">
@@ -38,8 +38,8 @@
       <ul>
         <li>Consistent look for multi-page applications</li>
         <li>Dynamic menu and navigation bars</li>
-        <li>Simple identity and access management with role-based access control</li>
-        <li>Persistent login through the use of token cookies (JWT)</li>
+        <li class="inprogress">Simple identity and access management with role-based access control</li>
+        <li class="inprogress">Persistent login through the use of token cookies (JWT)</li>
         <li>Simplified creation of HTML tables from SQL data sources</li>
         <li>Pagination of table data</li>
         <li>Logging of debugging output</li>
@@ -51,33 +51,33 @@
       <p>Hydrogen is designed to support the following high-level non-functional requirements:</p>
       <ul>
         <li>Usability on both desktop and mobile browsers</li>
-        <li>Ease of setup</li>
-        <li>Security</li>
-        <li>Extensibility via APIs</li>
-        <li>Customization via CSS, JS, PHP</li>
-        <li>Clearly-structured and -commented code</li>
-        <li>Up-to-date library compatibility</li>
+        <li class="inprogress">Ease of setup</li>
+        <li class="inprogress">Security</li>
+        <li class="inprogress">Extensibility via APIs</li>
+        <li class="inprogress">Customization via CSS, JS, PHP</li>
+        <li class="inprogress">Clearly-structured and -commented code</li>
+        <li class="inprogress">Up-to-date library compatibility</li>
 
       </ul>
       <p>Regarding documentation, see <a href="metadoc.html">HDoc</a>.</p>
       <div class="contentsL3" id="Responsive_Design__Requirements"></div>
       <div class="contentsL3" id="Easy_Setup__Requirements">
         <ul>
-          <li>Avoid the need for manually configuring a database connection</li>
-          <li>Provide a library of PNG images for commonly-needed navigation functions</li>
+          <li class="inprogress">Avoid the need for manually configuring a database connection</li>
+          <li class="inprogress">Provide a library of PNG images for commonly-needed navigation functions</li>
         </ul>
       </div>
       <div class="contentsL3" id="Security__Requirements">
         <p>User registration</p>
         <ul>
-          <li>Optionally prevent bot traffic</li>
+          <li class="inprogress">Optionally prevent bot traffic</li>
         </ul>
         <p>Password Authentication</p>
         <ul>
-          <li>Support password age, reuse, length and complexity requirements</li> 
+          <li class="inprogress">Support password age, reuse, length and complexity requirements</li> 
         </ul>
         <p>JWT Authentication</p>
-        <ul>
+        <ul class="inprogress">
           <li>Configurable expiration</li>
           <li>
             Be sure to check privileges and account status in the database no matter what a token says
@@ -85,17 +85,17 @@
 
 
         </ul>
-        <p>SQLite database security</p>
+        <p class="incomplete">SQLite database security</p>
       </div>
-      <div class="contentsL3" id="Extensibility__Requirements">
+      <div class="contentsL3 incomplete" id="Extensibility__Requirements">
 
       </div>
-      <div class="contentsL3" id="Customization__Requirements">
+      <div class="contentsL3 incomplete" id="Customization__Requirements">
         <ul>
           <li>Easily add Google Fonts to page template</li>
         </ul>
       </div>
-      <div class="contentsL3" id="Compatibility__Requirements">
+      <div class="contentsL3 incomplete" id="Compatibility__Requirements">
         <ul>
           <li>PHP Version</li>
           <li>mysqli rather than PDO</li>
@@ -103,7 +103,7 @@
         </ul>
       </div>
     </div>
-    <div class="contentsL2" id="Implementation">
+    <div class="contentsL2 incomplete" id="Implementation">
       <div class="contentsL3" id="Page_templates">
         <ul>
           <li>Have default stylesheet in Hydrogen directory which can be overridden by separate stylesheet file at web root</li>
@@ -111,12 +111,12 @@
         </ul>
 
       </div>
-      <div class="contentsL3" id="Easy_Setup__Design">
+      <div class="contentsL3 incomplete" id="Easy_Setup__Design">
         <ul>
           <li>Use SQLite as the default RDBMS</li>
         </ul>
       </div>
-      <div class="contentsL3" id="Security__Design">
+      <div class="contentsL3 incomplete" id="Security__Design">
           <p>User registration</p>
           <ul>
             <li>Use reCAPTCHA for preventing bot usage</li>
@@ -134,17 +134,21 @@
           </ul>
           <p>SQLite database security</p>
       </div>
-      <div class="contentsL3" id="Extensibility__Design">
+      <div class="contentsL3 incomplete" id="Extensibility__Design">
 
       </div>
-      <div class="contentsL3" id="Customization__Design">
+      <div class="contentsL3 incomplete" id="Customization__Design">
         <ul>
           <li>Easily add Google Fonts to page template</li>
         </ul>
       </div>
     </div>
-    <div class="contentsL2" id="Testing"></div>
-    <div class="contentsL2" id="Usage"></div>
+    <div class="contentsL2 incomplete" id="Testing">
+		<p>Testing plan and results</p>
+	</div>
+    <div class="contentsL2 incomplete" id="Usage">
+		<p>guide</p>
+	</div>
 
   </body>
 </html>
