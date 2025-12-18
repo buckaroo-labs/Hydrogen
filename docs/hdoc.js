@@ -106,7 +106,7 @@ $(document).ready(function(){
     /******************************************** 
      * THIS SECTION: CITATIONS and INLINE-NOTES
     *********************************************/
-    var citations = document.querySelectorAll("q,blockquote,span");
+    var citations = document.querySelectorAll("q,blockquote,span,end-note");
     var endNotes = document.createElement("div");
     endNotes.classList.add("HDocEndNotes");
     var endH2=document.createElement("H2");
@@ -116,12 +116,22 @@ $(document).ready(function(){
 
     var j=1;
     for (var i=0; i<citations.length; i++) {
-        if (citations[i].hasAttribute("cite")) {
+        if (citations[i].hasAttribute("cite") || citations[i].tagName=="END-NOTE") {
             if (citations[i].id=="") {citations[i].id="_citation_" + j}
+            console.log(citations[i].tagName);
             if (citations[i].tagName=="Q") {
                 $('<a class="citation" target="_blank" href="' + citations[i].cite + '"><sup>' + j + '</sup></a>&nbsp; ').insertAfter("#" + citations[i].id);
                 var newNote=document.createElement("p");
+                newNote.classList.add("HDocEndNoteItem");
+                newNote.id="EndNote_" + j;
                 newNote.innerHTML=j + ". " + citations[i].cite ;
+                endNotes.appendChild(newNote);
+            } else if (citations[i].tagName=="END-NOTE") {
+                $('<a class="citation" href="#EndNote_' + j + '"><sup>' + j + '</sup></a>&nbsp; ').insertAfter("#" + citations[i].id);
+                var newNote=document.createElement("p");
+                newNote.classList.add("HDocEndNoteItem");
+                newNote.id="EndNote_" + j;
+                newNote.innerHTML=j + ". " + citations[i].title ;
                 endNotes.appendChild(newNote);
             } else {
                 var citationLink = document.createElement("a");
@@ -132,7 +142,8 @@ $(document).ready(function(){
                 citationLink.appendChild(superscr);
                 citations[i].appendChild(citationLink);
                 var newNote=document.createElement("p");
-                newNote.classList.add("HDocEndNoteItem")
+                newNote.classList.add("HDocEndNoteItem");
+                newNote.id="EndNote_" + j;
                 newNote.innerHTML=j + ". " + citations[i].attributes["cite"].value ;
                 endNotes.appendChild(newNote);
             }
@@ -159,5 +170,6 @@ $(document).ready(function(){
         inlineNotes[i].appendChild(asterisk);
         inlineNotes[i].addEventListener("click", function() {this.innerHTML= " " + this.title;});
     }
+
 
 });
