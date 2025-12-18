@@ -111,6 +111,7 @@ $(document).ready(function(){
     endNotes.classList.add("HDocEndNotes");
     var endH2=document.createElement("H2");
     endH2.innerHTML="End Notes";
+    endH2.id="HDocEnd";
     endNotes.appendChild(endH2);
 
     var j=1;

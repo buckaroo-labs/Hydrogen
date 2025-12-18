@@ -99,8 +99,6 @@ table {
 .incomplete {
     color: yellow;
     background-color: black;
-    padding-top: 60px;
-    padding-bottom: 60px;
 }
 
 .inprogress {
