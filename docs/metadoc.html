@@ -18,8 +18,11 @@
 
     <!--Hydrogen Documentation Template CSS-->
     <link rel="stylesheet" href="hdoc.css">
-    <!--Document-Specific CSS-->
+	<!--Responsive management of illustration figures-->
+	<link rel="stylesheet" href="figure.css">
+	<!--Document-Specific CSS-->
     <link rel="stylesheet" href="style.css">
+
 
     <script src="hdoc.js"></script>
   </head>
@@ -38,6 +41,7 @@
             <li>Reduce redundancies in the editing process</li>
             <li>Automatically generate a table of contents with hyperlinks to document headings</li>
             <li>Manage the numbering of endnotes and citations</li>
+			<li>Provide a responsive CSS framework for illustrations that float among text</li>
             <li>Highlight the completion status of document sections and of the associated work</li>
         </ul>
         
@@ -94,6 +98,9 @@
         <p>In-progress items identified with the <q>inprogress</q> class are highlighted <span class="inprogress">in yellow</span>.</p>
         <p>Incomplete document sections identified with the <q>incomplete</q> class are highlighted <span class="incomplete">in black</span>.</p>
         </div>
+		<div class="contentsL3" id="Illustration">
+			<p>CSS classes will be provided for setting screen width thresholds for illustration elements&apos; <code>float</code> and <code>width</code> attributes and the <code>grid-template-columns</code> attribute of their parent containers. See <a href="#Illustration__Usage">Usage</a> below.</p>
+		</div>
         <div class="contentsL3" id="Credits">
             <p>Code for the top-of-page button is adapted from <a href="https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top"> https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top</a> . </p>
             
@@ -118,7 +125,25 @@
             <li>Customize the document&apos;s appearance by adding your own CSS in the <i>style.css</i> file.</li>
         </ol>
         <p>You may have two different document sections that you want to give the same subheading, but you want them to have unique IDs for bookmarking in the table of contents. Set the element IDs to the text you want, and then give each ID a unique suffix starting with two underscore characters. This suffix will not be displayed in the heading.</p>
-    </div>
+    <div class="contentsL3" id="Illustrations__Usage">
+		<div class="figdiv fright nofloat_900 float_800_50">
+			<figure>
+				<img src="Melencolia.jpg">
+				<figcaption>Albrecht D&uuml;rer&apos;s <cite>Melencolia I</cite>, courtesy of Wikipedia</figcaption>
+			</figure>
+		</div>
+
+		<p>If your document has figures that float to the left or right of text, it is helpful to designate a minumum screen width to allow floating, below which the figure will occupy most or all of the width of its parent container. To this end, HDoc provides CSS classes specifying this minumum screen width and media queries at the matching widths. Use the <code>figure.css</code> stylesheet and the classes <code>nofloat_500</code>, <code>nofloat_600</code>, <code>nofloat_750</code>, <code>nofloat_800</code>, <code>nofloat_900</code>, and <code>nofloat_1100</code>. The woodcut figure in this section is set to float at a minimum of 900 pixels; try it out if your screen is that large.
+		</p>
+		<p>
+		It is also helpful to specify screen width thresholds at which figures occupy smaller width percentages of wider screens. See the <code>figure.css</code> stylesheet for a complete list of the classes available for this purpose. As an example, applying the classes <code>float_600_50</code>, <code>float_900_33</code>, <code>float_1200_15</code> to your element will result in that element occupying 50% of the width of its parent at a minimum of 600px, 33% at 900px, and 15% at 1200px; the exception being when a <q>nofloat</q> class applies at that width, in which case it will take precedence. Because the <q>float</q> classes all require a minimum width, it is best to use a <q>nofloat</q> class that specifies a larger width than the smallest width specified in your element&apos;s <q>float</q> classes.
+		</p>
+
+		<p>
+		Lastly, it is helpful to make the number of columns in a grid layout depend on screen width. HDoc helps you to easily specify the minimum screen widths for two, three or four columns. See the <code>figure.css</code> stylesheet for a complete list of the classes available for this purpose.  For example, adding the <code>g2-800</code> and <code>g3-1200</code> classes to your container element having a default of one column will set it to two columns at a minimum width of 800px and to three columns at a minimum width of 1200px.
+		</p>
+	</div>
+	</div>
 
   </body>
 </html>
