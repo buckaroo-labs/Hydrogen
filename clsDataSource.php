@@ -1,11 +1,11 @@
 <?php
 /* Including this class file will:
-set default db connection string values as defined in settings.php
-create an array for dataSource objects
-create an array for saved SQL objects
-define the dataSource class with several handy functions
-instantiate dataSource class with defaults and save as 'default' member of datasource array
-provide the short-name $dds reference to 'default' data source
+-set default db connection string values as defined in settingsHydrogen.php and settingsPasswords.php
+-create an array for dataSource objects
+-create an array for saved SQL objects
+-define the dataSource class with several handy functions
+-instantiate dataSource class with defaults and save as 'default' member of datasource array
+-provide the short-name $dds reference to 'default' data source
 
 
 USAGE:
@@ -37,26 +37,30 @@ include_once ('Hydrogen/libDebug.php');
 include_once ('settingsHydrogen.php');
 include_once ('settingsPasswords.php');
 
-//(all this should come from settingsHydrogen.php):
-if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "oracle";
+//(This setting should come from settingsHydrogen.php, but just in case:)
+if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "sqlite";
+/* these were for when the default type was Oracle
 if (!isset($settings['DEFAULT_DB_USER'])) $settings['DEFAULT_DB_USER'] = "scott";
 if (!isset($settings['DEFAULT_DB_PASS'])) $settings['DEFAULT_DB_PASS'] = "tiger";
 if (!isset($settings['DEFAULT_DB_HOST'])) $settings['DEFAULT_DB_HOST'] = "localhost";
 if (!isset($settings['DEFAULT_DB_PORT'])) $settings['DEFAULT_DB_PORT'] = "1521";
 if (!isset($settings['DEFAULT_DB_INST'])) $settings['DEFAULT_DB_INST'] = "XE";
 if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 150;
+*/
 
 //Here we do some complicated gymnastics to make this code less platform-dependent.
 //We define an "OCIDataSource" class using one of the files included below. If the oci extension is not loaded, 
 //  we create it as a dummy ('Hydrogen/no-oci.inc'). otherwise we build it to call real OCI functions 
 //  ('Hydrogen/oci.inc'). If the default DB type is oracle, 
 //  at the end of THIS file we will instantiate an OCIDataSource class and make it the default. If mysql, we will 
-//  instantiate the "dateSource" class defined below as the default.
-//The function names for both classes are the same (for platform independence), but the GOTCHA 
-//  is that when changes are made to THIS file, they may also have to be made in oci.inc; and when troubleshooting, 
+//  instantiate the "dateSource" class defined below as the default, and so on.
+//The function names for all three classes are the same (for platform independence), but the GOTCHA 
+//  is that when changes are made to THIS file, they may also have to be made in oci.inc and sqlite3.inc; 
+//  and when troubleshooting, 
 //  you should double-check that you are actually looking at the right class definition.
-if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc');
-if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc'); else include_once ('Hydrogen/no-oci.inc');
+include_once ('Hydrogen/sqlite3.inc.php');
+if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc.php');
+if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc'); else include_once ('Hydrogen/no-oci.inc.php');
 
 
 $dataSource=array();
@@ -140,7 +144,7 @@ class dataSource {
 	}
 
 	public function getSQLID() {
-		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimited_sql);
+		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimitedSQL);
 		$insert_sql="INSERT INTO saved_sql (session_id,sqltext) values ('". session_id() ."','".$sqlstring ."')";
 		$result = $this->mysqli->query($insert_sql) ;
 		if (!$result) die ("Error executing SQL:" . $insert_sql . " Message: " . $this->mysqli->error);
@@ -161,7 +165,7 @@ class dataSource {
 
 	function setSQL($unlimited_sql) {
 		unset($this->page_count);
-		$this->unlimited_sql=$unlimited_sql;
+		$this->unlimitedSQL=$unlimited_sql;
 		$sql=$this->limitSQL($unlimited_sql);
 		$this->colNames=array();
 		$this->colTypes=array();
@@ -195,7 +199,7 @@ class dataSource {
 
 	function paginate() {
 		debug ("function: cls_dataSource:pagination",__FILE__);
-		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimited_sql . ")";
+		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimitedSQL . ")";
 		switch ($this->dbType) {
 			default:
 				//mysql
@@ -274,6 +278,7 @@ if (!isset($dataSource['default'])) {
 	global $settings;
 	if ($settings['DEFAULT_DB_TYPE']=="oracle") $dataSource['default']=new OCIDataSource();
 	if ($settings['DEFAULT_DB_TYPE']=="mysql") $dataSource['default']=new dataSource();
+	if ($settings['DEFAULT_DB_TYPE']=="sqlite") $dataSource['default']=new SQLiteDataSource();
 }
 	$dds = $dataSource['default'];
 ?>

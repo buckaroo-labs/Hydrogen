@@ -7,12 +7,13 @@ if (!isset($navbar_links)) {
 	//These are the (demo) defaults. Override them in an included settings file and/or page template.
 
 	$navbar_links[0]=array("name"=>'Logo',"href"=>"#","class"=>"w3-theme-l1");
-	//Put your log image here below in place of "Logo" text above
+	//Put your logo image here below in place of "Logo" text above
 	//$navbar_links[0]=array("name"=>'<img src="images/logo_thumbnail.jpg">',"href"=>"#","class"=>"w3-theme-l1");
-	$navbar_links[1]=array("name"=>"Home","href"=>"./","class"=>"w3-hide-small " . $settings['color3']);
-	$navbar_links[2]=array("name"=>"About","href"=>"#","class"=>"w3-hide-small " . $settings['color3']);
-	$navbar_links[3]=array("name"=>"News","href"=>"#","class"=>"w3-hide-small " . $settings['color3']);
-	$navbar_links[4]=array("name"=>"Contact","href"=>"#","class"=>"w3-hide-small " . $settings['color3'] );
+	$navbar_links[sizeof($navbar_links)]=array("name"=>"Home","href"=>"./","class"=> $settings['color3']);
+	//Best to hide most navbar links on smaller screens, or else they overlap the sidebar
+	$navbar_links[sizeof($navbar_links)]=array("name"=>"About","href"=>"#","class"=>"w3-hide-small " . $settings['color3']);
+	$navbar_links[sizeof($navbar_links)]=array("name"=>"News","href"=>"#","class"=>"w3-hide-small " . $settings['color3']);
+	$navbar_links[sizeof($navbar_links)]=array("name"=>"Contact","href"=>"#","class"=>"w3-hide-small " . $settings['color3'] );
 }
 if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
     $layout='iframe';
@@ -25,7 +26,7 @@ if ($layout!='iframe') {
 ?>
 <!-- Navbar -->
   <div class="w3-bar  <?php echo $settings['color1'] ?> w3-top w3-left-align w3-large">
-    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large  <?php echo $settings['color1'] ?>" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a class="w3-bar-item w3-button w3-right w3-hide-large <?php echo $settings['color1'] ?>" w3-large  <?php echo $settings['color3'] ?>" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
 <?php 
 
 	$arrlength=count($navbar_links);

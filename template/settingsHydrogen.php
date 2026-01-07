@@ -1,20 +1,27 @@
 <?php
 //defaults:
-$settings['DEFAULT_DB_TYPE'] = "mysql";
+$settings['DEFAULT_DB_TYPE'] = "sqlite";
+//The following settings would be needed for an Oracle or MySQL connection:
 $settings['DEFAULT_DB_USER'] = "username";
-$settings['DEFAULT_DB_PASS'] = "password";
+//don't put a password in this file (see below) but use this format:
+$settings['DEFAULT_DB_PASS'] = "password"; 
 $settings['DEFAULT_DB_HOST'] = "localhost";
 $settings['DEFAULT_DB_PORT'] = "1521";
 $settings['DEFAULT_DB_INST'] = "XE";
 $settings['DEFAULT_DB_MAXRECS'] = 150;
-//put actual passwords here:
-include ("settingsPasswords.php");
+//put actual passwords here, using format shown above:
+@include ("settingsPasswords.php");
 
+//If these color settings are not set here, defaults may be assigned elsewhere in the code.
 $settings['color1']="w3-blue";
 $settings['color2']="w3-green";
+//button hover colors
 $settings['color3']="w3-hover-white";
+$settings['color4']="w3-hover-blue";
+$settings['color5']="w3-hover-black";
 
-$logo_image="../images/logo.png";
+
+$logo_image="logo.png";
 $settings['login_page']="login.php";
 $hideSearchForm=true;
 $settings['footer_text1']='&copy;2025 My Site Inc Ltd';
@@ -26,17 +33,20 @@ $settings['JWTTokenName'] = 'persistentLogin';
 $navbar_links=array();  
 $sidebar_links=array();  
 if (!isset($_GET['menu'])) {
-	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 1',"href"=>"1.php","class"=>"w3-hover-blue");
-    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 2',"href"=>"2.php","class"=>"w3-hover-blue");
-    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 3',"href"=>"3.php","class"=>"w3-hover-blue");
-    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 4',"href"=>"4.php","class"=>"w3-hover-blue");
+	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 1',"href"=>"1.php","class"=>$settings['color4']);
+    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 2',"href"=>"2.php","class"=>$settings['color4']);
+    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 3',"href"=>"3.php","class"=>$settings['color4']);
+    $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 4',"href"=>"4.php","class"=>$settings['color4']);
 }
-$active_menu_class="w3-hide-small w3-black";
-$other_menu_class="w3-hide-small w3-hover-black";
-$navbar_links[0]=array("name"=>'<img src="../images/icon.png" height="20">',"href"=>"index.php","class"=>"w3-theme-l2");
-$navbar_links[1]=array("name"=>"Home","href"=>"index.php","class"=>"w3-hide-small w3-hover-white");
-$navbar_links[2]=array("name"=>"Navbar item A","href"=>"a.php","class"=>"w3-hover-white");
-$navbar_links[3]=array("name"=>"Navbar item B","href"=>"b.php","class"=>"w3-hover-white");
+//For testing:
+//unset ($sidebar_links);
+$active_menu_class="w3-hide-small " . $settings['color5'];
+$other_menu_class="w3-hide-small " . $settings['color5'];
+$navbar_links[sizeof($navbar_links)]=array("name"=>'<img src="logo.png" height="20">',"href"=>"index.php","class"=>"w3-theme-l2");
+$navbar_links[sizeof($navbar_links)]=array("name"=>"Home","href"=>"index.php","class"=> $settings['color3']);
+//Best to hide most navbar links on smaller screens, or else they overlap the sidebar
+$navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item A","href"=>"a.php","class"=>"w3-hide-small " .$settings['color3']);
+$navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item B","href"=>"b.php","class"=>"w3-hide-small " .$settings['color3']);
 
 
 ?>
