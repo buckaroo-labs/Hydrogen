@@ -4,6 +4,9 @@
 
 Reusable code for page layout, building and executing SQL statements, creating data-driven HTML tables, authentication, and so on.
 
+## Requirements
+* PHP with SQLite3 enabled. (MySQL and Oracle are configurable options)
+
 ## Setup /installation
 * Clone or copy the files into a "Hydrogen" folder in the application root.
 * For usage examples, copy or link the files in "/template" to the application root as well.
