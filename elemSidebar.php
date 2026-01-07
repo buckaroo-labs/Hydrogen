@@ -39,7 +39,7 @@ for($x=0;$x<$arrlength;$x++)   {
 
 if (isset($settings['facebook_page'])) {
 echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
- . $settings['facebook_page'] . '"><img src="Hydrogen/images/facebook.jpg" alt="Facebook" height="90" width="90"></a>');
+ . $settings['facebook_page'] . '"><img src="Hydrogen/images/sites/Facebook.png" alt="Facebook" height="90" width="90"></a>');
 }
 ?>
 </table>
