@@ -54,7 +54,7 @@ $db->exec("
 
 
 	CREATE TABLE IF NOT EXISTS user (
-	id INT PRIMARY KEY  AUTOINCREMENT , 
+	id INTEGER PRIMARY KEY  AUTOINCREMENT , 
 	username TEXT NOT NULL,
 	email TEXT NOT NULL,
 	password_hash TEXT  NOT NULL,
@@ -67,13 +67,13 @@ $db->exec("
 	last_login datetime DEFAULT NULL,
 	ins_user TEXT NOT NULL DEFAULT 'system',
 	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	UNIQUE KEY username (username),
-	UNIQUE KEY email (email)
+	UNIQUE   (username),
+	UNIQUE   (email)
 	);
 
 	
 	CREATE TABLE IF NOT EXISTS saved_sql (
-	id INT PRIMARY KEY AUTOINCREMENT , 
+	id INTEGER PRIMARY KEY AUTOINCREMENT , 
 	session_id TEXT NOT NULL  ,
 	sqltext TEXT NOT NULL  ,
 	created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP 
@@ -112,6 +112,7 @@ class SQLiteDataSource {
 
 
 	protected $dbconn;
+	protected $dbType;
 	protected $maxRecs;
 	protected $cursor;
 	protected $stmt;
@@ -146,6 +147,7 @@ class SQLiteDataSource {
 		global $settings;
 		debug("Constructing SQLiteDataSource class",__FILE__);
 		$this->setMaxRecs();
+		$this->dbType='sqlite3';
 		$this->dbconn = getDBConnection3($private);
 	}
 
@@ -229,7 +231,7 @@ class SQLiteDataSource {
 		return $this->stmt->fetchArray();
 	}
 
-	function getDataset($arraytype="indexed") {
+	public function getDataset($arraytype="indexed") {
 			$rownum=0;
 			$return=array();
 			while ($result_rows[$rownum] = $this->getNextRow($arraytype)){
@@ -239,5 +241,12 @@ class SQLiteDataSource {
 			return $return;
 	}
 
+	public function prepare($sql) {
+		return $this->dbconn->prepare($sql);
+	}
+
+	public function getStmtResult($stmt) {
+		return $stmt->execute();
+	}
 }//end class
 ?>

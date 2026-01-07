@@ -69,11 +69,12 @@ function lookUpUsername($username) {
 	if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
 
 	$stmt->execute();
-	$stmt->bind_result($uCount, $uname);
-	while ($stmt->fetch()) {
-		if ($uCount==1) $strResult=$uname;
+	//$stmt->bind_result($uCount, $uname);
+	$result=$stmt->get_result();
+	//while ($stmt->fetch()) {
+	while ($rrow=$result->fetch_assoc()) {
+		if ($rrow['user_count']==1) $strResult=$rrow['uname'];
 	}
-
 	return $strResult;
 
 }
@@ -95,19 +96,42 @@ function authenticate($uname, $password) {
 	if (lookUpUsername($username) != '') {
 		global $dds;
 		global $caseSensitiveUsernames;
-		$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
-		$where=" upper(username)=upper(?)";
-		if ($caseSensitiveUsernames) $where = " username=?";
+		//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+
+		if (strcmp($dds->dbType,'mysqli')==0) {
+			$where=" upper(username)=upper(?)";
+			if ($caseSensitiveUsernames) $where = " username=?";	
+		} elseif (strcmp($dds->dbType,'sqlite')==0) {
+			$where=" upper(username)=upper(':uname')";
+			if ($caseSensitiveUsernames) $where = " username=':uname'";	
+		} else {
+			//This library used to be Oracle compatible, 
+			//but here is where I no longer bother to test. Beware.
+			$where=" upper(username)=upper(':uname')";
+			if ($caseSensitiveUsernames) $where = " username=':uname'";
+		}
 		$sql = "select count(*) user_count, max(password_hash) max_hash from user where " . $where;
-		$stmt=$conn->prepare($sql); 
-		if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-		$rc=$stmt->bind_param("s", $username); 
-		if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-		$stmt->execute();
-		$stmt->bind_result($uCount, $hash);
-		while ($stmt->fetch()) {
+		$stmt=$dds->prepare($sql); 
+		if ( false===$stmt ) die('prepare() failed: ' . htmlspecialchars($dds->error));
+
+		//Ideally, more of this binding would be handled at the class level, 
+		//but each library requires a much different syntax.
+		if (strcmp($dds->dbType,'mysqli')==0) {
+			$rc=$stmt->bind_param("s", $username); 
+			if ( false===$rc ) die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+		} elseif (strcmp($dds->dbType,'sqlite')==0) {
+			$stmt->bindValue(':uname', $username, SQLITE3_TEXT);
+		} else {
+			//This repo used to be Oracle compatible, 
+			//but here is where I no longer bother to test. Beware.
+			oci_bind_by_name($stmt, ':uname', $userName);
+		}
+
+		$result = $dds->getStmtResult($stmt);
+ 
+		while ($rrow=$dds->getNextRow("assoc")) {
 		
-			if (    ($uCount > 0) && password_verify($password,$hash)   ) {
+			if ( ($rrow['user_count'] > 0) && password_verify($password,$rrow['max_hash'])   ) {
 					$success=1;
 			
 					//deprecated:

@@ -4,6 +4,7 @@
 if (!isset($settings['color4']))  $settings['color4']="w3-hover-blue";
 
 if (!isset($sidebar_links)) {
+	$sidebar_links=[];
 	//These are the (demo) defaults. Override them in an included settings file and/or page template.
 	$sidebar_links[sizeof($sidebar_links)]=array("name"=>"Link","href"=>"#","class"=> ' '.  
 		$settings['color4'] );
@@ -37,12 +38,32 @@ for($x=0;$x<$arrlength;$x++)   {
 }
 
 
-if (isset($settings['facebook_page'])) {
-echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
- . $settings['facebook_page'] . '"><img src="Hydrogen/images/sites/Facebook.png" alt="Facebook" height="90" width="90"></a>');
-}
 ?>
 </table>
+
+<?php 
+if (isset($settings['facebook_page'])) {
+echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
+ . $settings['facebook_page'] . '"><img class="HSidebarSiteImg" src="Hydrogen/images/sites/Facebook.png" alt="Facebook"></a>');
+}
+if (isset($settings['instagram_page'])) {
+echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
+ . $settings['instagram_page'] . '"><img class="HSidebarSiteImg" src="Hydrogen/images/sites/Instagram.png" alt="Instagram"></a>');
+}
+if (isset($settings['github_page'])) {
+echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
+ . $settings['github_page'] . '"><img class="HSidebarSiteImg" src="Hydrogen/images/sites/GitHub.png" alt="GitHub"></a>');
+}
+if (isset($settings['stackoverflow_page'])) {
+echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
+ . $settings['stackoverflow_page'] . '"><img class="HSidebarSiteImg" src="Hydrogen/images/sites/StackOverflow.png" alt="StackOverflow"></a>');
+}
+if (isset($settings['linkedin_page'])) {
+echo ('<a target="_blank" class="w3-bar-item w3-button '. $settings['color4'] . '" href="'
+ . $settings['linkedin_page'] . '"><img class="HSidebarSiteImg" src="Hydrogen/images/sites/LinkedIn.png" alt="LinkedIn"></a>');
+}
+?>
+
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens 

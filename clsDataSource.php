@@ -50,17 +50,17 @@ if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 1
 
 //Here we do some complicated gymnastics to make this code less platform-dependent.
 //We define an "OCIDataSource" class using one of the files included below. If the oci extension is not loaded, 
-//  we create it as a dummy ('Hydrogen/no-oci.inc'). otherwise we build it to call real OCI functions 
-//  ('Hydrogen/oci.inc'). If the default DB type is oracle, 
+//  we create it as a dummy ('Hydrogen/no-oci.inc.php'). otherwise we build it to call real OCI functions 
+//  ('Hydrogen/oci.inc.php'). If the default DB type is oracle, 
 //  at the end of THIS file we will instantiate an OCIDataSource class and make it the default. If mysql, we will 
 //  instantiate the "dateSource" class defined below as the default, and so on.
 //The function names for all three classes are the same (for platform independence), but the GOTCHA 
-//  is that when changes are made to THIS file, they may also have to be made in oci.inc and sqlite3.inc; 
+//  is that when changes are made to THIS file, they may also have to be made in oci.inc.php and sqlite3.inc; 
 //  and when troubleshooting, 
 //  you should double-check that you are actually looking at the right class definition.
 include_once ('Hydrogen/sqlite3.inc.php');
 if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc.php');
-if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc'); else include_once ('Hydrogen/no-oci.inc.php');
+if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc.php'); else include_once ('Hydrogen/no-oci.inc.php');
 
 
 $dataSource=array();
@@ -111,7 +111,6 @@ class dataSource {
 	}
 
 	public function __construct(
-		$dbType="xNULLx",
 		$dbUser="xNULLx",
 		$dbPass="xNULLx",
 		$dbHost="xNULLx",
@@ -119,8 +118,7 @@ class dataSource {
 		$dbInst="xNULLx") {
 		global $settings;
 		debug("Constructing dataSource class",__FILE__);
-
-		if($dbType=="xNULLx") $dbType=$settings['DEFAULT_DB_TYPE'];
+		$this->dbType="mysql";
 		if($dbUser=="xNULLx") $dbUser=$settings['DEFAULT_DB_USER'];
 		if($dbPass=="xNULLx") $dbPass=$settings['DEFAULT_DB_PASS'];
 		if($dbHost=="xNULLx") $dbHost=$settings['DEFAULT_DB_HOST'];
@@ -128,7 +126,6 @@ class dataSource {
 		if($dbInst=="xNULLx") $dbInst=$settings['DEFAULT_DB_INST'];
 
 		$this->setMaxRecs();
-		$this->dbType=$dbType;
 		switch ($this->dbType) {
 			default:
 				//mysql
@@ -260,7 +257,7 @@ class dataSource {
 		return $result_row;
 	}
 
-	function getDataset($arraytype="indexed") {
+	public function getDataset($arraytype="indexed") {
 			$rownum=0;
 			$return=array();
 			while ($result_rows[$rownum] = $this->getNextRow($arraytype)){
@@ -269,7 +266,15 @@ class dataSource {
 			}
 			return $return;
 	}
+	
+	public function prepare($sql) {
+		return $this->mysqli->prepare($sql);
+	}
 
+	public function getStmtResult($stmt) {
+		$stmt->execute();
+		return $stmt->get_result();
+	}
 
 }
 

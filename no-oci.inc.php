@@ -1,6 +1,9 @@
 <?php
 //dummy functions provided to match functions in oci.inc when the OCI extension is not loaded
 
+function oci_bind_by_name($thiss, $that, $tother) {
+	error_log ("Oracle OCI extension not detected!");
+}
 
 class OCIDataSource {
 		public function __construct($dbUser="xNULLx",

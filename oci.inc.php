@@ -7,6 +7,7 @@ class OCIDataSource {
 
 
 	protected $dbconn;
+	protected $dbType;
 	protected $maxRecs;
 	protected $cursor;
 	protected $stmt;
@@ -50,7 +51,7 @@ class OCIDataSource {
 		$dbInst="xNULLx") {
 		global $settings;
 		debug("Constructing OCIDataSource class",__FILE__);
-
+		$this->dbType='oracle';
 		if($dbUser=="xNULLx") $dbUser=$settings['DEFAULT_DB_USER'];
 		if($dbPass=="xNULLx") $dbPass=$settings['DEFAULT_DB_PASS'];
 		if($dbHost=="xNULLx") $dbHost=$settings['DEFAULT_DB_HOST'];
@@ -61,7 +62,7 @@ class OCIDataSource {
 		//$this->dbType=$dbType;
 				$dbstring=$dbHost . ":" . $dbPort . "/" . $dbInst;
 				debug("Connecting to Oracle: $dbstring",__FILE__);
-				$this->dbconn = oci_connect($dbUser, $dbPass, $dbstring) or die("Connection to $dbUser at $dbString failed: " . implode(" | ",oci_error()));
+				$this->dbconn = oci_connect($dbUser, $dbPass, $dbstring) or die("Connection to $dbUser at $dbstring failed: " . implode(" | ",oci_error()));
 				debug("Connected to Oracle",__FILE__);
 				$this->setSQL("alter session SET NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS'" );
 
@@ -83,7 +84,7 @@ class OCIDataSource {
 
 	function setSQL($unlimited_sql) {
 		unset($this->page_count);
-		$this->unlimited_sql=$unlimited_sql;
+		$this->unlimitedSQL=$unlimited_sql;
 		$sql=$this->limitSQL($unlimited_sql);
 		$this->colNames=array();
 		$this->colTypes=array();
@@ -102,7 +103,7 @@ class OCIDataSource {
 
 	}
 	public function getSQLID() {
-		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimited_sql);
+		$sqlstring=str_replace("'","#SINGLEQUOT#",$this->unlimitedSQL);
 		$insert_sql="INSERT INTO saved_sql (session_id,sqltext) values ('". session_id() ."','".$sqlstring ."')";
 		//Parse the statement
 		$stmt = oci_parse($this->dbconn,$insert_sql) or die ( oci_error($this->dbconn));
@@ -121,11 +122,11 @@ class OCIDataSource {
 
 	function paginate() {
 		debug ("function: cls_dataSource:pagination",__FILE__);
-		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimited_sql . ")";
+		$count_sql="SELECT COUNT(*) FROM (" . $this->unlimitedSQL . ")";
 				//Parse the statement
 				$stmt = oci_parse($this->dbconn,$count_sql) or die ( oci_error($this->dbconn));
 				//execute the query
-				$result= oci_execute($stmt) or die ("Error querying DB with SQL:" . $sql . " Error message: " . oci_error($this->dbconn));
+				$result= oci_execute($stmt) or die ("Error querying DB with SQL:" . $count_sql . " Error message: " . oci_error($this->dbconn));
 				$result_row = oci_fetch_array($stmt,OCI_NUM+OCI_RETURN_NULLS);
 
 		$rec_count=$result_row[0];
@@ -177,7 +178,7 @@ class OCIDataSource {
 		return $result_row;
 	}
 
-	function getDataset($arraytype="indexed") {
+	public function getDataset($arraytype="indexed") {
 			$rownum=0;
 			$return=array();
 			while ($result_rows[$rownum] = $this->getNextRow($arraytype)){
@@ -187,5 +188,12 @@ class OCIDataSource {
 			return $return;
 	}
 
+	public function prepare($sql) {
+		return oci_parse($this->dbconn,$sql);
+	}
+
+	public function getStmtResult($stmt) {
+		return oci_execute($stmt);
+	}
 }//end class
 ?>

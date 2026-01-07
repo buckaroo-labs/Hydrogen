@@ -30,7 +30,7 @@ $password = sanitizePostVar('password');
 $reset_code = sanitizeGetVar('reset_code');
 $resetPostCode = sanitizePostVar('reset_code');
 $resetPostUsername = sanitizePostVar('username');
-if (filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) $email = $_POST['email'];
+if (isset($_POST['email']) && filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) $email = $_POST['email'];
 
 $useCase=1;
 if (isset($email) and $email !="") $useCase=2;
@@ -63,28 +63,33 @@ function validateMail ($email_address,$captcha=false) {
 	} else {
 
 		//if CAPTCHA is validated, check if the email is in the DB
-		$sql="select count(*) ucount, max(username) max_name from user where email=?";
-		$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
-		$stmt=$conn->prepare($sql); 
-		if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-		$rc=$stmt->bind_param("s", $email_address);  
-		if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-		$stmt->execute();
-		$stmt->bind_result($uCount, $uname);
-		while ($stmt->fetch()) {
-			if ($uCount==1) {
+		$sql="select count(*) ucount, max(username) max_name from user where email='" . $email_address . "'";
+		/** Using prepared statements was a good idea, but input has been sanitized and
+		 * we need the same code to work for different DB libraries. Come back to this later.
+		 */
+		//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+		//$stmt=$conn->prepare($sql); 
+		//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
+		//$rc=$stmt->bind_param("s", $email_address);  
+		//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+		//$stmt->execute();
+		//$stmt->bind_result($uCount, $uname);
+		$result=$dds->setSQL($sql);
+		while ($rrow=$dds->getNextRow("assoc")) {
+			if ($rrow['ucount']==1) {
 				$emailValid=true;
-				$username=$uname;
+				$username=$rrow['max_name'];
 			}
 		}
 		if (!$emailValid) {
-			$sql = "INSERT INTO user (username,email) values (?,?)";
-			$stmt=$conn->prepare($sql); 
-			if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-			$rc=$stmt->bind_param("ss", $email_address, $email_address); 
-			if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-			$stmt->execute();
-			if ($stmt->affected_rows==1) {
+			$sql = "INSERT INTO user (username,email) values ('" . $email_address . "','" . $email_address . "')";
+			//$stmt=$conn->prepare($sql); 
+			//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
+			//$rc=$stmt->bind_param("ss", $email_address, $email_address); 
+			//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+			//$stmt->execute();
+			$result=$dds->setSQL($sql);
+			if ($result) {
 				$emailValid=true;
 				$username=$email_address;
 			}
@@ -97,7 +102,8 @@ function validateMail ($email_address,$captcha=false) {
 function validateResetCode ($code_value,$user_name) {
 	global $dds;
 	$validated=false;
-	$sql = "select count(*) from user where username='" . $user_name . "' and reset_code='" . $code_value . "' and session_id='" . session_id() . "'";
+	$sql = "select count(*) from user where username='" . $user_name .
+	 "' and reset_code='" . $code_value . "' and session_id='" . session_id() . "'";
 	$result=$dds->setSQL($sql);
 	$row=$dds->getNextRow();
 	if ($row[0]=1) 	$validated=true;
@@ -167,7 +173,8 @@ function createResetCode ($email_address) {
 	$new_code = substr(str_shuffle($strKeyspace),0,25);
 
 	//debug ("Creating reset code for " . $email_address . ", Session ID " . session_id() . ": " . $new_code);
-	$sql = "update user set reset_code='" . $new_code . "', session_id='" . session_id() . "' where email='" . $email_address . "'";
+	$sql = "update user set reset_code='" . $new_code . "', session_id='" . session_id() . 
+		"' where email='" . $email_address . "'";
 	$dds->setSQL($sql);
 
 	$reset_link= 'http://' . $_SERVER['SERVER_NAME'];
@@ -227,8 +234,6 @@ if ($useCase==1 or $useCase==3) {
 	</form>';
 } //use cases 1 and 3
 
-
-
 if ($useCase==2 or $useCase==4) {
 	$registration_message="";
 	$password_reset=false;
@@ -262,7 +267,8 @@ if ($useCase==2 or $useCase==4) {
 					//register the user (in the database) with hashed password
 					// and delete the reset code
 					$hash =password_hash($password,PASSWORD_BCRYPT);
-					$sql="update user set session_id=null, reset_code=null, password='". $hash . "' where username='" . $username . "'";
+					$sql="update user set session_id=null, reset_code=null, password='". $hash .
+						 "' where username='" . $username . "'";
 					//$sql="update user set password='". $hash . "' where username='" . $resetPostUsername . "'";
 					$dds->setSQL($sql);
 					$registration_message = $registration_success;

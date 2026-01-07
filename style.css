@@ -18,6 +18,10 @@
     margin-bottom: 40px;
 }
 
+.HSidebarSiteImg {
+	max-height: 25px;
+}
+
 #footer {
     margin-top: 100px;
     margin-bottom: 100px;

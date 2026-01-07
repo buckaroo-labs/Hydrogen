@@ -5,8 +5,22 @@ $setup_mode=true;
 include "Hydrogen/pgTemplate.php";
 
 if (isset($_GET['setmeup'])) {
-  $secret = '<?php $' . "settings['JWT-SECRET-KEY']='" . md5(uniqid()) . "'; ?>";
-  $secretsfile = file_put_contents('settingsPasswords.php', $secret.PHP_EOL , FILE_APPEND | LOCK_EX);
+  //phpinfo() will help add some randomness to the key.
+  ob_start();
+  phpinfo();
+  $secret= md5(uniqid() . ob_get_clean());
+  $output = "<?php\n" . 
+"   //Changing the JWT secret key will invalidate any tokens 
+//issued by the application.\n" .
+	'   $' . "settings['JWT-SECRET-KEY']='" .$secret . "';\n";
+  if (!isset($settings['SQLITE-SECRET-KEY'])) {
+	$output .="   //Changing the sqlite secret key will break the mapping
+   //from the application to its data files. Use caution!\n";
+	$output .=  '   $' . "settings['SQLITE-SECRET-KEY']='" . md5($secret) . "';\n";
+  }
+  $output .= "?>";
+  $secretsfile = file_put_contents('settingsPasswords.php', $output.PHP_EOL , FILE_APPEND | LOCK_EX);
+  
 }
 @include('settingsPasswords.php');
 if (empty($settings['JWT-SECRET-KEY'])) {
