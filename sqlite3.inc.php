@@ -10,35 +10,100 @@ function getDBConnection3($private) {
 		$username=strtolower($_SESSION['username']);
 	}
 	//a filename containing a hash of the username and key can be exposed to the
-	// user for download without compromising the user's data or the key
-	// even if this code is open source
+	// user for download without compromising the key or the user's data 
+	// even if this code is open source. But people make mistakes, so if you give a
+	// user a copy of their file, rename the copy.
 	$filename = $username . "_" . md5($username.$secret_key);
-	$dbString='sqlite:' . $filename . '.sqlite';
+	$dbString='Hydrogen/data/' . $filename . '.sqlite';
 	$dbconn = new SQLite3($dbString);
 	return $dbconn;
 }
 
-/*
+
 // Create tables if not existing
+$db=getDBConnection3(false);
 $db->exec("
-    CREATE TABLE IF NOT EXISTS projects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        status TEXT 
-    );
 
-    CREATE TABLE IF NOT EXISTS time_logs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        project_id INTEGER,
-        start_time TEXT,
-        end_time TEXT,
-        notes TEXT,
-        FOREIGN KEY(project_id) REFERENCES projects(id)
-    );
+	CREATE TABLE IF NOT EXISTS page_usage (
+	id INTEGER  PRIMARY KEY  AUTOINCREMENT,
+	server TEXT DEFAULT NULL,
+	ip TEXT DEFAULT NULL,
+	remote_host TEXT DEFAULT NULL,
+	uri TEXT DEFAULT NULL,
+	username TEXT DEFAULT NULL,
+	server_time datetime DEFAULT CURRENT_TIMESTAMP,
+	request_method TEXT DEFAULT NULL
+	);
+
+
+	CREATE TABLE IF NOT EXISTS privilege (
+	id INTEGER  PRIMARY KEY  AUTOINCREMENT,
+	name TEXT NOT NULL,
+	description TEXT NOT NULL,
+	ins_user TEXT NOT NULL DEFAULT 'system',
+	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+
+	CREATE TABLE IF NOT EXISTS role (
+	id INTEGER  PRIMARY KEY  AUTOINCREMENT,
+	name TEXT NOT NULL,
+	description TEXT NOT NULL,
+	ins_user TEXT NOT NULL DEFAULT 'system',
+	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+
+
+	CREATE TABLE IF NOT EXISTS user (
+	id INT PRIMARY KEY  AUTOINCREMENT , 
+	username TEXT NOT NULL,
+	email TEXT NOT NULL,
+	password_hash TEXT  NOT NULL,
+	first_name TEXT NOT NULL ,
+	last_name TEXT NOT NULL ,
+	reset_code TEXT DEFAULT NULL,
+	session_id TEXT DEFAULT NULL,
+	access_token TEXT DEFAULT NULL,
+	last_ip TEXT DEFAULT NULL,
+	last_login datetime DEFAULT NULL,
+	ins_user TEXT NOT NULL DEFAULT 'system',
+	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	UNIQUE KEY username (username),
+	UNIQUE KEY email (email)
+	);
+
+	
+	CREATE TABLE IF NOT EXISTS saved_sql (
+	id INT PRIMARY KEY AUTOINCREMENT , 
+	session_id TEXT NOT NULL  ,
+	sqltext TEXT NOT NULL  ,
+	created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP 
+	);
+
+	CREATE TABLE IF NOT EXISTS m_role_privilege (
+	id INTEGER  PRIMARY KEY AUTOINCREMENT,
+	role_id INTEGER  NOT NULL,
+	privilege_id INTEGER  NOT NULL,
+	ins_user TEXT NOT NULL DEFAULT 'system',
+	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (privilege_id) REFERENCES privilege (id),
+	FOREIGN KEY (role_id) REFERENCES role (id),
+	CONSTRAINT role_priv_unq UNIQUE (privilege_id,role_id)
+	);
+
+
+	CREATE TABLE IF NOT EXISTS m_user_role (
+	id INTEGER  PRIMARY KEY AUTOINCREMENT,
+	role_id INTEGER  NOT NULL,
+	user_id INTEGER  NOT NULL,
+	ins_user TEXT NOT NULL DEFAULT 'system',
+	ins_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT user_role_unq UNIQUE (user_id,role_id),
+	FOREIGN KEY (role_id) REFERENCES role (id),
+	FOREIGN KEY (user_id) REFERENCES user (id)
+	);
+
 ");
-?>
 
-*/
 
 class SQLiteDataSource {
 

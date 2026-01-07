@@ -1,4 +1,3 @@
-login_authenticate.php
-settings.php
-*_OLD.php
+settingsPasswords.php
 template/Thumbs.db
+data/*.sqlite
