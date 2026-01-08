@@ -1,7 +1,6 @@
 <?php
 	$pagetitle="Page title";
 	$headline = '<h1>My Site</h1><h3>My super awesome tagline</h3>' ;
-	include "Hydrogen/pgTemplate.php";
 ?>
 
 	<!-- Main content: shift it to the right when the sidebar is visible -->

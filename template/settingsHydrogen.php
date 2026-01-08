@@ -75,6 +75,7 @@ if ($testmode) {
 	$settings['github_page'] = "https://www.facebook.com/pages/MyPageName/1234567890";
 	$settings['linkedin_page'] = "https://www.facebook.com/pages/MyPageName/1234567890";
 	$settings['stackoverflow_page'] = "https://www.facebook.com/pages/MyPageName/1234567890";
-
+	
+	$settings['DEBUG']=true;
 }
 ?>

@@ -16,12 +16,36 @@ if (empty($settings['JWT-SECRET-KEY'])) {
 /*****CONFIG-END *****/
 
 if (isset($_GET['p']) && strcmp($_GET['p'],'login')==0) {
-	include "Hydrogen/pages/Login.php";  
+	$include= "Hydrogen/pages/Login.php";  
+		$pagetitle="Log In";
+	$headline = '<h1>Log In</h1>' ;
 } elseif (isset($_GET['p']) && strcmp($_GET['p'],'register')==0) {
-	include "Hydrogen/pages/Register.php";  
+	$include= "Hydrogen/pages/Register.php";  
+		$pagetitle="Register";
+	$headline = '<h1>Register</h1>' ;
 } else {
-	include "Hydrogen/pages/Sample.php";  
+	$include= "Hydrogen/pages/Sample.php";  
+	$pagetitle="Demo";
+	$headline = '<h1>Demo</h1>' ;
 }
+
+include "Hydrogen/pgTemplate.php";
+
+
+?>
+<!-- Main content: shift it to the right when the sidebar is visible -->
+<div class="w3-main">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+		<?php include $include; ?>
+	</div>
+    <div class="w3-third w3-container">
+  	</div>
+  </div>
+
+</div>
+<?php
 	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle -
 	//   so include it at the end and then let it float to the top
 	include 'Hydrogen/elements/Navbar.php';

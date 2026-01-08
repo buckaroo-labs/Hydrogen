@@ -5,7 +5,7 @@ require_once ('Hydrogen/db/clsDataSource.php');
 // The default behavior is to disallow usernames 
 //	which would match if forced to same case
 if (!isset($caseSensitiveUsernames)) $caseSensitiveUsernames = false;
-if (!isset($settings['DATAFILE_PATH'])) $settings['DATAFILE_PATH'] = dirname(__FILE__);
+if (!isset($settings['DATAFILE_PATH'])) $settings['DATAFILE_PATH'] = str_replace(dirname(__FILE__),'lib','log');
 
 function generateJWT($userId) {
 		global $settings;
@@ -58,28 +58,34 @@ function setPersistentLoginCookie($username) {
 function lookUpUsername($username) {
 	global $caseSensitiveUsernames;
 	global $settings;
+	global $dds;
 	$strResult="";
-	$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
-	$where=" upper(username)= upper(?)";
-	if ($caseSensitiveUsernames) $where = " username=?";
-	$sql = "select count(*)  as user_count , max(username) as uname from user where " . $where;
-    $stmt=$conn->prepare($sql); 
-	if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-    $rc=$stmt->bind_param("s", $username) ;
-	if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-
-	$stmt->execute();
-	//$stmt->bind_result($uCount, $uname);
-	$result=$stmt->get_result();
-	//while ($stmt->fetch()) {
-	while ($rrow=$result->fetch_assoc()) {
-		if ($rrow['user_count']==1) $strResult=$rrow['uname'];
+	$rows=0;
+ 	$where=" where upper(username)= upper('" . $username . "')";
+	if ($caseSensitiveUsernames) $where = " where username='" . $username . "'";
+	//$where="";
+	$sql = "select count(*)  as user_count , max(username) as uname from user " . $where;
+	debug("Querying db for username","lib/Authenticate");
+    $result=$dds->setSQL($sql); 
+	debug("Queried db for username","lib/Authenticate");
+	while ($rrow=$dds->getNextRow("assoc")) {
+		$rows++;
+		debug("Checking db result for username","lib/Authenticate");
+		if ($rrow['user_count']==1) {
+			$strResult=$rrow['uname'];
+			debug("Username found","lib/Authenticate");
+		} else {
+			error_log("Failed login attempt for unknown user '" . $username . "'");
+			debug("No matching username","lib/Authenticate");
+		}
+	}
+	if ($rows==0) {
+		debug("No username match: " . $username,"lib/Authenticate");
+		error_log("Failed login attempt for unknown user '" . $username . "'");
 	}
 	return $strResult;
 
 }
-
-
 
 function authenticate($uname, $password) {
 	//Change log:
@@ -93,17 +99,19 @@ function authenticate($uname, $password) {
 	//if username is not clean, neutralize it
     $username=filter_var($uname,FILTER_SANITIZE_EMAIL);
 	//if ($username!=$uname) $username=filter_var($uname,FILTER_validate_email);
+	debug("Looking up username","lib/Authenticate");
 	if (lookUpUsername($username) != '') {
+		debug("Username lookup successful","lib/Authenticate");
 		global $dds;
 		global $caseSensitiveUsernames;
 		//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
-
-		if (strcmp($dds->dbType,'mysqli')==0) {
+		debug("DB Type:" . $dds->dbType());
+		if (strcmp($dds->dbType(),'mysqli')==0) {
 			$where=" upper(username)=upper(?)";
 			if ($caseSensitiveUsernames) $where = " username=?";	
-		} elseif (strcmp($dds->dbType,'sqlite')==0) {
-			$where=" upper(username)=upper(':uname')";
-			if ($caseSensitiveUsernames) $where = " username=':uname'";	
+		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
+			$where=" upper(username)=upper(:uname)";
+			if ($caseSensitiveUsernames) $where = " username=:uname";	
 		} else {
 			//This library used to be Oracle compatible, 
 			//but here is where I no longer bother to test. Beware.
@@ -111,15 +119,16 @@ function authenticate($uname, $password) {
 			if ($caseSensitiveUsernames) $where = " username=':uname'";
 		}
 		$sql = "select count(*) user_count, max(password_hash) max_hash from user where " . $where;
+		debug ("Querying db with SQL:" . $sql		);
 		$stmt=$dds->prepare($sql); 
 		if ( false===$stmt ) die('prepare() failed: ' . htmlspecialchars($dds->error));
 
 		//Ideally, more of this binding would be handled at the class level, 
 		//but each library requires a much different syntax.
-		if (strcmp($dds->dbType,'mysqli')==0) {
+		if (strcmp($dds->dbType(),'mysqli')==0) {
 			$rc=$stmt->bind_param("s", $username); 
 			if ( false===$rc ) die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-		} elseif (strcmp($dds->dbType,'sqlite')==0) {
+		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
 			$stmt->bindValue(':uname', $username, SQLITE3_TEXT);
 		} else {
 			//This repo used to be Oracle compatible, 
@@ -128,17 +137,29 @@ function authenticate($uname, $password) {
 		}
 
 		$result = $dds->getStmtResult($stmt);
- 
-		while ($rrow=$dds->getNextRow("assoc")) {
+		debug("Verifying password","lib/Authenticate");
 		
+		if (strcmp($dds->dbType(),'mysqli')==0) {
+			$rrow=$result->fetch_assoc();
+		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
+			$rrow = $result->fetchArray();
+		} else {
+			//This repo used to be Oracle compatible, 
+			//but here is where I no longer bother. Beware.
+			debug("Unsupported fetch from Oracle prepared statement.");
+		}
+	
+		if ($rrow) {
+			if (is_null( $rrow['max_hash'] )) debug("Hash is null.");
+			debug("Checking hash: " . $rrow['max_hash'] . "(" . strlen($rrow['max_hash']) . ") chars","lib/Authenticate/141");
 			if ( ($rrow['user_count'] > 0) && password_verify($password,$rrow['max_hash'])   ) {
 					$success=1;
-			
+					debug("Successful authentication","lib/Authenticate");
 					//deprecated:
-					$accessToken = password_hash($_SERVER['REMOTE_ADDR']. date("D M j G:i:s T Y"),PASSWORD_BCRYPT) ;
-					$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
-					$sql="update user set access_token='" . $accessToken . "', last_ip='" .  $_SERVER['REMOTE_ADDR'] . "' , last_login=CURRENT_TIMESTAMP where username='" . $uname . "'";
-					$dds->setSQL($sql);
+					//$accessToken = password_hash($_SERVER['REMOTE_ADDR']. date("D M j G:i:s T Y"),PASSWORD_BCRYPT) ;
+					//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+					//$sql="update user set access_token='" . $accessToken . "', last_ip='" .  $_SERVER['REMOTE_ADDR'] . "' , last_login=CURRENT_TIMESTAMP where username='" . $uname . "'";
+					//$dds->setSQL($sql);
 
 					//write to file
 					$filepath=$settings['DATAFILE_PATH'] . '/user_login.log';
@@ -151,8 +172,12 @@ function authenticate($uname, $password) {
 
 
 			} else {
-				$_SESSION['errMsg']='Invalid username/password.';
-
+				$errmsg='Invalid username/password.';
+				$_SESSION['errMsg']=$errmsg;
+				$errmsg .= ": " . $password;
+				if (empty($rrow['user_count'])) $errmsg .= " (user not found)";
+				error_log ($errmsg);
+				debug($errmsg,"lib/Authenticate");
 				//write to file
 				$filepath=$settings['DATAFILE_PATH'] . '/failed_login_attempts.log';
 				$fp = fopen($filepath, 'a');

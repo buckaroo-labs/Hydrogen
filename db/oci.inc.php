@@ -16,7 +16,10 @@ class OCIDataSource {
 	protected $unlimitedSQL;
 	protected $page_count;
 	protected $page_num;
-
+	
+	public function dbType() {
+		return $this->dbType;
+	}
 	function limitSQL($sql) {
 		//This function will take a SQL statement and append a clause limiting the
 		//number of rows returned, starting at the appropriate offset.

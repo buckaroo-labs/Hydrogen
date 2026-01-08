@@ -41,19 +41,10 @@ $done_authenticating=false;
 //  the method can be implemented as a function which takes a username and password
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
 require_once('Hydrogen/lib/Authenticate.php');
+require_once('Hydrogen/lib/State.php');
 
 if (session_status() == PHP_SESSION_NONE) session_start();
 
-
-function showUsernameAndLogoutButton() {
-	global $settings;
-	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . '</td></tr></table><br>Click the "Home" link in the upper left to reload the menu. ');
-	echo "<br><br>";
-	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
-	echo ('	<input type="hidden" name="flow" value="logOut">');
-	echo ('	<input type="submit" value="Log out">');
-	echo ('	</form>');
-}
 
 function showDebugInfo() {
 	echo "Debug info:<br>";
@@ -95,41 +86,11 @@ function logOut() {
 
 //We define status of "logged in" as a non-empty $_SESSION['username'} token.
 //If the user has already successfully logged in, notify them and offer to log them out
-if (isset($_SESSION['username'])) {
-	showUsernameAndLogoutButton() ;
-	//exit();
-	$done_authenticating=true;
-} else {
-
-
 
 	//The user is not logged in, so figure out if the user has supplied credentials
 	//(i.e. whether this page has called itself from the login form submit button)
 	//2025-12-08 move much of this to pgTemplate to handle cookies
 
-	if (isset($_POST['uname']) and isset($_POST['passwd'])) {
-
-		//Now instead of the authenticate() function we will just
-		//use the 'username' token to check login status
-		if (isset($_SESSION['username'])) {
-			//successful, so show them their status
-			showUsernameAndLogoutButton();
-
-			//check if there was a page that the user would want to go
-			//back to now that they are done logging in
-			if (isset($_SESSION['referring_page'])) {
-				echo ('You can return to the page you were viewing before you logged in <a href="' . $_SESSION['referring_page'] . '">here</a>.');
-			} // end IF (referred)
-
-			//this works fine unless you want to add the footer afterward. 
-			//changing this to set a boolean value instead which will 
-			//cause the rest of this file to be ignored
-			//exit();
-			$done_authenticating=true;
-		} // end IF (authenticated)
-
-	} else {$_POST['uname']="";  //define the variable so we can populate the form with it regardless of whether it was blank
-	} // end IF (post:username)
 
 	//eventually, lost password/forgotten username help will be needed;
 	//put it here . . .
@@ -167,7 +128,10 @@ if (isset($_SESSION['username'])) {
 			echo("<h2>New user or forgotten password?</h2>");
 			echo('<p>Reset or request password <a href="' . $settings['registration_page'] . '">here</a>.</p>');
 		}
+	} else {
+		//redirect?
+		echo '<p>Logged in.</p>';
 	}
-}
+
 ?>
 

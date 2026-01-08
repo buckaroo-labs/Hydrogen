@@ -1,5 +1,7 @@
 <?php
 ob_start();
+
+
 //This file and the "Hydrogen/elem*.php" includes are a PHP adapatation of the HTML/CSS template at
 // https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_webpage&stacked=h
 
@@ -52,6 +54,17 @@ include "Hydrogen/pgTemplate.php";
 </body></html>
 */
 
+function showUsernameAndLogoutButton() {
+	global $settings;
+	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . '</td></tr></table><br>Click the "Home" link in the upper left to reload the menu. ');
+	echo "<br><br>";
+	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
+	echo ('	<input type="hidden" name="flow" value="logOut">');
+	echo ('	<input type="submit" value="Log out">');
+	echo ('	</form>');
+}
+
+
 $layout='default';
 if(isset($_POST['layout']) && $_POST['layout']=='iframe') {
     $layout='iframe';
@@ -64,6 +77,7 @@ if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
 if (!isset($setup_mode)) require_once 'Hydrogen/lib/Authenticate.php';
 if (isset($setup_mode)) require_once ('Hydrogen/lib/Debug.php');
+require_once('Hydrogen/lib/State.php');
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
@@ -96,30 +110,36 @@ if (isset($_POST['flow'])) {
 	}
 }
 
-
-//Handle LogIn
+if (!isset($SESSION['username'])) {
+	//Handle LogIn
 	if (isset($_POST['uname']) and isset($_POST['passwd'])) {
-
+		debug("Username and password posted","pgTemplate");
+		$username=sanitizePostVar('uname'); //$_POST['uname']
+		$password=sanitizePostVar('passwd'); ; //$_POST['passwd']
 		//the credentials are there, so attempt to authenticate
-		//using whatever method is defined in libAuthenticate.php
-		if (authenticate($_POST['uname'],$_POST['passwd'])==1) {
+		//using whatever method is defined in lib/Authenticate.php
+		if (authenticate($username,$password)==1) {
 			$_SESSION['username']=$_POST['uname'];
 			//the user is now logged in
 			$_SESSION['password']=$_POST['passwd'];
 			unset($_SESSION['errMsg']);
-		}
-
-
-		//Now instead of the authenticate() function we will just
-		//use the 'username' token to check login status
-		if (isset($_SESSION['username'])) {
-
-
 			$done_authenticating=true;
-		} // end IF (authenticated)
+			debug("Successful authentication","pgTemplate");
+		} else {
+			debug("Unsuccessful authentication","pgTemplate");
+		}
 
 	} else {$_POST['uname']="";  //define the variable so we can populate the form with it regardless of whether it was blank
 	} // end IF (post:username)
+}
+//Now instead of the authenticate() function we will just
+//use the 'username' token to check login status
+if (isset($_SESSION['username'])) {
+
+	showUsernameAndLogoutButton() ;
+	$done_authenticating=true;
+} // end IF (authenticated)
+
 debug ("Template output begins");
 ob_end_flush();
 ?>

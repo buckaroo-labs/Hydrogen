@@ -121,6 +121,11 @@ class SQLiteDataSource {
 	protected $unlimitedSQL;
 	protected $page_count;
 	protected $page_num;
+	protected $error_msg;
+
+	public function dbType() {
+		return $this->dbType;
+	}
 
 	function limitSQL($sql) {
 		//This function will take a SQL statement and append a clause limiting the
@@ -137,7 +142,7 @@ class SQLiteDataSource {
 		if (isset($this->page_count)) {
 			if ($this->page_num > $this->page_count) $this->page_num=$this->page_count;
 		}
-		$start_rec=(($this->page_num-1)*$this->maxRecs)+1;
+		$start_rec=(($this->page_num-1)*$this->maxRecs);
 		$end_rec=$start_rec+$this->maxRecs-1;
 		return $sql . " LIMIT  " .  $this->maxRecs . " OFFSET " . $start_rec;
 
@@ -166,20 +171,26 @@ class SQLiteDataSource {
 	}
 
 	function setSQL($unlimited_sql) {
+		$row = $this->dbconn->query("PRAGMA database_list")->fetchArray(SQLITE3_ASSOC);
+		debug("Querying SQLite db at " . $row['file']);
 		unset($this->page_count);
 		$this->unlimitedSQL=$unlimited_sql;
 		$sql=$this->limitSQL($unlimited_sql);
 		$this->colNames=array();
 		$this->colTypes=array();
 		debug("class-limited SQL: $sql",__FILE__);
-		$this->dbconn->exec($sql);
+		//$this->dbconn->exec($sql);
 		$this->stmt=$this->dbconn->query($sql);
-		$ncols = $this->stmt->numColumns();
-		for ($i = 1; $i <= $ncols; $i++) {
-			$this->colNames[$i-1] = $this->stmt->columnName($i);
-			$this->colTypes[$i-1] = $this->stmt->columnType($i);
+		if(!$this->stmt) {
+			$this->error_msg=$this->dbconn->lastErrorMsg();
+			debug($this->error_msg,"sqlite3.inc.php");
+		} else {
+			$ncols = $this->stmt->numColumns();
+			for ($i = 1; $i <= $ncols; $i++) {
+				$this->colNames[$i-1] = $this->stmt->columnName($i);
+				$this->colTypes[$i-1] = $this->stmt->columnType($i);
+			}
 		}
-
 	}
 	function paginate() {
 		debug ("function: cls_dataSource:pagination",__FILE__);
