@@ -29,7 +29,8 @@ $settings['color5']="w3-hover-black";
 
 
 $logo_image="logo.png";
-$settings['login_page']="login.php";
+$settings['login_page']="index.php?p=login";
+$settings['registration_page']="index.php?p=register";
 $hideSearchForm=true;
 $settings['footer_text1']='&copy;2025 My Site Inc Ltd';
 $settings['footer_text2']="secondary footer text";

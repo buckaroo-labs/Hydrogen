@@ -36,8 +36,8 @@ if ($layout!='iframe') {
 	}
 	//default behavior is to show the search form and login status.
 		
-	if (!isset($hideSearchForm)) include('Hydrogen/elemSearchForm.php');  
-	if (!isset($hideLoginStatus)) include('Hydrogen/elemLoginStatusbar.php'); 
+	if (!isset($hideSearchForm)) include('Hydrogen/elements/SearchForm.php');  
+	if (!isset($hideLoginStatus)) include('Hydrogen/elements/LoginStatusbar.php'); 
 ?>
 
   </div>

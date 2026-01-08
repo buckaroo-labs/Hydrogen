@@ -14,7 +14,7 @@ include "Hydrogen/pgTemplate.php";
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
 
-	<?php include "Hydrogen/pgLogin.php"; ?>
+	<?php include "Hydrogen/pages/Login.php"; ?>
 
     </div>
     <div class="w3-third w3-container">
@@ -23,24 +23,24 @@ include "Hydrogen/pgTemplate.php";
 
 </div>
 
-<?php include "Hydrogen/elemFooter.php"; 
-	include "Hydrogen/elemNavbar.php"
+<?php include "Hydrogen/elements/Footer.php"; 
+	include "Hydrogen/elements/Navbar.php"
 ?>
 </body></html>
 
 ******************************************************/
 
 // Define a login page URL in settingsLogin.php or use the default defined there.
-// Your login page may INCLUDE or REQUIRE Hydrogen/pgLogin.php but should not BE this file, as
+// Your login page may INCLUDE or REQUIRE Hydrogen/pages/Login.php but should not BE this file, as
 //    doing that either in PHP code or in a hyperlink will put the user in the Hydrogen
 //    subdirectory rather than the directory for your app and then links will break.
 require_once ("Hydrogen/settingsLogin.php");
-if (!isset($settings['login_page'])) $settings['login_page'] = "login.php";
+if (!isset($settings['login_page'])) $settings['login_page'] = "index.php?p=login";
 $done_authenticating=false;
 //Code in this file (pgLogin.php) is independent of authentication method as long as
 //  the method can be implemented as a function which takes a username and password
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
-require_once('Hydrogen/libAuthenticate.php');
+require_once('Hydrogen/lib/Authenticate.php');
 
 if (session_status() == PHP_SESSION_NONE) session_start();
 

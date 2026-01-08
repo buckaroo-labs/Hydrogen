@@ -16,7 +16,7 @@ include "Hydrogen/pgTemplate.php";
 
 <div class="w3-main">
 
-<?php include 'Hydrogen/elemLogoHeadline.php';  	 ?>
+<?php include 'Hydrogen/elements/elemLogoHeadline.php';  	 ?>
 
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
@@ -46,8 +46,8 @@ include "Hydrogen/pgTemplate.php";
 <?php
 	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle -
 	//   so include it at the end and then let it float to the top
-	include 'Hydrogen/elemNavbar.php';
-	include "Hydrogen/elemFooter.php";
+	include 'Hydrogen/elements/Navbar.php';
+	include "Hydrogen/elements/Footer.php";
 ?>
 </body></html>
 */
@@ -62,8 +62,8 @@ if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
 
 if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
-if (!isset($setup_mode)) require_once 'Hydrogen/libAuthenticate.php';
-if (isset($setup_mode)) require_once ('Hydrogen/libDebug.php');
+if (!isset($setup_mode)) require_once 'Hydrogen/lib/Authenticate.php';
+if (isset($setup_mode)) require_once ('Hydrogen/lib/Debug.php');
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
 
@@ -145,7 +145,7 @@ unset ($pagetitle);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link rel="stylesheet" href="Hydrogen/style.css">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="styles.css">
 
 <?php 
 if (isset($settings['head_content'])) echo $settings['head_content'];
@@ -162,9 +162,9 @@ if (isset($settings['head_content'])) echo $settings['head_content'];
     $layout='iframe';
   }
   if ( $settings['SIDEBAR_DISPLAY']==1 && $layout !='iframe') {
-    include 'Hydrogen/elemSidebar.php';
+    include 'Hydrogen/elements/Sidebar.php';
   }
-  // include 'Hydrogen/elemAnalytics.php';
+  
   if (isset($settings['page_usage_tracking'])) {
     if ($settings['page_usage_tracking']==true)
     $pageUser="unauthenticated";

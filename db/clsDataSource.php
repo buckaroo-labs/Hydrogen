@@ -33,7 +33,7 @@ $table->finish();
 
 //set this to true to enable debug output from this PHP file
 $debug[__FILE__]=true;
-include_once ('Hydrogen/libDebug.php');
+include_once ('Hydrogen/lib/Debug.php');
 include_once ('settingsHydrogen.php');
 include_once ('settingsPasswords.php');
 
@@ -58,9 +58,9 @@ if (!isset($settings['DEFAULT_DB_MAXRECS'])) $settings['DEFAULT_DB_MAXRECS'] = 1
 //  is that when changes are made to THIS file, they may also have to be made in oci.inc.php and sqlite3.inc; 
 //  and when troubleshooting, 
 //  you should double-check that you are actually looking at the right class definition.
-include_once ('Hydrogen/sqlite3.inc.php');
-if (extension_loaded('mysqli')) include_once ('Hydrogen/mysqli.inc.php');
-if (extension_loaded('oci8')) include_once ('Hydrogen/oci.inc.php'); else include_once ('Hydrogen/no-oci.inc.php');
+include_once ('Hydrogen/db/sqlite3.inc.php');
+if (extension_loaded('mysqli')) include_once ('Hydrogen/db/mysqli.inc.php');
+if (extension_loaded('oci8')) include_once ('Hydrogen/db/oci.inc.php'); else include_once ('Hydrogen/db/no-oci.inc.php');
 
 
 $dataSource=array();

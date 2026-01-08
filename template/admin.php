@@ -42,7 +42,7 @@ if (empty($settings['JWT-SECRET-KEY'])) {
 <!-- Main content: shift it to the right when the sidebar is visible -->
 <div class="w3-main">
 
-<?php include 'Hydrogen/elemLogoHeadline.php';  	 ?>
+<?php include 'Hydrogen/elements/LogoHeadline.php';  	 ?>
 
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
@@ -59,7 +59,7 @@ if (empty($settings['JWT-SECRET-KEY'])) {
 <?php
 	//Yes, it goes at the top, but it may use variables (session status) that are set by what happens in the middle -
 	//   so include it at the end and then let it float to the top
-	include 'Hydrogen/elemNavbar.php';
-	include "Hydrogen/elemFooter.php";
+	include 'Hydrogen/elements/Navbar.php';
+	include "Hydrogen/elements/Footer.php";
 ?>
 </body></html>

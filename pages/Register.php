@@ -2,7 +2,7 @@
 
 // Define a registration page URL in your included settings file
 // 		or page template; or use the default defined in settingsLogin.php.
-// Your registration page may INCLUDE or REQUIRE Hydrogen/pgRegistration.php 
+// Your registration page may INCLUDE or REQUIRE Hydrogen/pages/Registration.php 
 //		but should not BE this file, as doing that either in this code 
 //		or in a hyperlink will put the user in the Hydrogen 
 //    	subdirectory rather than the directory for your app 
@@ -12,10 +12,10 @@
 
 require_once ("Hydrogen/settingsLogin.php");
 require_once ('Hydrogen/clsPasswdRules.php');
-require_once ('Hydrogen/clsDataSource.php');
-require_once ('Hydrogen/clsSQLBuilder.php');
-require_once ('Hydrogen/libFilter.php');
-require_once ('Hydrogen/libAuthenticate.php');
+require_once ('Hydrogen/db/clsDataSource.php');
+require_once ('Hydrogen/db/clsSQLBuilder.php');
+require_once ('Hydrogen/lib/Filter.php');
+require_once ('Hydrogen/lib/Authenticate.php');
 
 /* This page has FOUR sequential use cases:
 1. No GET or POST variables. Ask for an email address
