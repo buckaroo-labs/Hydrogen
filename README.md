@@ -1,4 +1,5 @@
 # Hydrogen
+![representation of a hydrogen atom](./template/logo.png)
 
 ## Library of basic building blocks for an xAMP app.
 
