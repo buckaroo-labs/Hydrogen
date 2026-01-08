@@ -48,7 +48,7 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
       $dds->setSQL($sql); 
       $output .= '  $' . "settings['admin-name']='" . $adminname . "';\n";
       $output .= '  $' . "settings['admin-passwd']='" . $adminpass . "';\n";
-	  $output .= '// DEBUG: hashed passwd: ' . $adminhash . "';\n";
+	  //$output .= '// DEBUG: hashed passwd: ' . $adminhash . "';\n";
       //Also define some roles and privileges in the DB tables
 
 

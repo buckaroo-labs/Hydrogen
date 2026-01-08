@@ -2,7 +2,7 @@
 //Debug output path DEBUG_PATH is defined in settingsHydrogen.php
 include_once ('settingsHydrogen.php');
 
-if (!isset($settings['DEBUG_PATH'])) $settings['DEBUG_PATH'] = str_replace(dirname(__FILE__),'lib','log') . "/debug.log" ;
+if (!isset($settings['DEBUG_PATH'])) $settings['DEBUG_PATH'] = str_replace('lib','log',dirname(__FILE__)) . "/debug.log" ;
 if (!isset($settings['DEBUG'])) {
 	$settings['DEBUG'] = false;
 } elseif ($settings['DEBUG']){
