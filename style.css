@@ -1,15 +1,44 @@
 :root {
   --sidebar-width: 200px;
   --navbar-height: 43px;
+  --color1: #ffffff;
+  --color2: #eeeded;
+  --color3: #cfcdcd;
+
 }
 
 #logo {float: left; margin-right: 30px;}
+#myAccountImage {
+	height: 20px;
+	margin-top: 10px;
+	margin-right: 10px;
 
+}
+#toggleAccountInfo, #toggleLoginInfo {
+	display: none;
+}
+#toggleAccountInfo {
+	position: fixed;
+	top: 45px;
+	right: 10px;
+	padding: 20px;
+	border-radius: 10px;
+	background-color: var(--color3);
+	color:  var(--color2);
+}
+#toggleAccountInfo a {
+	background-color: var(--color1);
+	padding: 10px;
+	border-radius: 5px;
+}
 form#logout {
 	max-height: 30px;
 	margin: 0px;
 }
 
+#loginStatus, #username, #myAccountImage, #logoutDiv, #loginPrompt, #toggleLoginInfo, #LoginInfo {
+	float: right;
+}
 
 #sidebar {
 	margin-top: 20px;

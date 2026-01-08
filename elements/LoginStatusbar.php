@@ -13,33 +13,53 @@ if (!isset($settings['color3']))  $settings['color3']="w3-hover-white";
 function showLoginStatus() {
 	global $settings;
 	if (isset($_SESSION['username'])) {
+
 		showUsername();
+		
 	} else {
-	echo ('<a href="' . $settings['login_page'] . '" class="w3-bar-item w3-button "' .  
-		$settings['color3'] .'>Log in</a>');
+
+		echo ('<div id="loginPrompt"><a href="' . $settings['login_page'] . '" class="w3-bar-item w3-button "' .  
+		$settings['color3'] .'>Log in</a></div>');
+		
 	}
 }
 
 function showUsername() {
 	global $settings;
-	echo ('<a href="#" class="w3-bar-item w3-button w3-medium w3-hide-small ' .  
-		$settings['color3'] .'">Logged in as ' . $_SESSION['username'] . "</a>");
+	echo ('<div id="username"><a href="#" class="w3-bar-item w3-button w3-medium w3-hide-small ' .  
+		$settings['color3'] .'">Logged in as ' . $_SESSION['username'] . "</a></div>");
 }
 
 function showLogoutButton() {
 	global $settings;
+	echo '<div id="logoutDiv">';
 	echo ('	<a class="w3-bar-item w3-button w3-medium"><form id="logout" action="' . $settings['login_page'] .
 	 '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
 	echo ('	</form></a>');
+	echo '</div>';
 }
 
 ?>
-
+<div id="loginStatus">
 <?php 
-showLoginStatus(); 
-if (isset($_SESSION['username'])) {
-	showLogoutButton() ;
-}
+	if (isset($_SESSION['username'])) {
+		echo '<img id="myAccountImage" src="Hydrogen/images/account.png">';
+		echo '<div id="toggleLoginInfo">';
+	} else {
+		echo '<img id="myAccountImage" src="Hydrogen/images/person.png">';
+		echo '<div id="LoginInfo">';
+	}
+	
+	showLoginStatus(); 
+	if (isset($_SESSION['username'])) {
+		showLogoutButton() ;
+	}
+	echo '</div>';
+	
+?>
+</div>
+<?php
+	if (isset($_SESSION['username'])) echo '<div id="toggleAccountInfo"><a href="index.php?p=Account">My Account</a></div>';
 ?>

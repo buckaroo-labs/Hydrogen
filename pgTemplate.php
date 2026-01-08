@@ -175,7 +175,14 @@ if (isset($settings['head_content'])) echo $settings['head_content'];
 ?>
 <script src="Hydrogen/sorttable.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
+<script>
+	$(document).ready(function(){
+		$("#myAccountImage").click(function(){
+			$("#toggleAccountInfo").slideToggle();
+			$("#toggleLoginInfo").slideToggle();
+		});
+	});
+</script>
 <body class="bg-light">
 
 <?php
