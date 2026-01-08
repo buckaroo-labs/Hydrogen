@@ -28,11 +28,11 @@ function showUsername() {
 
 function showLogoutButton() {
 	global $settings;
-	echo ('	<span class="w3-bar-item w3-button w3-medium"><form id="logout" action="' . $settings['login_page'] .
+	echo ('	<a class="w3-bar-item w3-button w3-medium"><form id="logout" action="' . $settings['login_page'] .
 	 '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
-	echo ('	</form></span>');
+	echo ('	</form></a>');
 }
 
 ?>

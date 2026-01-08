@@ -5,6 +5,12 @@
 
 #logo {float: left; margin-right: 30px;}
 
+form#logout {
+	max-height: 30px;
+	margin: 0px;
+}
+
+
 #sidebar {
 	margin-top: 20px;
 	margin-bottom: 20px;

@@ -36,7 +36,7 @@ include "Hydrogen/pgTemplate.php";
 //    subdirectory rather than the directory for your app and then links will break.
 require_once ("Hydrogen/settingsLogin.php");
 if (!isset($settings['login_page'])) $settings['login_page'] = "index.php?p=login";
-$done_authenticating=false;
+//$done_authenticating=false;
 //Code in this file (pgLogin.php) is independent of authentication method as long as
 //  the method can be implemented as a function which takes a username and password
 //  as arguments and returns a "1" (one) for success. This function goes in the following file:
@@ -130,7 +130,7 @@ function logOut() {
 		}
 	} else {
 		//redirect?
-		echo '<p>Logged in.</p>';
+		echo '<p style="margin-bottom: 400px;">Logged in.</p>';
 	}
 
 ?>

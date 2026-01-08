@@ -56,12 +56,15 @@ include "Hydrogen/pgTemplate.php";
 
 function showUsernameAndLogoutButton() {
 	global $settings;
-	echo ('<table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] . '</td></tr></table><br>Click the "Home" link in the upper left to reload the menu. ');
-	echo "<br><br>";
+	//Nah.
+	/*
+	echo ('<div class="w3-main"><table name="successOK"><tr><td>Logged in as </td><td class="username">' . $_SESSION['username'] .
+	 '</td></tr></table>');
 	echo ('	<form class="access" id="logout" action="' . $settings['login_page'] . '" method="post">');
 	echo ('	<input type="hidden" name="flow" value="logOut">');
 	echo ('	<input type="submit" value="Log out">');
-	echo ('	</form>');
+	echo ('	</form></div>');
+	*/
 }
 
 
