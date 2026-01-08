@@ -7,11 +7,12 @@ Reusable code for page layout, building and executing SQL statements, creating d
 
 > [!IMPORTANT]
 > ## Requirements
-* PHP with SQLite3 enabled. (MySQL and Oracle are configurable options)
+>* PHP with SQLite3 enabled. (MySQL and Oracle are configurable options)
 
-## Setup /installation
-* Clone or copy the files into a "Hydrogen" folder in the application root.
-* For usage examples, copy or link the files in "/template" to the application root as well.
+> [!NOTE]
+>## Setup /installation
+>* Clone or copy the files into a "Hydrogen" folder in the application root.
+>* For usage examples, copy or link the files in "/template" to the application root as well.
 
 ## Changes planned for release 2:
 * Use JWT cookie for persistent login
