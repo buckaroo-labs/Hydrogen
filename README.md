@@ -8,11 +8,14 @@ Reusable code for page layout, building and executing SQL statements, creating d
 > [!IMPORTANT]
 > ## Requirements
 >* PHP with SQLite3 enabled. (MySQL and Oracle are configurable options)
+>* [Composer](https://getcomposer.org/download/) for PHPMailer installation (Fear not, installation is painless).
+>* [PHPMailer](https://github.com/PHPMailer/PHPMailer) for email support (likewise).
 
 > [!NOTE]
 >## Setup /installation
 >* Clone or copy the files into a "Hydrogen" folder in the application root.
->* For usage examples, copy or link the files in "/template" to the application root as well.
+>* For usage examples that include a setup walkthrough, copy or link the files in "/template" to the application root as well.
+>* Install PHPMailer in the same application root (not in the Hydrogen folder): <code>composer require phpmailer/phpmailer</code> Run the template application or see the <code>Hydrogen/docs</code> folder for further configuration instructions (SMTP host, etc).
 
 ## Changes planned for release 2:
 * Use JWT cookie for persistent login

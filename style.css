@@ -36,6 +36,10 @@ form#logout {
 	margin: 0px;
 }
 
+#registrationForm {
+	margin-bottom: 300px;
+}
+
 #loginStatus, #username, #myAccountImage, #logoutDiv, #loginPrompt, #toggleLoginInfo, #LoginInfo {
 	float: right;
 }

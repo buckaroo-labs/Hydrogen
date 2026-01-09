@@ -79,14 +79,14 @@ CREATE TABLE `role` (
 --
 -- Table structure for table `user`
 --
-
+--password and names must be allowed as null for self-registration process
 CREATE TABLE `user` (
 `id` INT NOT NULL AUTO_INCREMENT , 
   `username` varchar(50) NOT NULL,
   `email` varchar(99) NOT NULL,
-  `password_hash` varchar(500)  NOT NULL COMMENT 'php password_hash(password,PASSWORD_BCRYPT)' ,
-  `first_name` VARCHAR(30) NOT NULL ,
-`last_name` VARCHAR(30) NOT NULL ,
+  `password_hash` varchar(500)  DEFAULT NULL COMMENT 'php password_hash(password,PASSWORD_BCRYPT)' ,
+  `first_name` VARCHAR(30) DEFAULT NULL ,
+`last_name` VARCHAR(30) DEFAULT NULL ,
   `reset_code` varchar(25) DEFAULT NULL,
   `session_id` varchar(50) DEFAULT NULL,
   `access_token` varchar(500) DEFAULT NULL,

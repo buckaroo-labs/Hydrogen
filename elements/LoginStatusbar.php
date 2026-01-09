@@ -8,7 +8,7 @@
 // Your login page may INCLUDE or REQUIRE Hydrogen/pgLogin.php but should not BE this file, as
 //    doing that either in this code or in a hyperlink will put the user in the Hydrogen 
 //    subdirectory rather than the directory for your app.
-//require_once ("Hydrogen/settingsLogin.php");
+require_once ("Hydrogen/settingsLogin.php");
 if (!isset($settings['color3']))  $settings['color3']="w3-hover-white";
 function showLoginStatus() {
 	global $settings;

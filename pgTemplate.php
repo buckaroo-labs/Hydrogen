@@ -78,8 +78,8 @@ if(isset($_GET['layout']) && $_GET['layout']=='iframe') {
 
 if(!isset($_SESSION)) session_start();
 require_once 'settingsHydrogen.php';
-if (!isset($setup_mode)) require_once 'Hydrogen/lib/Authenticate.php';
-if (isset($setup_mode)) require_once ('Hydrogen/lib/Debug.php');
+if (!isset($_SESSION['setup_mode']) ) require_once 'Hydrogen/lib/Authenticate.php';
+if (isset($_SESSION['setup_mode']) ) require_once ('Hydrogen/lib/Debug.php');
 require_once('Hydrogen/lib/State.php');
 if(!isset( $settings['search_page'])) $settings['search_page']="/";
 if(!isset( $settings['login_page'])) $settings['login_page'] = "/";
@@ -177,6 +177,7 @@ if (isset($settings['head_content'])) echo $settings['head_content'];
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
+		$('input[name="botkiller"]').val(1337);
 		$("#myAccountImage").click(function(){
 			$("#toggleAccountInfo").slideToggle();
 			$("#toggleLoginInfo").slideToggle();
