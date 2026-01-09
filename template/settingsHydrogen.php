@@ -77,5 +77,9 @@ if ($testmode) {
 	$settings['stackoverflow_page'] = "https://www.facebook.com/pages/MyPageName/1234567890";
 	
 	$settings['DEBUG']=true;
+
 }
+//Run this once more to override any test values we don't want checked into the git repo for this project
+@include ("settingsPasswords.php");
+
 ?>

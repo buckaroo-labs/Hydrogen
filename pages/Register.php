@@ -9,12 +9,12 @@
 // 		and then things will break due to relative references 
 //		like the ones below
 
-
 require_once ("Hydrogen/settingsLogin.php");
 require_once ('Hydrogen/clsPasswdRules.php');
 require_once ('Hydrogen/db/clsDataSource.php');
 require_once ('Hydrogen/db/clsSQLBuilder.php');
-require_once ('Hydrogen/lib/Filter.php');
+require_once ('Hydrogen/lib/State.php');
+require_once ('Hydrogen/lib/Mail.php');
 require_once ('Hydrogen/lib/Authenticate.php');
 
 /* This page has FOUR sequential use cases:
@@ -30,7 +30,14 @@ $password = sanitizePostVar('password');
 $reset_code = sanitizeGetVar('reset_code');
 $resetPostCode = sanitizePostVar('reset_code');
 $resetPostUsername = sanitizePostVar('username');
-if (isset($_POST['email']) && filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) $email = $_POST['email'];
+if (isset($_POST['email']) && filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) {
+	//bot prevention
+	if (isset($_POST['botkiller']) && $_POST['botkiller']==1337) {
+		$email = $_POST['email'];
+	} else {
+		debug ("Bot prevention has screened out a registration request.","pages/Register/38");
+	}
+}
 
 $useCase=1;
 if (isset($email) and $email !="") $useCase=2;
@@ -39,62 +46,50 @@ if (isset($password) and $password!="") $useCase=4;
 debug ("Use Case: " . $useCase);
 
 
-function validateMail ($email_address,$captcha=false) {
-	global $emailValid;
+function validateMail ($email_address) {
 	global $settings;
+	global $dds;
 	global $username;
 	$emailValid=false;
-
-	//validate the CAPTCHA first
-	if ($captcha) {
-		include_once 'securimage/securimage.php';
-		$securimage = new Securimage();
+	debug ("Validating email: " . $email_address, "pages/Register/54");
+	$sql="select count(*) ucount, max(username) max_name from user where email='" . $email_address . "'";
+	/** Using prepared statements was a good idea, but input has been sanitized and
+	 * we need the same code to work for different DB libraries. Come back to this later.
+	 */
+	//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+	//$stmt=$conn->prepare($sql); 
+	//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
+	//$rc=$stmt->bind_param("s", $email_address);  
+	//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+	//$stmt->execute();
+	//$stmt->bind_result($uCount, $uname);
+	$result=$dds->setSQL($sql);
+	while ($rrow=$dds->getNextRow("assoc")) {
+		debug ("Checking db result: " . $email_address, "pages/Register/68");
+		if ($rrow['ucount']==1) {
+			$emailValid=true;
+			$username=$rrow['max_name'];
+			debug ("DB result found: " . $email_address, "pages/Register/72");
+		}
 	}
-
-	if ($captcha) {
-			  // if the captcha code is incorrect
-			  // you should handle the error so that the form processor doesn't continue
-			  // or you can use the following code if there is no validation or you do not know how
-			  
-			  //echo "The security code entered was incorrect.<br /><br />";
-			  //echo "Please go <a href='javascript:history.go(-1)'>back</a> and try again.";
-			  //exit;
-			  if ($securimage->check($_POST['captcha_code']) == false) $emailValid=false;
-	} else {
-
-		//if CAPTCHA is validated, check if the email is in the DB
-		$sql="select count(*) ucount, max(username) max_name from user where email='" . $email_address . "'";
-		/** Using prepared statements was a good idea, but input has been sanitized and
-		 * we need the same code to work for different DB libraries. Come back to this later.
-		 */
-		//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+	if (!$emailValid) {
+		$sql = "INSERT INTO user (username,email) values ('" . $email_address . "','" . $email_address . "')";
 		//$stmt=$conn->prepare($sql); 
 		//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-		//$rc=$stmt->bind_param("s", $email_address);  
+		//$rc=$stmt->bind_param("ss", $email_address, $email_address); 
 		//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
 		//$stmt->execute();
-		//$stmt->bind_result($uCount, $uname);
+		debug ("Inserting email: " . $email_address, "pages/Register/82");
 		$result=$dds->setSQL($sql);
-		while ($rrow=$dds->getNextRow("assoc")) {
-			if ($rrow['ucount']==1) {
-				$emailValid=true;
-				$username=$rrow['max_name'];
-			}
-		}
-		if (!$emailValid) {
-			$sql = "INSERT INTO user (username,email) values ('" . $email_address . "','" . $email_address . "')";
-			//$stmt=$conn->prepare($sql); 
-			//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-			//$rc=$stmt->bind_param("ss", $email_address, $email_address); 
-			//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-			//$stmt->execute();
-			$result=$dds->setSQL($sql);
-			if ($result) {
-				$emailValid=true;
-				$username=$email_address;
-			}
+		if ($result) {
+			$emailValid=true;
+			$username=$email_address;
+			debug ("Inserted email: " . $email_address, "pages/Register/87");
 		}
 	}
+	$returnStatus='true';
+	if(!$emailValid) $returnStatus='false';
+	debug ("Returning email validation of '" . $returnStatus . "': " . $email_address, "pages/Register/54");
 	return $emailValid;
 }
 
@@ -132,12 +127,8 @@ function sendMail_oracle($mailTo, $resetLink) {
 	END;";
 	$dds->setSQL($sql);
 }
-function sendMail ($mailTo, $resetLink) {
-	//For Windows only
-	ini_set('SMTP','mailrelay.foo.com');
-	ini_set('smtp_port',25);
-
-	$to = $mailTo;
+function sendResetMail ($mailTo, $resetLink) {
+	global $settings;
 	$subject = "Password reset";
 	
 	$message = '
@@ -152,15 +143,8 @@ function sendMail ($mailTo, $resetLink) {
 	</html>
 	';
 	
-	// Always set content-type when sending HTML email
-	$headers = "MIME-Version: 1.0" . "\r\n";
-	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-	
-	// More headers
-	$headers .= 'From: App name <app@foo.com>' . "\r\n";
-	//$headers .= 'bcc: user@foo.com' . "\r\n";
-	
-	mail($to,$subject,$message,$headers);
+
+	sendMail($message,$subject,$mailTo,$settings['mailfromaddress']);
 
 }
 
@@ -182,7 +166,11 @@ function createResetCode ($email_address) {
 	if ($_SERVER['SERVER_PORT']!='80') $reset_link.= ":" . $_SERVER['SERVER_PORT'] ;
 	$reset_link.= $_SERVER['REQUEST_URI'] . "?username=" . $username . "&reset_code=" . $new_code;
 	debug ("Reset link: " . $reset_link);
-	sendMail($email_address,$reset_link);
+	if (extension_loaded('oci8')) {
+		sendMail_oracle($email_address,$reset_link);
+	} else {
+		sendResetMail($email_address,$reset_link);
+	}
 }
 
 if ($useCase==1 or $useCase==3) {
@@ -191,12 +179,14 @@ if ($useCase==1 or $useCase==3) {
 	if($useCase==3 and validateResetCode($reset_code,$username)) $password_reset=true;
 	if($useCase==3 and !validateResetCode($reset_code,$username)) debug ("Invalid reset code for use case 3");
 
-	echo '<form action="' . $settings['registration_page'] . '" method="post" name="regForm" id="regForm" >
+	echo '<form id="registrationForm" action="' . $settings['registration_page'] . '" method="post" name="regForm" id="regForm" >
 	<table>';
 
 	if (!isset($password_reset)) {
 		echo '<tr><td>Your e-mail address: </td>';
-		echo '<td><input name="email" type="email" id="usr_email"  maxlength="30" size="25" value="';
+		echo '<td>
+		<input id="botkiller-input" type="hidden" name="botkiller" value="86">
+		<input name="email" type="email" id="usr_email"  maxlength="30" size="25" value="';
 		if(isset($_POST["email"])) echo $email; 
 		echo '"></td></tr>';
 	}
@@ -240,8 +230,15 @@ if ($useCase==2 or $useCase==4) {
 	$emailValid=false;
 
 	if($useCase==2 ) {
-		if (validateMail($email)) createResetCode($email);
-		//send an email with link to this page including a session-specific code as GET variable
+		if (validateMail($email)) {
+			$emailValid=true;
+			debug ("Valid email: " . $email_address, "pages/Register/273");
+			//send an email with link to this page including a session-specific code as GET variable
+			createResetCode($email);
+		} else {
+			debug ("Invalid email: " . $email_address, "pages/Register/276");
+		}
+		
 		
 	}
 	if($useCase==2 ) {

@@ -124,7 +124,7 @@ function logOut() {
 
 		echo"</tr></table></form>";
 
-		if ($settings['prompt_reg']==1) {
+		if ($settings['prompt_reg']==1 && array_key_exists('SMTPHost',$settings)) {
 			echo("<h2>New user or forgotten password?</h2>");
 			echo('<p>Reset or request password <a href="' . $settings['registration_page'] . '">here</a>.</p>');
 		}

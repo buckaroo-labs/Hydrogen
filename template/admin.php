@@ -1,11 +1,18 @@
 <?php
 $pagetitle="Hydrogen Setup";
 $headline = '<h1>Setup</h1>' ;
-if (empty($settings['JWT-SECRET-KEY'])) $setup_mode=true; //see pgTemplate.php
-include "Hydrogen/pgTemplate.php";
-
 //Most of this file deals with initial setup. The many other functions that 
 //this page will serve are accomplished using includes.
+if (array_key_exists('JWT-SECRET-KEY',$settings) && 
+	array_key_exists('SQLITE-SECRET-KEY',$settings) && 
+	array_key_exists('unauthenticated-app',$settings)
+	) {
+		unset($_SESSION['setup_mode']) ;
+	} else {
+		//see pgTemplate.php
+		$_SESSION['setup_mode']=true;
+	} 
+include "Hydrogen/pgTemplate.php";
 
 if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
   //phpinfo() will help add some randomness to the key.
@@ -14,7 +21,7 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
   $secret= md5(uniqid() . ob_get_clean());
   $output = "<?php\n" . 
 "   //Changing the JWT secret key will invalidate any tokens 
-//issued by the application.\n" .
+   //issued by the application.\n" .
 	'   $' . "settings['JWT-SECRET-KEY']='" .$secret . "';\n";
   $output .= "?>";
   $secretsfile = file_put_contents('settingsPasswords.php', $output.PHP_EOL , FILE_APPEND | LOCK_EX);
@@ -30,13 +37,13 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
 	$output .=  '   $' . "settings['SQLITE-SECRET-KEY']='" . md5($secret) . "';\n";
   $output .= "?>";
   $secretsfile = file_put_contents('settingsPasswords.php', $output.PHP_EOL , FILE_APPEND | LOCK_EX);
-} elseif (isset($_GET['authsetup']) && !array_key_exists('unauthenticated-db',$settings)) {
+} elseif (isset($_GET['authsetup']) && !array_key_exists('unauthenticated-app',$settings)) {
   if ($_GET['authsetup']==0 || $_GET['authsetup']==1 ) { 
     $output = "<?php\n"; 
 	$unauthenticated=0;
 	if ($_GET['authsetup']==0) $unauthenticated=1;
-    $output .=  '   $' . "settings['unauthenticated-db']=" . $unauthenticated .";\n";
-
+    //$_SESSION['unauthenticated-app']=$unauthenticated;
+	$output .= '  $' . "settings['unauthenticated-app']='" . $unauthenticated . "';\n";
     if ($_GET['authsetup']==1 ) {
 	  include_once("Hydrogen/db/clsDataSource.php");
       //Add a user to the DB and save the password 
@@ -69,7 +76,7 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
 //set $greeting if minimum setup is not yet complete.
 if (empty($settings['JWT-SECRET-KEY'])) {
   $greeting='<h1>Check 1 of 3</h1><br>
-  <ul>
+  <ul class="setupChecklist">
     <li><span style="color:red">X</span> JWT secret key</li>
     <li><span >?</span> Database secret key</li>
     <li><span >?</span> Admin account</li>
@@ -85,12 +92,12 @@ if (empty($settings['JWT-SECRET-KEY'])) {
   ';
 } elseif (empty($settings['SQLITE-SECRET-KEY'])) {
   $greeting='<h1>Check 2 of 3</h1><br>
-    <ul>
+    <ul class="setupChecklist">
     <li><span style="color:green">&#10003;</span> JWT secret key</li>
     <li><span style="color:red">X</span> Database secret key</li>
     <li><span >?</span> Admin account</li>
   </ul>
-  <p>The Hydrogen library does not detect a SQLite secret key in your configuration files, which will be necessary for securing your data. Click the <q>Setup</q> button below to add an auto-generated secret key to the file <code>settingsPasswords.php</code> in your application root, or add one yourself and return to this page if necessary to confirm.</p>
+  <p>The Hydrogen library does not detect a SQLite secret key in your configuration files, which will be necessary for securing data stored in SQLite databases (You can configure alternative databases in a later step). Click the <q>Setup</q> button below to add an auto-generated secret key to the file <code>settingsPasswords.php</code> in your application root, or add one yourself and return to this page if necessary to confirm.</p>
   ';
   $greeting.='<p>Example: <code>$settings[' . "'" . "SQLITE-SECRET-KEY']=" . '"uvaikmgzpk5hgu5ctbggczovdgow";</code></p><br>
   <form>
@@ -108,9 +115,9 @@ if (empty($settings['JWT-SECRET-KEY'])) {
   $dds->setSQL($sql);
   $rrow=$dds->getNextRow();
 
-  if (!isset($settings['unauthenticated-db']) && $rrow['ucount']==0) {
+  if (isset($_SESSION['setup_mode']) && !isset($settings['unauthenticated-app']) && $rrow['ucount']==0) {
     $greeting='<h1>Check 3 of 3</h1><br>
-      <ul>
+      <ul class="setupChecklist">
       <li><span style="color:green">&#10003;</span> JWT secret key</li>
       <li><span style="color:green">&#10003;</span> Database secret key</li>
       <li><span >?</span> Admin account</li>
@@ -132,7 +139,7 @@ if (empty($settings['JWT-SECRET-KEY'])) {
 if(isset($_GET['p']) && strcmp($_GET['p'],"UserAdmin")==0) $page=$_GET['p'];
 if(isset($_GET['p']) && strcmp($_GET['p'],"RoleAdmin")==0) $page=$_GET['p'];
 if(isset($_GET['p']) && strcmp($_GET['p'],"PrivAdmin")==0) $page=$_GET['p'];
-
+if(isset($_GET['p']) && strcmp($_GET['p'],"Mail")==0) $page=$_GET['p'];
 ?>
 
 
@@ -147,11 +154,17 @@ if(isset($_GET['p']) && strcmp($_GET['p'],"PrivAdmin")==0) $page=$_GET['p'];
         if(isset($greeting)) {
           echo $greeting; 
         } elseif(isset($page)) {
-           include('Hydrogen/includes/' . $page . ".php"); 
+           include('Hydrogen/pages/' . $page . ".php"); 
         } else {
-          echo '<p>Setup is complete. What would you like to do next?</p>';
+          echo '<p>Minimal Setup is complete. What would you like to do next?</p>';
           if (!isset($_SESSION['username'])) echo '<p>The following pages require you to be logged in:</p>';
-          echo '<ul>
+		  //see https://github.com/buckaroo-labs/SabreDance/blob/main/index.php lines 184-189
+          echo '<h4>Additional setup</h4><ul>
+            <li><a href="admin.php?p=Mail">Mail</a> (required for user self-registration)</li>
+            <li><a href="admin.php?p=MySQL">MySQL</a></li>
+            <li><a href="admin.php?p=Logos">App branding</a></li>
+          </ul>';
+		  echo '<h4>Role-based Access Control</h4><ul>
             <li><a href="admin.php?p=UserAdmin">User administration</a></li>
             <li><a href="admin.php?p=RoleAdmin">Role administration</a></li>
             <li><a href="admin.php?p=PrivAdmin">Privilege administration</a></li>
