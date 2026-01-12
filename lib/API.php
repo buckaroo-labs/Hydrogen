@@ -35,7 +35,8 @@
 			curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($this->ch, CURLOPT_HTTPHEADER, $reqheaders);
 			curl_setopt($this->ch, CURLOPT_HEADER, 1);
-			curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, '_handleHeader');
+			curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, 
+				[$this, '_handleHeader']);
 			
 		}
 		private function _handleHeader($curl, $header_line) {
