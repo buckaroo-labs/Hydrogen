@@ -26,6 +26,9 @@
 		public function getItemCount() {
 			return $this->itemCount;
 		}
+		public function getURL() {
+			return $this->URL;
+		}
 		public function __construct($userAgent,$authHeader,$per_page=50,$debug=false) {
 			$this->debug=$debug;
 			$this->ratelimit=60;
