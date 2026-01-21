@@ -63,6 +63,9 @@ class HTMLTable {
 	protected $keycols;
 	protected $invisible;
 	protected $hide_headers;
+	protected $fieldNames;
+	protected $fieldTypes;
+	protected $linkTargets;
 
 	public function __construct($fieldNames,$fieldTypes) {
 		$this->fieldNames=$fieldNames;
@@ -90,7 +93,7 @@ class HTMLTable {
 				echo '>' . $header . '</th>';
 			}
 		}
-		echo '</tr>';
+		echo '</tr>' . "\n";
 		$rownum=1;
 	}
 
@@ -158,11 +161,11 @@ class HTMLTable {
 			}
 		}
 
-		echo '</tr>';
+		echo '</tr>' . "\n";
 	}
 
 	public function finish() {
-		echo '</table>';
+		echo '</table>' . "\n";
 	}
 
 }

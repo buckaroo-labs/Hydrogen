@@ -182,14 +182,16 @@ class SQLiteDataSource {
 		//$this->dbconn->exec($sql);
 		$this->stmt=$this->dbconn->query($sql);
 		if(!$this->stmt) {
+			debug($this->dbconn->lastErrorMsg(),"sqlite3.inc.php:185");
 			$this->error_msg=$this->dbconn->lastErrorMsg();
-			debug($this->error_msg,"sqlite3.inc.php");
+			return false;
 		} else {
 			$ncols = $this->stmt->numColumns();
 			for ($i = 1; $i <= $ncols; $i++) {
 				$this->colNames[$i-1] = $this->stmt->columnName($i);
 				$this->colTypes[$i-1] = $this->stmt->columnType($i);
 			}
+			return true;
 		}
 	}
 	function paginate() {
@@ -258,6 +260,10 @@ class SQLiteDataSource {
 
 	public function getStmtResult($stmt) {
 		return $stmt->execute();
+	}
+
+	public function getError() {
+		return $this->dbconn->lastErrorMsg();
 	}
 }//end class
 ?>

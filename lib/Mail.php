@@ -19,18 +19,27 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TL
 $mail->Port       = $settings['SMTPPort'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 //Create an instance; passing `true` enables exceptions
-function sendMail($mailbody,$mailsubject,$mailtoaddress,$mailfromaddress,$mailfromname='',$mailtoname='') {
+function sendMail($mailbody,$mailsubject,$mailtoaddress,$mailfromaddress,$mailfromname='',$mailtoname='',$verbose=false) {
 	global $mail;
 	global $settings;
 	try {
 
 		//Recipients
+		if (strlen($mailfromname>1)) {
+			$mail->setFrom($mailfromaddress,$mailfromname);
+		} else {
+			$mail->setFrom($mailfromaddress);
+		}
 		//$mail->setFrom('from@example.com', 'Mailer');
-		$mail->setFrom($mailfromaddress);
+		if (strlen($mailtoname>1)) {
+			$mail->addAddress($mailtoaddress,$mailtoname);
+		} else {
+			$mail->addAddress($mailtoaddress);
+		}
 		//$mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
 		//$mail->addAddress('ellen@example.com');               //Name is optional
-		$mail->addAddress($mailtoaddress);
-		//$mail->addReplyTo('info@example.com', 'Information');
+		
+		$mail->addReplyTo($mailfromaddress, 'Account services');
 		//$mail->addCC('cc@example.com');
 		//$mail->addBCC('bcc@example.com');
 
@@ -44,11 +53,13 @@ function sendMail($mailbody,$mailsubject,$mailtoaddress,$mailfromaddress,$mailfr
 		$mail->Body = $mailbody;
 		//$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
 		//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
+		if (!$verbose) ob_start();
 		$mail->send();
-		echo 'Message has been sent';
+		if (!$verbose) ob_end_clean();
+		return true;
 	} catch (Exception $e) {
 		echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+		return false;
 	}
 }
 ?>

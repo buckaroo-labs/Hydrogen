@@ -102,7 +102,7 @@ function logOut() {
 
 
 
-	if (!$done_authenticating) {
+	if (!isset($done_authenticating) || !$done_authenticating) {
 		if ($settings['prompt_reg']==1) {
 			echo ("<h2>Registered users log in below:</h2>");
 		}

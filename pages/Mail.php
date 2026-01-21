@@ -1,4 +1,5 @@
 <?php
+require_once("Hydrogen/lib/Mail.php");
 	$instructions="";
 	$feedback="";
 	if (!file_exists('vendor/autoload.php')) {
@@ -59,13 +60,34 @@
 			echo '<p id="instructions">' . $instructions . '</p>';
 		}
 	} else {
-		//good to go!
-		echo '<h3>Mail Setup</h3><p>Mail setup appears to be complete.<p>';
-		//give config details ...
-		echo '<p>Your SMTP Server hostname is <code>' . $settings['SMTPHost'] . '</code>.<p>';
-		echo '<p>Your SMTP Server port is <code>' . $settings['SMTPPort'] . '</code>.<p>';
-		echo '<p>Your SMTP Server username is <code>' . $settings['SMTPUsername'] . '</code>.<p>';
-		echo '<p>Your SMTP Server password should be found in your <code>settingsPasswords.php</code> file.<p>';
+		//All minimal setup tests have completed. Now we can check for POSTED
+		//data, handle it, and display the results or a default response.
+
+		$default_response='<h3>Mail Setup</h3><p>Mail setup appears to be complete.<p>';
+		$default_response .= '<p>Your SMTP Server hostname is <code>' . 		$settings['SMTPHost'] . '</code>.<p>';
+		$default_response .=  '<p>Your SMTP Server port is <code>' . $settings['SMTPPort'] . '</code>.<p>';
+		$default_response .=  '<p>Your SMTP Server username is <code>' . $settings['SMTPUsername'] . '</code>.<p>';
+		$default_response .=  '<p>Your SMTP Server password should be found in your <code>settingsPasswords.php</code> file.<p>';
+		$default_response .=  '<div id="sendTestEmail"><form method="POST">
+		  <label for="email">Send a test email to:</label>
+  			<input type="email" id="email" name="email_test_destination">
+  			<input type="submit" value="Send">
+		</form></div>';
+
+		if (isset($_POST['email_test_destination'])) {
+			if (!filter_var($_POST['email_test_destination'],FILTER_VALIDATE_EMAIL)) {
+				echo '<p>Invalid email input.</p>';
+			} else {
+				if (sendMail('This email is to test the configuration of your new application.','Application configuration',$_POST['email_test_destination'],$settings['mailfromaddress'],'','',true)) {
+					echo '<div id="mailtestresults" style="margin-top 30px; font-weight: bold; color: red;"><p>Test email sent successfully.</p></div>'; //success;
+				} else {
+					echo '<div id="mailtestresults" style="margin-top 30px; font-weight: bold; color: red;"><p>Test email failed.</p></div>';//failure;
+				}
+			}
+
+		} else {
+			echo $default_response;
+		}
 	}
 
 ?>

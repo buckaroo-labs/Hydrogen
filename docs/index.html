@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hydrogen documentation</title>
+    <title>Hydrogen Documentation</title>
 
     <!--Bootstrap and JQuery-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
         <a target="_blank" href="https://github.com/buckaroo-labs/Hydrogen">Hydrogen</a> is a Framework for development and documentation of responsive web applications. It is based on a <a target="_blank" href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_home">w3schools example</a>, using <a target="_blank" href="https://www.w3schools.com/w3css/default.asp">w3.css</a>, and has been in sporadic development since 2014. 
       </p>
       <p>
-        Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include <span class="inprogress">SQLite</span>, MySQL, and Oracle.
+        Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include <span class="inprogress">SQLite</span>, MySQL, and (sort of) Oracle. The guiding principle of this project is to reduce barriers to productivity so that developers can focus on creating their particular application rather than repeating steps that are common to many applications.
       </p>
       <p>
         This document is built on <a href="metadoc.html">HDoc</a>, a tool built specifically for the documentation of the Hydrogen project, but easily repurposed elsewhere. See the HDoc <a href="metadoc.html">meta-documentation</a> for more about this document&apos;s layout and styling.
@@ -68,23 +68,45 @@
 
       </ul>
       <p>Regarding documentation, see <a href="metadoc.html">HDoc</a>.</p>
-      <div class="contentsL3" id="Responsive_Design__Requirements"></div>
+      <div class="contentsL3" id="Responsive_Design__Requirements">
+        <ul>
+          <li>Have a built-in, customizable top-of-page button</li>
+        </ul>
+      </div>
       <div class="contentsL3" id="Easy_Setup__Requirements">
         <ul>
           <li class="inprogress">Avoid the need for manually configuring a database connection</li>
           <li class="inprogress">Provide a library of PNG images for commonly-needed navigation functions</li>
+          <li>Support pagination of search results</li>
+          <li>Support alternate table and card layouts of search results</li>
         </ul>
       </div>
       <div class="contentsL3" id="Security__Requirements">
-        <p>User registration</p>
+        <h4>User registration</h4>
         <ul>
-          <li class="inprogress">Optionally prevent bot traffic</li>
+          <li class="inprogress">Prevent bot traffic</li>
+          <li>A system-generated username is assigned upon registration of email address. </li>
+          <li>To complete registration, users must supply a first and last name. </li>
         </ul>
-        <p>Password Authentication</p>
+        <h4>Account self-service</h4>
+        <ul>
+          <li>Users are able to request a reset of their own password.
+          </li>
+          <li>Users may choose their own username, with reasonable limitations.
+          </li>
+          <li>Users may set a profile image for their account.
+          </li>
+          <li>
+            Users may change their first and last names and/or email address.
+          </li>
+        </ul>
+        <h4>Password Authentication</h4>
         <ul>
           <li class="inprogress">Support password age, reuse, length and complexity requirements</li> 
+          <li>Allow users to log in using either their username or email address.</li>
+          
         </ul>
-        <p>JWT Authentication</p>
+        <h4>JWT Authentication</h4>
         <ul class="inprogress">
           <li>Configurable expiration</li>
           <li>
@@ -93,7 +115,7 @@
 
 
         </ul>
-        <p class="incomplete">SQLite database security</p>
+        <h4 class="incomplete">SQLite database security</h4>
       </div>
       <div class="contentsL3 incomplete" id="Extensibility__Requirements">
 
@@ -101,6 +123,7 @@
       <div class="contentsL3 incomplete" id="Customization__Requirements">
         <ul>
           <li>Easily add Google Fonts to page template</li>
+          <li>Easily manage fonts throughout application</li>
         </ul>
       </div>
       <div class="contentsL3 incomplete" id="Compatibility__Requirements">
@@ -112,47 +135,12 @@
       </div>
     </div>
     <div class="contentsL2 incomplete" id="Implementation">
-      <div class="contentsL3" id="Page_templates">
-        <ul>
-          <li>Have default stylesheet in Hydrogen directory which can be overridden by separate stylesheet file at web root</li>
-          <li>Set nav- menu-bar sizes in global settings; have template CSS driven by PHP to set margins, widths, and heights accordingly</li>
-        </ul>
-
-      </div>
-      <div class="contentsL3 incomplete" id="Easy_Setup__Design">
-        <ul>
-          <li>Use SQLite as the default RDBMS</li>
-        </ul>
-      </div>
-      <div class="contentsL3 incomplete" id="Security__Design">
-          <p>User registration</p>
-          <ul>
-            <li>Use reCAPTCHA for preventing bot usage</li>
-          </ul>
-          <p>Password Authentication</p>
-          <p>JWT Authentication</p>
-          <ul>
-            <li>
-               Add a status column to the users table; populate on registration and check it on login or cookie authent
-            </li>
-            <li>
-              Use a <q>Remember Me</q> checkbox
-            </li>
-
-          </ul>
-          <p>SQLite database security</p>
-      </div>
-      <div class="contentsL3 incomplete" id="Extensibility__Design">
-
-      </div>
-      <div class="contentsL3 incomplete" id="Customization__Design">
-        <ul>
-          <li>Easily add Google Fonts to page template</li>
-        </ul>
-      </div>
-    </div>
+    <p>See <a href="designrationale.html">Design Rationale</a></p>
+		<p>Design goals and summary</p>
+	</div>
     <div class="contentsL2 incomplete" id="Testing">
-		<p>Testing plan and results</p>
+    <p>See <a href="testingplan.html">Testing Plan</a></p>
+		<p>Testing plan and results summary</p>
 	</div>
     <div class="contentsL2 incomplete" id="Usage">
 		<p>guide</p>

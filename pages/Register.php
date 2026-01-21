@@ -43,7 +43,7 @@ $useCase=1;
 if (isset($email) and $email !="") $useCase=2;
 if (isset($reset_code) and $reset_code !="") $useCase=3;
 if (isset($password) and $password!="") $useCase=4;
-debug ("Use Case: " . $useCase);
+debug ("Use Case: " . $useCase,"pages/Register:46");
 
 
 function validateMail ($email_address) {
@@ -80,16 +80,19 @@ function validateMail ($email_address) {
 		//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
 		//$stmt->execute();
 		debug ("Inserting email: " . $email_address, "pages/Register/82");
-		$result=$dds->setSQL($sql);
-		if ($result) {
+		$success=$dds->setSQL($sql);
+		
+		if ($success) {
 			$emailValid=true;
 			$username=$email_address;
 			debug ("Inserted email: " . $email_address, "pages/Register/87");
+		} else {
+			debug ("email insertion failed: " . $email_address . ": " . $dds->getError() , "pages/Register/87");
 		}
 	}
 	$returnStatus='true';
 	if(!$emailValid) $returnStatus='false';
-	debug ("Returning email validation of '" . $returnStatus . "': " . $email_address, "pages/Register/54");
+	debug ("Returning email validation of '" . $returnStatus . "': " . $email_address, "pages/Register/92");
 	return $emailValid;
 }
 
@@ -134,17 +137,23 @@ function sendResetMail ($mailTo, $resetLink) {
 	$message = '
 	<html>
 	<head>
-	<title>HTML email</title>
+	<title>Account request</title>
 	</head>
 	<body>
-	<p>Click the link below to reset your password:</p>
-	<a href="' . $resetLink . '">' . $resetLink . '</a>
+	<p>';
+	$message='We have recieved a request to establish an account or reset a password. If you did not make this request, 
+	you can ignore this email.';
+	$remainder='</p><p>To set or reset your password, click the following link:</p>
+	<a href="' . $resetLink . '">Reset password</a>
 	</body>
-	</html>
-	';
+	</html>	';
+	//uncomment this when delivery troubleshooting is done
+	//$message .= $remainder;
+	$message.=' To set or reset your password, copy the following and paste it in your browser: ' 
+	. str_replace('http://','',$resetLink) ;
 	
 
-	sendMail($message,$subject,$mailTo,$settings['mailfromaddress']);
+	sendMail($message,$subject,$mailTo,$settings['mailfromaddress'],'Sheldrake Industries','Subscriber',true);
 
 }
 
@@ -174,10 +183,17 @@ function createResetCode ($email_address) {
 }
 
 if ($useCase==1 or $useCase==3) {
-
+	debug ("Validating reset code","pages/Register:179");
 	//validate the code
-	if($useCase==3 and validateResetCode($reset_code,$username)) $password_reset=true;
-	if($useCase==3 and !validateResetCode($reset_code,$username)) debug ("Invalid reset code for use case 3");
+	if($useCase==3) {
+		$result=validateResetCode($reset_code,$username);
+		if ($result) {
+			$password_reset=true;
+			debug ("Valid reset code for use case 3");
+		} else {
+			 debug ("Invalid reset code for use case 3");
+		}
+	}
 
 	echo '<form id="registrationForm" action="' . $settings['registration_page'] . '" method="post" name="regForm" id="regForm" >
 	<table>';
@@ -186,7 +202,7 @@ if ($useCase==1 or $useCase==3) {
 		echo '<tr><td>Your e-mail address: </td>';
 		echo '<td>
 		<input id="botkiller-input" type="hidden" name="botkiller" value="86">
-		<input name="email" type="email" id="usr_email"  maxlength="30" size="25" value="';
+		<input name="email" type="email" size="30" id="usr_email"  maxlength="50" size="25" value="';
 		if(isset($_POST["email"])) echo $email; 
 		echo '"></td></tr>';
 	}
@@ -232,11 +248,11 @@ if ($useCase==2 or $useCase==4) {
 	if($useCase==2 ) {
 		if (validateMail($email)) {
 			$emailValid=true;
-			debug ("Valid email: " . $email_address, "pages/Register/273");
+			debug ("Valid email: " . $email, "pages/Register/273");
 			//send an email with link to this page including a session-specific code as GET variable
 			createResetCode($email);
 		} else {
-			debug ("Invalid email: " . $email_address, "pages/Register/276");
+			debug ("Invalid email: " . $email, "pages/Register/276");
 		}
 		
 		

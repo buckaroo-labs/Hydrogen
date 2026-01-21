@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hydrogen Design Rationale</title>
+
+    <!--Bootstrap and JQuery-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <!--Hydrogen Documentation Template CSS-->
+    <link rel="stylesheet" href="hdoc.css">
+    <!--Document-Specific CSS-->
+    <link rel="stylesheet" href="style.css">
+
+    <script src="hdoc.js"></script>
+
+  </head>
+<body>
+    <div class="contentsL2" id="Introduction">
+        <p>This document will explain the design choices meant to support the requirements as defined in the <a href="index.html">Requirements</a> document.</p>
+        <p>These are some of the project's guiding ideas:</p>
+        <ul>
+          <li>
+            Every additional piece of software that a developer has to download or configure is a barrier to productivity.
+          </li>
+          <li>
+            Every service that a developer has independently register for is a barrier to productivity.
+          </li>
+        </ul>
+    </div>
+    <div class="contentsL2" id="Page_templates">
+      <ul>
+        <li>Have default stylesheet in Hydrogen directory which can be overridden by separate stylesheet file at web root</li>
+        <li>Set nav- menu-bar sizes in global settings; have template CSS driven by PHP to set margins, widths, and heights accordingly</li>
+      </ul>
+
+    </div>
+    <div class="contentsL2 incomplete" id="Easy_Setup__Design">
+      <ul>
+        <li>Use SQLite as the default RDBMS</li>
+      </ul>
+    </div>
+    <div class="contentsL2 incomplete" id="Security__Design">
+        <h4>Bot prevention</h4>
+        <p>The user login and registration forms present an attack surface for malicious activity. One common way of preventing usage of such forms by automated attacks is to implement CAPTCHA. The two greatest drawbacks of such a system are that even the most simple CAPTCHA challenges can be a burden on the user, and that their implementation is always a burden on the developer, often requiring registration with some provider.</p>
+        <p>For these reasons, this project is trying a different approach. All forms will include a hidden input containing an integer value. This value will be updated by a JavaScript function, and only form data having the updated value will be processed. Bots typically will not run JavaScript and are merely looking for easy targets or <q>low-hanging fruit</q>.</p>
+        <p>This strategy will not prevent abuse abetted by a human analyst, so that risk ought to be assessed for any given application being built on this framework.</p>
+        
+        <h4>User registration</h4>
+        <p>Sending a password reset or email confirmation link to a user should be easy, but it isn't. The mail server that you pay for, that you supply your own account credentials to, and that obliges you every step of the way through the SMTP message-acceptance protocol may decide that your message looks too much like spam, and consequently discard it as soon as it is done talking to you.</p>
+        <p>It&apos;s an affront to good sense, but to get along in the current world of shared hosting and overwhelming amounts of malicious email, your best option is not to send anything that even looks like a link so that you don&apos;t waste hours of your time wondering why messages aren&apos;t being delivered.</p>
+        <p>For this reason, users registering an email address or requesting a password reset will be sent a single-use alphanumeric code for that purpose. </p>
+
+
+        <h4>Password Authentication</h4>
+        <h4>JWT Authentication</h4>
+        <ul>
+          <li>
+              Add a status column to the users table; populate on registration and check it on login or cookie authent
+          </li>
+          <li>
+            Use a <q>Remember Me</q> checkbox
+          </li>
+
+        </ul>
+        <h4>SQLite database security</h4>
+    </div>
+    <div class="contentsL2 incomplete" id="Extensibility__Design">
+
+    </div>
+    <div class="contentsL2 incomplete" id="Customization__Design">
+      <ul>
+        <li>Easily add Google Fonts to page template</li>
+      </ul>
+    </div>
+
+
+</body>
+</html>

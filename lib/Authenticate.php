@@ -133,7 +133,7 @@ function authenticate($uname, $password) {
 		} else {
 			//This repo used to be Oracle compatible, 
 			//but here is where I no longer bother to test. Beware.
-			oci_bind_by_name($stmt, ':uname', $userName);
+			oci_bind_by_name($stmt, ':uname', $username);
 		}
 
 		$result = $dds->getStmtResult($stmt);

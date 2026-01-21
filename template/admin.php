@@ -1,13 +1,15 @@
 <?php
 $pagetitle="Hydrogen Setup";
 $headline = '<h1>Setup</h1>' ;
+require_once("settingsHydrogen.php");
+session_start();
 //Most of this file deals with initial setup. The many other functions that 
 //this page will serve are accomplished using includes.
 if (array_key_exists('JWT-SECRET-KEY',$settings) && 
 	array_key_exists('SQLITE-SECRET-KEY',$settings) && 
 	array_key_exists('unauthenticated-app',$settings)
 	) {
-		unset($_SESSION['setup_mode']) ;
+		if (array_key_exists('setup-mode',$_SESSION)) unset($_SESSION['setup_mode']) ;
 	} else {
 		//see pgTemplate.php
 		$_SESSION['setup_mode']=true;
