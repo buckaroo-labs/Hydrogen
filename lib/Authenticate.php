@@ -106,7 +106,7 @@ function authenticate($uname, $password) {
 		global $caseSensitiveUsernames;
 		//$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
 		debug("DB Type:" . $dds->dbType());
-		if (strcmp($dds->dbType(),'mysqli')==0) {
+		if (strcmp($dds->dbType(),'mysql')==0) {
 			$where=" upper(username)=upper(?)";
 			if ($caseSensitiveUsernames) $where = " username=?";	
 		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
@@ -125,7 +125,7 @@ function authenticate($uname, $password) {
 
 		//Ideally, more of this binding would be handled at the class level, 
 		//but each library requires a much different syntax.
-		if (strcmp($dds->dbType(),'mysqli')==0) {
+		if (strcmp($dds->dbType(),'mysql')==0) {
 			$rc=$stmt->bind_param("s", $username); 
 			if ( false===$rc ) die('bind_param() failed: ' . htmlspecialchars($stmt->error));
 		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
