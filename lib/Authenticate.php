@@ -139,7 +139,7 @@ function authenticate($uname, $password) {
 		$result = $dds->getStmtResult($stmt);
 		debug("Verifying password","lib/Authenticate");
 		
-		if (strcmp($dds->dbType(),'mysqli')==0) {
+		if (strcmp($dds->dbType(),'mysql')==0) {
 			$rrow=$result->fetch_assoc();
 		} elseif (strcmp($dds->dbType(),'sqlite3')==0) {
 			$rrow = $result->fetchArray();
