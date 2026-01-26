@@ -75,7 +75,7 @@ function lookUpUsername($username) {
 			$strResult=$rrow['uname'];
 			debug("Username found","lib/Authenticate");
 		} else {
-			error_log("Failed login attempt for unknown user '" . $username . "'");
+			error_log("Failed login attempt for unknown user: '" . $username . "'");
 			debug("No matching username","lib/Authenticate");
 		}
 	}
@@ -91,7 +91,7 @@ function authenticate($uname, $password) {
 	//Change log:
 	/*
 	2025-12-08 Set a cookie upon successful authentication
-	2025-12-08 deprecate use of access_token field in user table
+	2026-01-25 repurpose the access_token field in user table
 
 	*/
 	$success=0;
@@ -118,7 +118,7 @@ function authenticate($uname, $password) {
 			$where=" upper(username)=upper(':uname')";
 			if ($caseSensitiveUsernames) $where = " username=':uname'";
 		}
-		$sql = "select count(*) user_count, max(password_hash) max_hash from user where " . $where;
+		$sql = "select count(*) user_count, max(password_hash) max_hash, max(access_token) as temp_pwd from user where " . $where;
 		debug ("Querying db with SQL:" . $sql		);
 		$stmt=$dds->prepare($sql); 
 		if ( false===$stmt ) die('prepare() failed: ' . htmlspecialchars($dds->error));
@@ -169,8 +169,15 @@ function authenticate($uname, $password) {
 
 					//set a persistent login cookie
 					setPersistentLoginCookie($username) ;
-
-
+			//adding a check for the temp password mailed for registration and resets
+			} elseif (($rrow['user_count'] > 0) && password_verify($password,$rrow['temp_pwd'])) {
+					$success=1;
+					debug("Successful authentication with temp password","lib/Authenticate");
+					setPersistentLoginCookie($username) ;
+					$filepath=$settings['DATAFILE_PATH'] . '/user_login.log';
+					$fp = fopen($filepath, 'a');
+					fwrite($fp,  $username . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
+					fclose($fp);
 			} else {
 				$errmsg='Invalid username/password.';
 				$_SESSION['errMsg']=$errmsg;

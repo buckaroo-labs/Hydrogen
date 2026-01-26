@@ -39,6 +39,7 @@ function sanitizePostVar($varname, $method=FILTER_SANITIZE_ENCODED, $allowSpaces
 	if (isset($_POST[$varname])) {
 		$retVal=filter_var($_POST[$varname],$method);
 		if($allowSpaces) $retVal=str_replace('%20',' ',$retVal);
+		$retVal=str_replace('%40','@',$retVal);
 		return $retVal;
 	}
 	else return '';

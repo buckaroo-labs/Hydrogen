@@ -18,18 +18,30 @@ require_once ('Hydrogen/lib/Mail.php');
 require_once ('Hydrogen/lib/Authenticate.php');
 
 /* This page has FOUR sequential use cases:
-1. No GET or POST variables. Ask for an email address
-2. POSTed email address. Validate it and send an email with link to this page including a session-specific code as GET variable .
-3. GET the code from case 2. If it is valid for the session, set the boolean $password_reset to true, and ask for a new password.
-4. POSTed code and password. Update the password for the user.
+1. No GET or POST variables. Ask for an email address.
+
+
+
+2. POSTed email address. 
+	Old response: Validate it and send an email with link to this page 
+		including a session-specific code as GET variable .
+	New response: Emailed links are often censored and may not arrive. 
+		Send a temporary password instead. Hash and store it like a normal
+		password. Instruct the user to click a/the link to the login page
+		and use the temporary username shown on-screen and their emailed password with it.
+
+3. (deprecated) GET the code from case 2. If it is valid for the session, set the boolean $password_reset to true, 
+and ask for a new password.
+
+4. (deprecated) POSTed code and password. Update the password for the user.
 
 */
 
 $username = sanitizeGetVar('username');
-$password = sanitizePostVar('password');
-$reset_code = sanitizeGetVar('reset_code');
-$resetPostCode = sanitizePostVar('reset_code');
-$resetPostUsername = sanitizePostVar('username');
+//$password = sanitizePostVar('password');
+//$reset_code = sanitizeGetVar('reset_code');
+//$resetPostCode = sanitizePostVar('reset_code');
+//$resetPostUsername = sanitizePostVar('username');
 if (isset($_POST['email']) && filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) {
 	//bot prevention
 	if (isset($_POST['botkiller']) && $_POST['botkiller']==1337) {
@@ -41,8 +53,8 @@ if (isset($_POST['email']) && filter_var($_POST['email'],FILTER_VALIDATE_EMAIL))
 
 $useCase=1;
 if (isset($email) and $email !="") $useCase=2;
-if (isset($reset_code) and $reset_code !="") $useCase=3;
-if (isset($password) and $password!="") $useCase=4;
+//if (isset($reset_code) and $reset_code !="") $useCase=3;
+//if (isset($password) and $password!="") $useCase=4;
 debug ("Use Case: " . $useCase,"pages/Register:46");
 
 
@@ -96,7 +108,7 @@ function validateMail ($email_address) {
 	return $emailValid;
 }
 
-
+/*
 function validateResetCode ($code_value,$user_name) {
 	global $dds;
 	$validated=false;
@@ -130,9 +142,35 @@ function sendMail_oracle($mailTo, $resetLink) {
 	END;";
 	$dds->setSQL($sql);
 }
-function sendResetMail ($mailTo, $resetLink) {
+*/
+function sendResetMail($mailTo, $password, $username) {
 	global $settings;
-	$subject = "Password reset";
+	$subject = "Registration or Password reset";
+	
+	$message = '
+	<html>
+	<head>
+	<title>Account request</title>
+	</head>
+	<body>
+	<p>';
+	$message.='We have recieved a request to establish an account or reset a password. If you did not make this request, 
+	you can ignore this email.';
+	$message .='</p><p>Your username is "' . $username . '" and your temporary password is: </p>'
+	 . $password . '<p>You will be able to reset your password after logging in with the temporary password.
+	 We would like to provide you with a link to the login page in this message, 
+	but we find that some systems refuse to deliver mail containing such links. Please follow the 
+	directions you were given at the time this request was made.<p>
+	</body>
+	</html>	';
+	$mailfromname="Account Service";
+	if (isset($settings['mailfromname'])) $mailfromname=$settings['mailfromname'];
+	sendMail($message,$subject,$mailTo,$settings['mailfromaddress'],$mailfromname,'Subscriber',false);
+
+}
+function sendResetMail_old ($mailTo, $resetLink) {
+	global $settings;
+	$subject = "Registration or Password reset";
 	
 	$message = '
 	<html>
@@ -163,22 +201,29 @@ function createResetCode ($email_address) {
 
 	$strKeyspace = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
 	//generate random alphanumeric code, 25 char length
-	$new_code = substr(str_shuffle($strKeyspace),0,25);
+	//$new_code = substr(str_shuffle($strKeyspace),0,25);
+	//the above is not secure enough.
+	$new_code='';
+	for ($i = 0; $i < 25; $i++) {
+        $randomIndex = random_int(0, strlen($strKeyspace)-1);
+        $new_code .= $strKeyspace[$randomIndex];
+    }
 
-	//debug ("Creating reset code for " . $email_address . ", Session ID " . session_id() . ": " . $new_code);
-	$sql = "update user set reset_code='" . $new_code . "', session_id='" . session_id() . 
+	//debug ("Creating temp password for " . $email_address . ", Session ID " . session_id() . ": " . $new_code);
+	$sql = "update user set access_token='" . password_hash($new_code,PASSWORD_BCRYPT) . "', session_id='" . session_id() . 
 		"' where email='" . $email_address . "'";
 	$dds->setSQL($sql);
-
+	/*
 	$reset_link= 'http://' . $_SERVER['SERVER_NAME'];
 	if ($_SERVER['SERVER_PORT']=='443') $reset_link= 'https://' . $_SERVER['SERVER_NAME'];
 	if ($_SERVER['SERVER_PORT']!='80') $reset_link.= ":" . $_SERVER['SERVER_PORT'] ;
 	$reset_link.= $_SERVER['REQUEST_URI'] . "?username=" . $username . "&reset_code=" . $new_code;
 	debug ("Reset link: " . $reset_link);
+	*/
 	if (extension_loaded('oci8')) {
-		sendMail_oracle($email_address,$reset_link);
+		//sendMail_oracle($email_address,$reset_link);
 	} else {
-		sendResetMail($email_address,$reset_link);
+		sendResetMail($email_address,$new_code,$username);
 	}
 }
 
@@ -186,6 +231,7 @@ if ($useCase==1 or $useCase==3) {
 	debug ("Validating reset code","pages/Register:179");
 	//validate the code
 	if($useCase==3) {
+		/*
 		$result=validateResetCode($reset_code,$username);
 		if ($result) {
 			$password_reset=true;
@@ -193,6 +239,7 @@ if ($useCase==1 or $useCase==3) {
 		} else {
 			 debug ("Invalid reset code for use case 3");
 		}
+		*/
 	}
 
 	echo '<form id="registrationForm" action="' . $settings['registration_page'] . '" method="post" name="regForm" id="regForm" >
@@ -208,6 +255,7 @@ if ($useCase==1 or $useCase==3) {
 	}
 	else {
 		//Default password rule is 12-character minumum. 
+		/*
 		if (!isset($passwordRules)) {
 			$passwordRules=new PasswordRules(false);
 			$passwordRules->addRule("min",12,"/\S/","character");
@@ -229,7 +277,9 @@ if ($useCase==1 or $useCase==3) {
 		</tr>
 		<tr>
 		<td colspan="2">&nbsp;</td>
-		</tr>';}
+		</tr>';
+		*/
+	}
 		
 	echo '
 	</table>
@@ -249,20 +299,16 @@ if ($useCase==2 or $useCase==4) {
 		if (validateMail($email)) {
 			$emailValid=true;
 			debug ("Valid email: " . $email, "pages/Register/273");
-			//send an email with link to this page including a session-specific code as GET variable
+			//set and send a temporary password
 			createResetCode($email);
 		} else {
 			debug ("Invalid email: " . $email, "pages/Register/276");
 		}
-		
-		
-	}
-	if($useCase==2 ) {
-		if (!$emailValid) $registration_message="<h4>Invalid email address</h4>";
-
+		if (!$emailValid) $registration_message="<h4>Invalid email address</h4>";	
 	}
 
-	if($useCase==4 and validateResetCode($resetPostCode,$resetPostUsername)) $password_reset=true;
+	//deprecated
+	//if($useCase==4 and validateResetCode($resetPostCode,$resetPostUsername)) $password_reset=true;
 	//Default password rule is 12-character minumum. 
 	if (!isset($passwordRules)) {
 		$passwordRules=new PasswordRules(false);
@@ -273,7 +319,7 @@ if ($useCase==2 or $useCase==4) {
 	
 	$registration_success = "<h4>Password reset successful.</h4>";
 
-
+	//deprecated
 	if ($useCase==4 and $password_reset) {
 			if ($passwordRules->checkPassword($password)) {
 
@@ -289,7 +335,9 @@ if ($useCase==2 or $useCase==4) {
 				$registration_message ="<h4>Password invalid. " . $rules . "</h4> " . $rules ;
 			}
 	} else {
-		if ($useCase==4 or $emailValid) $registration_message ="<p>Check your inbox for a password reset link. Keep this browser window open and open the link using this browser (OK to click on it if this browser is your default).</p>";
+		if ($useCase==4 or $emailValid) $registration_message ="<p>Check your inbox for a 
+		temporary password. Click the 'Log in' link above, keep this browser window open,
+		 and enter the username and password that is mailed to you.</p>";
 	}
 echo $registration_message;
 debug ($registration_message);
