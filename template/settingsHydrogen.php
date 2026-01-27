@@ -1,17 +1,4 @@
 <?php
-//defaults:
-$settings['DEFAULT_DB_TYPE'] = "sqlite";
-//The following settings would be needed for an Oracle or MySQL connection:
-$settings['DEFAULT_DB_USER'] = "username";
-$settings['DEFAULT_DB_HOST'] = "localhost";
-$settings['DEFAULT_DB_PORT'] = "1521";
-$settings['DEFAULT_DB_INST'] = "XE";
-$settings['DEFAULT_DB_MAXRECS'] = 150;
-//Because this file may not be ignored by git, don't put a password 
-//  in this file, but use this format:
-$settings['DEFAULT_DB_PASS'] = "password"; 
-//put any required passwords in this file instead:
-@include ("settingsPasswords.php");
 
 /*
 If these color settings are not set here, defaults may be assigned elsewhere in the code. These aren't colors per se, but classes assigned to elements, which by default will be colored according to w3.css specs. You can use the w3 color classes or something else defined in your styles.css file. ... or even override the colors of the w3 classes in your css. 
@@ -79,7 +66,23 @@ if ($testmode) {
 	$settings['DEBUG']=true;
 
 }
-//Run this once more to override any test values we don't want checked into the git repo for this project
+
+//defaults:
+$settings['DEFAULT_DB_TYPE'] = "sqlite";
+//The following settings would be needed for an Oracle or MySQL connection:
+$settings['DEFAULT_DB_USER'] = "username";
+$settings['DEFAULT_DB_HOST'] = "localhost";
+$settings['DEFAULT_DB_PORT'] = "1521";
+$settings['DEFAULT_DB_INST'] = "XE";
+$settings['DEFAULT_DB_MAXRECS'] = 150;
+//Because this file may not be ignored by git, don't put a password 
+//  in this file, but use this format:
+$settings['DEFAULT_DB_PASS'] = "password"; 
+//put any required passwords in this file instead:
 @include ("settingsPasswords.php");
+
+//settingsPasswords.php can also contain any values for framework testing
+// that we don't want checked into the git repo for this project
+
 
 ?>
