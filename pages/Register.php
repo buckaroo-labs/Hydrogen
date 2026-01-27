@@ -17,7 +17,7 @@ require_once ('Hydrogen/lib/State.php');
 require_once ('Hydrogen/lib/Mail.php');
 require_once ('Hydrogen/lib/Authenticate.php');
 
-/* This page has FOUR sequential use cases:
+/* This page had FOUR use cases, two of which are now deprecated:
 1. No GET or POST variables. Ask for an email address.
 
 
@@ -86,11 +86,6 @@ function validateMail ($email_address) {
 	}
 	if (!$emailValid) {
 		$sql = "INSERT INTO user (username,email) values ('" . $email_address . "','" . $email_address . "')";
-		//$stmt=$conn->prepare($sql); 
-		//if ( false===$stmt )         die('prepare() failed: ' . htmlspecialchars($conn->error));
-		//$rc=$stmt->bind_param("ss", $email_address, $email_address); 
-		//if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-		//$stmt->execute();
 		debug ("Inserting email: " . $email_address, "pages/Register/82");
 		$success=$dds->setSQL($sql);
 		
@@ -108,41 +103,6 @@ function validateMail ($email_address) {
 	return $emailValid;
 }
 
-/*
-function validateResetCode ($code_value,$user_name) {
-	global $dds;
-	$validated=false;
-	$sql = "select count(*) from user where username='" . $user_name .
-	 "' and reset_code='" . $code_value . "' and session_id='" . session_id() . "'";
-	$result=$dds->setSQL($sql);
-	$row=$dds->getNextRow();
-	if ($row[0]=1) 	$validated=true;
-	return $validated;
-}
-
-function sendMail_oracle($mailTo, $resetLink) {
-	global $dds;
-	$sql ="BEGIN
-	EXECUTE IMMEDIATE 'ALTER SESSION SET smtp_out_server = ''mailrelay.foo.com'''; 
-	UTL_MAIL.send(sender => 'compass@foo.com',
-	recipients => '". $mailTo . "',
-	subject => 'Password reset',
-	message => '<html>
-		<head>
-		<title>HTML email</title>
-		</head>
-		<body>
-		<p>A password reset has been requested for your ID in the application having the link below. If you did not make this request, the request may have been made in error.</p>
-		<p>Click the link below to reset your password:</p><br>
-		<a href=' || chr(34) || '". $resetLink . "' || chr(34) || '>' || '". $resetLink . "' || '</a>
-		</body>
-		</html>
-		',
-	mime_type => 'text/html; charset=UTF-8');
-	END;";
-	$dds->setSQL($sql);
-}
-*/
 function sendResetMail($mailTo, $password, $username) {
 	global $settings;
 	$subject = "Registration or Password reset";
@@ -155,7 +115,7 @@ function sendResetMail($mailTo, $password, $username) {
 	<body>
 	<p>';
 	$message.='We have recieved a request to establish an account or reset a password. If you did not make this request, 
-	you can ignore this email.';
+	you can ignore this email; no changes have been made to your account.';
 	$message .='</p><p>Your username is "' . $username . '" and your temporary password is: </p>'
 	 . $password . '<p>You will be able to reset your password after logging in with the temporary password.
 	 We would like to provide you with a link to the login page in this message, 
@@ -168,63 +128,26 @@ function sendResetMail($mailTo, $password, $username) {
 	sendMail($message,$subject,$mailTo,$settings['mailfromaddress'],$mailfromname,'Subscriber',false);
 
 }
-function sendResetMail_old ($mailTo, $resetLink) {
-	global $settings;
-	$subject = "Registration or Password reset";
-	
-	$message = '
-	<html>
-	<head>
-	<title>Account request</title>
-	</head>
-	<body>
-	<p>';
-	$message='We have recieved a request to establish an account or reset a password. If you did not make this request, 
-	you can ignore this email.';
-	$remainder='</p><p>To set or reset your password, click the following link:</p>
-	<a href="' . $resetLink . '">Reset password</a>
-	</body>
-	</html>	';
-	//uncomment this when delivery troubleshooting is done
-	//$message .= $remainder;
-	$message.=' To set or reset your password, copy the following and paste it in your browser: ' 
-	. str_replace('http://','',$resetLink) ;
-	
-
-	sendMail($message,$subject,$mailTo,$settings['mailfromaddress'],'Sheldrake Industries','Subscriber',true);
-
-}
-
+ 
 function createResetCode ($email_address) {
 	global $dds;
 	global $username;
 
 	$strKeyspace = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
 	//generate random alphanumeric code, 25 char length
-	//$new_code = substr(str_shuffle($strKeyspace),0,25);
-	//the above is not secure enough.
-	$new_code='';
+	$access_token='';
 	for ($i = 0; $i < 25; $i++) {
         $randomIndex = random_int(0, strlen($strKeyspace)-1);
-        $new_code .= $strKeyspace[$randomIndex];
+        $access_token .= $strKeyspace[$randomIndex];
     }
 
-	//debug ("Creating temp password for " . $email_address . ", Session ID " . session_id() . ": " . $new_code);
-	$sql = "update user set access_token='" . password_hash($new_code,PASSWORD_BCRYPT) . "', session_id='" . session_id() . 
+	//debug ("Creating temp password for " . $email_address . ", Session ID " . session_id() . ": " . $access_token);
+	$sql = "update user set access_token='" . password_hash($access_token,PASSWORD_BCRYPT) . "', session_id='" . session_id() . 
 		"' where email='" . $email_address . "'";
 	$dds->setSQL($sql);
-	/*
-	$reset_link= 'http://' . $_SERVER['SERVER_NAME'];
-	if ($_SERVER['SERVER_PORT']=='443') $reset_link= 'https://' . $_SERVER['SERVER_NAME'];
-	if ($_SERVER['SERVER_PORT']!='80') $reset_link.= ":" . $_SERVER['SERVER_PORT'] ;
-	$reset_link.= $_SERVER['REQUEST_URI'] . "?username=" . $username . "&reset_code=" . $new_code;
-	debug ("Reset link: " . $reset_link);
-	*/
-	if (extension_loaded('oci8')) {
-		//sendMail_oracle($email_address,$reset_link);
-	} else {
-		sendResetMail($email_address,$new_code,$username);
-	}
+	
+	sendResetMail($email_address,$access_token,$username);
+
 }
 
 if ($useCase==1 or $useCase==3) {

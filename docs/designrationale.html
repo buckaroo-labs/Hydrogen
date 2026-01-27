@@ -39,8 +39,8 @@
     </div>
     <div class="contentsL2" id="Page_templates">
       <ul>
-        <li>Have default stylesheet in Hydrogen directory which can be overridden by separate stylesheet file at web root</li>
-        <li>Set nav- menu-bar sizes in global settings; have template CSS driven by PHP to set margins, widths, and heights accordingly</li>
+        <li>Have a default stylesheet in the Hydrogen directory which can be overridden by a separate stylesheet file at web root</li>
+        <li>Set nav- and menu-bar sizes in global settings; have template CSS driven to set margins, widths, and heights accordingly</li>
       </ul>
 
     </div>
@@ -51,21 +51,33 @@
     </div>
     <div class="contentsL2 incomplete" id="Security__Design">
         <h4>Bot prevention</h4>
-        <p>The user login and registration forms present an attack surface for malicious activity. One common way of preventing usage of such forms by automated attacks is to implement CAPTCHA. The two greatest drawbacks of such a system are that even the most simple CAPTCHA challenges can be a burden on the user, and that their implementation is always a burden on the developer, often requiring registration with some provider.</p>
-        <p>For these reasons, this project is trying a different approach. All forms will include a hidden input containing an integer value. This value will be updated by a JavaScript function, and only form data having the updated value will be processed. Bots typically will not run JavaScript and are merely looking for easy targets or <q>low-hanging fruit</q>.</p>
-        <p>This strategy will not prevent abuse abetted by a human analyst, so that risk ought to be assessed for any given application being built on this framework.</p>
+        <p>
+			The user login and registration forms present an attack surface for malicious activity. One common way of preventing usage of such forms by automated attacks is to implement CAPTCHA. The two greatest drawbacks of such a system are that even the most simple CAPTCHA challenges can be a burden on the user, and that their implementation is always a burden on the developer, often requiring registration with some provider.
+		</p>
+        <p>
+			For these reasons, this project is trying a different approach. All forms will include a hidden input containing an integer value. This value will be updated by a JavaScript function, and only form data having the updated value will be processed. Bots typically will not run JavaScript and are merely looking for easy targets or <q>low-hanging fruit</q>.
+		</p>
+        <p>
+			This strategy will not prevent abuse abetted by a human analyst, so that risk ought to be assessed for any given application being built on this framework.
+		</p>
         
         <h4>User registration</h4>
-        <p>Sending a password reset or email confirmation link to a user should be easy, but it isn't. The mail server that you pay for, that you supply your own account credentials to, and that obliges you every step of the way through the SMTP message-acceptance protocol may decide that your message looks too much like spam, and consequently discard it as soon as it is done talking to you.</p>
-        <p>It&apos;s an affront to good sense, but to get along in the current world of shared hosting and overwhelming amounts of malicious email, your best option is not to send anything that even looks like a link so that you don&apos;t waste hours of your time wondering why messages aren&apos;t being delivered.</p>
-        <p>For this reason, users registering an email address or requesting a password reset will be sent a single-use alphanumeric code for that purpose. </p>
+        <p>
+			Sending a password reset or email confirmation link to a user should be easy, but it isn't. The mail server that you pay for, that you supply your own account credentials to, and that obliges you every step of the way through the SMTP message-acceptance protocol may decide that your message looks too much like spam, and consequently discard it as soon as it is done talking to you.
+		</p>
+        <p>
+			It&apos;s an affront to good sense, but to get along in the current world of shared hosting and overwhelming amounts of malicious email, your best option is not to send anything that even looks like a link so that you don&apos;t waste hours of your time wondering why messages aren&apos;t being delivered.
+		</p>
+        <p>
+			For this reason, users registering an email address or requesting a password reset will be sent an alphanumeric token for that purpose. This token will be described as a <q>temporary password,</q> and it will be stored in hash form alongside the hashed actual password. The current release of Hydrogen may invalidate the token after its first use, expire it after some duration, and/or remind the user to change their password upon successful login (see the <a href="testingplan.html">Testing Plan</a>). In any case, the actual password will not be changed during the reset-request process because, after all, it is initiated by an unauthenticated user.
+		</p>
 
 
         <h4>Password Authentication</h4>
         <h4>JWT Authentication</h4>
         <ul>
           <li>
-              Add a status column to the users table; populate on registration and check it on login or cookie authent
+            Add a status column to the users table; populate on registration and check it on login or cookie authent
           </li>
           <li>
             Use a <q>Remember Me</q> checkbox
