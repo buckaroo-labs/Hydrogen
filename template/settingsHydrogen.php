@@ -76,13 +76,14 @@ $settings['DEFAULT_DB_PORT'] = "1521";
 $settings['DEFAULT_DB_INST'] = "XE";
 $settings['DEFAULT_DB_MAXRECS'] = 150;
 //Because this file may not be ignored by git, don't put a password 
-//  in this file, but use this format:
+//  in this file, but do use this format:
 $settings['DEFAULT_DB_PASS'] = "password"; 
 //put any required passwords in this file instead:
 @include ("settingsPasswords.php");
 
 //settingsPasswords.php can also contain any values for framework testing
-// that we don't want checked into the git repo for this project
+// that we don't want checked into the git repo for this project. 
+// Will override anything above.
 
 
 ?>
