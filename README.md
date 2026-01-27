@@ -14,7 +14,7 @@ Reusable code for page layout, building and executing SQL statements, creating d
 > [!NOTE]
 >## Setup /installation
 >* Clone or copy the files into a "Hydrogen" folder in the application root.
->* For usage examples that include a setup walkthrough, copy or link the files in "/template" to the application root as well.
+>* For usage examples that include a setup walkthrough, copy or link the files in "/template" to the application root as well, and then point a browser to the root (or to index.php).
 >* Install PHPMailer in the same application root (not in the Hydrogen folder): <code>composer require phpmailer/phpmailer</code> Run the template application or see the <code>Hydrogen/docs</code> folder for further configuration instructions (SMTP host, etc).
 
 ## Changes planned for release 2:
