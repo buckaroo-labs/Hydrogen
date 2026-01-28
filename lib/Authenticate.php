@@ -165,6 +165,7 @@ function authenticate($uname, $password) {
 					//$dds->setSQL($sql);
 
 					//write to file
+					debug("Writing to: " . $settings['DATAFILE_PATH'] . '/user_login.log');
 					$filepath=$settings['DATAFILE_PATH'] . '/user_login.log';
 					$fp = fopen($filepath, 'a');
 					fwrite($fp,  $username . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
