@@ -1,4 +1,3 @@
-
 <?php
 /*****************************************************
 
@@ -57,51 +56,6 @@ function showDebugInfo() {
 	echo "<br>";
 };
 
-
-
-//showDebugInfo();
-
-//2025-12-08 moving this code to pgTemplate.php to be able to process cookies
-
-//check if this page was called by the click of the "log out" button
-/*
-if (isset($_POST['flow'])) {
-//echo "flow=" . $_POST['flow'];
-	if ($_POST['flow']="logOut"){
-			logOut();;
-	}
-}
-
-function logOut() {
-	global $settings;
-	//clear the session variables to log them out
-	$_SESSION=array();
-
-	//2025-12-08
-	//remove the persistent login cookie data and expire it
-	//setcookie($settings['JWTTokenName'], "", time() - 3600);
-
-}
-*/
-
-//We define status of "logged in" as a non-empty $_SESSION['username'} token.
-//If the user has already successfully logged in, notify them and offer to log them out
-
-	//The user is not logged in, so figure out if the user has supplied credentials
-	//(i.e. whether this page has called itself from the login form submit button)
-	//2025-12-08 move much of this to pgTemplate to handle cookies
-
-
-	//eventually, lost password/forgotten username help will be needed;
-	//put it here . . .
-
-
-	// -----------------------all IF blocks have completed by this point------------------- -->
-
-	// display the login form with any error message from a previous authentication attempt -->
-
-
-
 	if (!isset($done_authenticating) || !$done_authenticating) {
 		if ($settings['prompt_reg']==1) {
 			echo ("<h2>Registered users log in below:</h2>");
@@ -133,5 +87,4 @@ function logOut() {
 		echo '<p style="margin-bottom: 400px;">Logged in.</p>';
 	}
 
-?>
 

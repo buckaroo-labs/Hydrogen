@@ -52,7 +52,10 @@ function setPersistentLoginCookie($username) {
 		(time() + $settings['JWTExpireTime']) . " with name '" . $settings['JWTTokenName']
 		 . "' for '" . $username . "' at '" . $_SERVER['HTTP_HOST'] ."'" ;
 	if ($cookiestatus) debug ("SUCCESS: " . $statusMsg );
-	if (!$cookiestatus) debug ("FAILURE: " . $statusMsg );
+	if (!$cookiestatus) {
+		debug ("FAILURE: " . $statusMsg );
+		if (headers_sent()) debug ("Headers already sent" );
+	}
 }
 
 function lookUpUsername($username) {

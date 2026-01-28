@@ -158,6 +158,7 @@ if(isset($_GET['p']) && strcmp($_GET['p'],"Mail")==0) $page=$_GET['p'];
         } elseif(isset($page)) {
            include('Hydrogen/pages/' . $page . ".php"); 
         } else {
+		  unset($_SESSION['setup_mode']);
           echo '<p>Minimal Setup is complete. What would you like to do next?</p>';
           if (!isset($_SESSION['username'])) echo '<p>The following pages require you to be logged in:</p>';
 		  //see https://github.com/buckaroo-labs/SabreDance/blob/main/index.php lines 184-189

@@ -109,7 +109,7 @@ function logOut() {
 if (isset($_POST['flow'])) {
 	if ($_POST['flow']="logOut"){
       debug ("Logging out");
-			logOut();;
+			logOut();
 	}
 }
 
@@ -204,7 +204,4 @@ if (isset($settings['head_content'])) echo $settings['head_content'];
       //$dds->setSQL ($sql);
 
   }
-
-?>
-
 
