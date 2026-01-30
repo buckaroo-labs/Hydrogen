@@ -105,3 +105,14 @@ a.footer_item:link, a.footer_item:visited {
 }
 
 
+.rbac_table th, .rbac_table td {
+    padding: 3px;
+}
+
+.rbac_table tr:nth-child(even) {
+    background-color: #DDDDDD;
+}
+
+.rbac_table th {
+    background-color: #DDDDDD;
+}

@@ -1,6 +1,19 @@
 <?php
-$pagetitle="Hydrogen Setup";
-$headline = '<h1>Setup</h1>' ;
+if(isset($_GET['p']) && strcmp($_GET['p'],"Users")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"Roles")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"Privs")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"user")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"role")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"priv")==0) $page=$_GET['p'];
+if(isset($_GET['p']) && strcmp($_GET['p'],"Mail")==0) $page=$_GET['p'];
+
+if (!isset($page)) {
+  $headline = '<h1>Setup</h1>' ;
+  $pagetitle="Hydrogen Setup";
+} elseif ($page!="Mail") {
+  $pagetitle="Application security";
+}
+ 
 require_once("settingsHydrogen.php");
 session_start();
 //Most of this file deals with initial setup. The many other functions that 
@@ -138,17 +151,16 @@ if (empty($settings['JWT-SECRET-KEY'])) {
   }
 }
 
-if(isset($_GET['p']) && strcmp($_GET['p'],"UserAdmin")==0) $page=$_GET['p'];
-if(isset($_GET['p']) && strcmp($_GET['p'],"RoleAdmin")==0) $page=$_GET['p'];
-if(isset($_GET['p']) && strcmp($_GET['p'],"PrivAdmin")==0) $page=$_GET['p'];
-if(isset($_GET['p']) && strcmp($_GET['p'],"Mail")==0) $page=$_GET['p'];
+
 ?>
 
 
 <!-- Main content: shift it to the right when the sidebar is visible -->
 <div class="w3-main">
 
-<?php include 'Hydrogen/elements/LogoHeadline.php';  	 ?>
+<?php 
+  if (!isset($page)) include 'Hydrogen/elements/LogoHeadline.php';  	 
+?>
 
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
@@ -168,9 +180,9 @@ if(isset($_GET['p']) && strcmp($_GET['p'],"Mail")==0) $page=$_GET['p'];
             <li><a href="admin.php?p=Logos">App branding</a></li>
           </ul>';
 		  echo '<h4>Role-based Access Control</h4><ul>
-            <li><a href="admin.php?p=UserAdmin">User administration</a></li>
-            <li><a href="admin.php?p=RoleAdmin">Role administration</a></li>
-            <li><a href="admin.php?p=PrivAdmin">Privilege administration</a></li>
+            <li><a href="admin.php?p=Users">User administration</a></li>
+            <li><a href="admin.php?p=Roles">Role administration</a></li>
+            <li><a href="admin.php?p=Privs">Privilege administration</a></li>
           </ul>';
         }
       ?>

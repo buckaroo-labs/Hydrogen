@@ -1,5 +1,5 @@
 settingsPasswords.php
-template/Thumbs.db
+*/Thumbs.db
 data/*.sqlite
 data/*.sqlite-journal
 Hydrogen/debug.txt
