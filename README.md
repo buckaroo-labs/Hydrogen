@@ -21,6 +21,7 @@ Reusable code for page layout, building and executing SQL statements, creating d
 * Use JWT cookie for persistent login
 * Add external stylesheet link to page template
 * documentation
+* role-based access control
 
 ## Credits
 * Logo from https://www.flaticon.com/free-icons/hydrogen
