@@ -107,7 +107,7 @@ function logOut() {
 }
 
 if (isset($_POST['flow'])) {
-	if ($_POST['flow']="logOut"){
+	if ($_POST['flow']=="logOut"){
       debug ("Logging out");
 			logOut();
 	}
