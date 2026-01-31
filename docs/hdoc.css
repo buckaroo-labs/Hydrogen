@@ -106,3 +106,8 @@ table {
     background-color: rgb(251, 235, 17);
 
 }
+
+.hidden {
+    display: none;
+
+}

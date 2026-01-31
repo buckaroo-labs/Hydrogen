@@ -44,12 +44,12 @@
       </ul>
 
     </div>
-    <div class="contentsL2 incomplete" id="Easy_Setup__Design">
+    <div class="contentsL2" id="Easy_Setup__Design">
       <ul>
-        <li>Use SQLite as the default RDBMS</li>
+        <li>SQLite will be the default RDBMS, which makes the entire application more portable and eliminates the need for configuring a separately-authentication data source.</li>
       </ul>
     </div>
-    <div class="contentsL2 incomplete" id="Security__Design">
+    <div class="contentsL2" id="Security__Design">
         <h4>Bot prevention</h4>
         <p>
 			The user login and registration forms present an attack surface for malicious activity. One common way of preventing usage of such forms by automated attacks is to implement CAPTCHA. The two greatest drawbacks of such a system are that even the most simple CAPTCHA challenges can be a burden on the user, and that their implementation is always a burden on the developer, often requiring registration with some provider.
@@ -73,8 +73,8 @@
 		</p>
 
 
-        <h4>Password Authentication</h4>
-        <h4>JWT Authentication</h4>
+        <h4 class="incomplete">Password Authentication</h4>
+        <h4 class="incomplete">JWT Authentication</h4>
         <ul>
           <li>
             Add a status column to the users table; populate on registration and check it on login or cookie authent
@@ -84,12 +84,12 @@
           </li>
 
         </ul>
-        <h4>SQLite database security</h4>
+        <h4 class="incomplete">SQLite database security</h4>
     </div>
-    <div class="contentsL2 incomplete" id="Extensibility__Design">
+    <div class="contentsL2 hidden" id="Extensibility__Design">
 
     </div>
-    <div class="contentsL2 incomplete" id="Customization__Design">
+    <div class="contentsL2 hidden" id="Customization__Design">
       <ul>
         <li>Easily add Google Fonts to page template</li>
       </ul>

@@ -31,7 +31,7 @@
         <a target="_blank" href="https://github.com/buckaroo-labs/Hydrogen">Hydrogen</a> is a Framework for development and documentation of responsive web applications. It is based on a <a target="_blank" href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_home">w3schools example</a>, using <a target="_blank" href="https://www.w3schools.com/w3css/default.asp">w3.css</a>, and has been in (occasional) development since 2014. 
       </p>
       <p>
-        Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include <span class="inprogress">SQLite</span>, MySQL, and (sort of) Oracle. The guiding principle of this project is to reduce barriers to productivity so that developers can focus on creating their particular application rather than repeating steps that are common to many applications.
+        Hydrogen is designed for small projects that run on inexpensive hosting, e.g. a LAMP stack, and runs on vanilla PHP. Data storage options include SQLite, MySQL, and (sort of) Oracle. The guiding principle of this project is to reduce barriers to productivity so that developers can focus on creating their particular application rather than repeating steps that are common to many applications.
       </p>
       <p>
         This document is built on <a href="metadoc.html">HDoc</a>, a tool built specifically for the documentation of the Hydrogen project, but easily repurposed elsewhere. See the HDoc <a href="metadoc.html">meta-documentation</a> for more about this document&apos;s layout and styling.
@@ -46,8 +46,8 @@
       <ul>
         <li>Consistent look for multi-page applications</li>
         <li>Dynamic menu and navigation bars</li>
-        <li class="inprogress">Simple identity and access management with role-based access control</li>
-        <li class="inprogress">Persistent login through the use of token cookies (JWT)</li>
+        <li>Simple identity and access management with role-based access control</li>
+        <li>Persistent login through the use of token cookies (JWT)</li>
         <li>Simplified creation of HTML tables from SQL data sources</li>
         <li>Pagination of table data</li>
         <li>Logging of debugging output</li>
@@ -59,12 +59,12 @@
       <p>Hydrogen is designed to support the following high-level non-functional requirements:</p>
       <ul>
         <li>Usability on both desktop and mobile browsers</li>
-        <li class="inprogress">Ease of setup</li>
-        <li class="inprogress">Security</li>
-        <li class="inprogress">Extensibility via APIs</li>
-        <li class="inprogress">Customization via CSS, JS, PHP</li>
-        <li class="inprogress">Clearly-structured and -commented code</li>
-        <li class="inprogress">Up-to-date library compatibility</li>
+        <li>Ease of setup</li>
+        <li>Security</li>
+        <li class="hidden">Extensibility via APIs</li>
+        <li>Customization via CSS, JS, PHP</li>
+        <li>Clearly-structured and -commented code</li>
+        <li>Up-to-date library compatibility</li>
 
       </ul>
       <p>Regarding documentation, see <a href="metadoc.html">HDoc</a>.</p>
@@ -75,16 +75,16 @@
       </div>
       <div class="contentsL3" id="Easy_Setup__Requirements">
         <ul>
-          <li class="inprogress">Avoid the need for manually configuring a database connection</li>
-          <li class="inprogress">Provide a library of PNG images for commonly-needed navigation functions</li>
+          <li>Avoid the need for manually configuring a database connection</li>
+          <li>Provide a library of PNG images for commonly-needed navigation functions</li>
           <li>Support pagination of search results</li>
           <li>Support alternate table and card layouts of search results</li>
         </ul>
       </div>
-      <div class="contentsL3" id="Security__Requirements">
+      <div class="contentsL3 hidden" id="Security__Requirements">
         <h4>User registration</h4>
         <ul>
-          <li class="inprogress">Prevent bot traffic</li>
+          <li>Prevent bot traffic</li>
           <li>A system-generated username is assigned upon registration of email address. </li>
           <li>To complete registration, users must supply a first and last name. </li>
         </ul>
@@ -92,18 +92,18 @@
         <ul>
           <li>Users are able to request a reset of their own password.
           </li>
-          <li>Users may choose their own username, with reasonable limitations.
+          <li class="inprogress">Users may choose their own username, with reasonable limitations.
           </li>
-          <li>Users may set a profile image for their account.
+          <li class="inprogress">Users may set a profile image for their account.
           </li>
-          <li>
+          <li class="inprogress">
             Users may change their first and last names and/or email address.
           </li>
         </ul>
         <h4>Password Authentication</h4>
         <ul>
           <li class="inprogress">Support password age, reuse, length and complexity requirements</li> 
-          <li>Allow users to log in using either their username or email address.</li>
+          <li class="inprogress">Allow users to log in using either their username or email address.</li>
           
         </ul>
         <h4>JWT Authentication</h4>
@@ -112,21 +112,16 @@
           <li>
             Be sure to check privileges and account status in the database no matter what a token says
           </li>
-
-
         </ul>
-        <h4 class="incomplete">SQLite database security</h4>
-      </div>
-      <div class="contentsL3 incomplete" id="Extensibility__Requirements">
 
       </div>
-      <div class="contentsL3 incomplete" id="Customization__Requirements">
+      <div class="contentsL3 hidden" id="Customization__Requirements">
         <ul>
           <li>Easily add Google Fonts to page template</li>
           <li>Easily manage fonts throughout application</li>
         </ul>
       </div>
-      <div class="contentsL3 incomplete" id="Compatibility__Requirements">
+      <div class="contentsL3 hidden" id="Compatibility__Requirements">
         <ul>
           <li>PHP Version</li>
           <li>mysqli rather than PDO</li>
@@ -134,16 +129,17 @@
         </ul>
       </div>
     </div>
-    <div class="contentsL2 incomplete" id="Implementation">
+    <div class="contentsL2 inprogress" id="Implementation">
     <p>See <a href="designrationale.html">Design Rationale</a></p>
 		<p>Design goals and summary</p>
 	</div>
-    <div class="contentsL2 incomplete" id="Testing">
+    <div class="contentsL2 inprogress" id="Testing">
     <p>See <a href="testingplan.html">Testing Plan</a></p>
 		<p>Testing plan and results summary</p>
 	</div>
-    <div class="contentsL2 incomplete" id="Usage">
-		<p>guide</p>
+    <div class="contentsL2 inprogress" id="Usage">
+		<p>See <a href="usage.html">Usage Guide</a></p>
+		<p>Usage summary</p>
 	</div>
 
   </body>
