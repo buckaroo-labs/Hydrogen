@@ -3,7 +3,8 @@
 $sql="select id, username, email from user where id = " . $userID ;
 	
 $result = $dds->setSQL($sql) ;
-
+$editableColumns[0]='username';
+$editableColumns[1]='email';
 function eB ($columnName) {
     global $editableColumns;
     global $userID;
@@ -13,17 +14,12 @@ function eB ($columnName) {
                 }
         }
 
-
 }
 
 while ($rrow = $dds->getNextRow()) {
-    //echo "<tr>";
-    
-    //person
     $ID=$rrow[0];
     $userName=$rrow[1];
     $eMail=$rrow[2];
- 
 }
 
 ?>
@@ -40,6 +36,6 @@ while ($rrow = $dds->getNextRow()) {
       </table>
 
 <?php
-
+echo '<p><a href="admin.php?p=Users&action=delete&id='. $ID . '"><img class="button" src="Hydrogen/images/edit/remove.jpg"></a> Delete <p>';
 include ("Hydrogen/rbac/user-roles.inc.php");
 ?>

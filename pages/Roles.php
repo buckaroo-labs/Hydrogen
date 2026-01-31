@@ -46,7 +46,7 @@ if(!$user_is_admin) {
         
 
       </p>';
-if($action=="view") echo '<a href="admin.php?p=Roles&action=add"><img height="20" src="Hydrogen/images/edit/add.jpg"> Add</a>';      
+if($action=="view") echo '<a href="admin.php?p=Roles&action=add"><img class="button" src="Hydrogen/images/edit/add.jpg"> Add</a>';      
  echo '     <table class="sortable rbac_table">
         <tbody>
         ';

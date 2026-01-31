@@ -24,7 +24,7 @@ while ($rrow = $dds->getNextRow()) {
 
   } 
   echo '<tr>
-  <td><a href="admin?p=role&id=' . $rrow[0] . '"><img height="20" src="Hydrogen/images/socnet.png"></a></td>
+  <td><a href="admin.php?p=role&id=' . $rrow[0] . '"><img height="20" src="Hydrogen/images/socnet.png"></a></td>
   <td>' . $rrow[1] . '</td>
   <td>' . $rrow[2] . '</td>
   </tr>';

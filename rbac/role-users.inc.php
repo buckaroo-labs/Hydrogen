@@ -2,7 +2,7 @@
 
 if ($user_is_admin) {
     $targetPage="admin.php?p=role";
-    $leftHandImage="socmed.png";
+    $leftHandImage="socnet.png";
     $nextAction="";
     $i=0;
     $iterations=2;
@@ -33,9 +33,11 @@ if ($user_is_admin) {
 
           $has_records=true;
           if (!$header_printed) {
-            echo '<h4>Users' . $headerAdditionalText . ':  ';
-            if ($user_is_admin and $action=="view") echo '<a href="admin.php?p=role&id=' . $roleID . '&action=users"><img class="button" src="Hydrogen/images/edit/dataentry.png"> Manage</a>';
-            echo '</h4>
+            echo '<br><h4>Users' . $headerAdditionalText . ':  ';
+
+            echo '</h4>';
+			if ($user_is_admin and $action=="view") echo '<a href="admin.php?p=role&id=' . $roleID . '&action=users"><img class="button" src="Hydrogen/images/edit/dataentry.png"> Manage</a>';
+			echo '
             <table>
             <tr>
             <th>ID</th>
