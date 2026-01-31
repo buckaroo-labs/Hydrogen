@@ -1,6 +1,6 @@
 <?php
-include_once ('settingsHydrogen.php');
-include_once ('settingsPasswords.php');
+//include_once ('settingsHydrogen.php');
+//include_once ('settingsPasswords.php');
 require_once ('Hydrogen/db/clsDataSource.php');
 // The default behavior is to disallow usernames 
 //	which would match if forced to same case

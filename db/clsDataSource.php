@@ -289,5 +289,8 @@ if (!isset($dataSource['default'])) {
 	if ($settings['DEFAULT_DB_TYPE']=="mysql") $dataSource['default']=new dataSource();
 	if ($settings['DEFAULT_DB_TYPE']=="sqlite") $dataSource['default']=new SQLiteDataSource();
 }
+	//Default datasource $dds will always point to the source used for authentication
 	$dds = $dataSource['default'];
+	//$appdb will initially point to the same source, but may be changed after authentication
+	$appdb = $dataSource['default'];
 ?>
