@@ -33,6 +33,11 @@ if (!isset($_GET['menu'])) {
     $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 2',"href"=>"2.php","class"=>$settings['color4']);
     $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 3',"href"=>"3.php","class"=>$settings['color4']);
     $sidebar_links[sizeof($sidebar_links)]=array("name"=>'Page 4',"href"=>"4.php","class"=>$settings['color4']);
+} elseif($_GET['menu']=="admin") {
+	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Mail setup',"href"=>"admin.php?p=Mail","class"=>$settings['color4']);
+	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Users',"href"=>"admin.php?p=Users","class"=>$settings['color4']);
+	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Roles',"href"=>"admin.php?p=Roles","class"=>$settings['color4']);
+	$sidebar_links[sizeof($sidebar_links)]=array("name"=>'Privileges',"href"=>"admin.php?p=Privs","class"=>$settings['color4']);
 }
 
 
@@ -41,6 +46,9 @@ $other_menu_class="w3-hide-small " . $settings['color5'];
 
 $navbar_links[sizeof($navbar_links)]=array("name"=>'<img src="logo.png" height="20">',"href"=>"index.php","class"=>"w3-theme-l2");
 $navbar_links[sizeof($navbar_links)]=array("name"=>"Home","href"=>"index.php","class"=> $settings['color3']);
+if (isset($_SESSION['username'])) {
+	$navbar_links[sizeof($navbar_links)]=array("name"=>"Admin","href"=>"admin.php?menu=admin","class"=> $settings['color3']);
+}
 //Best to hide most navbar links on smaller screens, or else they overlap the sidebar
 $navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item A","href"=>"a.php","class"=>"w3-hide-small " .$settings['color3']);
 $navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item B","href"=>"b.php","class"=>"w3-hide-small " .$settings['color3']);
