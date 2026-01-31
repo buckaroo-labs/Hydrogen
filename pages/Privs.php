@@ -2,12 +2,23 @@
 if(!$user_is_admin) {
   echo '<p>Your account lacks the administrative privilege necessary to use this page.</p>';
 } else {
+	/* The "action" determines the page contents, behavior and purpose:
+	1. "view" (default): list the defined privileges 
+	2. "add" : present the form for adding a named privilege
+	3. "insert" : process the submitted data for a new privilege and then proceed to "view"
+	4. "delete" : process the submitted ID for deletion and then proceed to "view"
+	*/
+	$privID=0;
+	if (isset($_GET['id']) && is_numeric($_GET['id'])) $privID=$_GET['id'];
+	if (isset($_POST['id']) && is_numeric($_POST['id'])) $privID=$_POST['id'];
     $action="view";
     if ( isset( $_GET['action'])) {
       if ($_GET['action']=="add") {
         $action="add";
-        //echo "<p>GET-Action=Add</p>";
       }
+      if ($_GET['action']=="delete") {
+        $action="delete";
+      }	  
     }
     if ( isset( $_POST['flow'])) {
       if ($_POST['flow']=="insert") $action= $_POST['flow'];
@@ -16,26 +27,24 @@ if(!$user_is_admin) {
     if ($action=="add") {
       require ("Hydrogen/rbac/priv-add.inc.php"); 
     }  
-
+	if ($action=="delete" && $privID>0 ) { 
+		$sql="delete from privilege where id=" . $privID;
+		$dds->setSQL($sql);
+		$action="view";
+	}
     if ($action=="insert") {
-      if ($user_is_admin  and isset($_POST['privname']) and isset($_POST['pdescription']))    {
+      if (isset($_POST['privname']) and isset($_POST['pdescription']))    {
         //insert the new record and show the results
         $privName=sanitizePostVar('privname');
         $privDesc=sanitizePostVar('pdescription');
-
-        //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
         $sql="insert into privilege (name,description) values ('".$privName."','".$privDesc."')";
-        //$stmt=$dds->prepare($sql); 
-        //if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
-        //$rc=$stmt->bind_param("ss", $privName, $privDesc);  
-        //if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-        //$stmt->execute();
         $dds->setSQL($sql);
         //$rowCount=$stmt->affected_rows;
         $rowCount=1;
-        if ($rowCount==-1) {
+        if ($rowCount!=1) {
           echo "<br><br><h2>Oops!</h2><p>There was a problem adding your record.<p> <br><br>";
         } 
+		$action="view";
       }
     }  
 
@@ -43,7 +52,7 @@ if(!$user_is_admin) {
 echo '      <p>
         The table below lists application privileges.
         ';
-if($action=="view") echo '<a href="admin.php?p=Privs&action=add"><img height="20" src="Hydrogen/images/edit/add.jpg"> Add</a>';
+if($action=="view") echo '<br><a href="admin.php?p=Privs&action=add"><img class="button" src="Hydrogen/images/edit/add.jpg"> </a> Add';
 echo '
       </p>
       <table class="sortable rbac_table">
@@ -55,14 +64,14 @@ $result = $dds->setSQL($sql) ;
 
 
 echo '<tr>';
-echo '<th>ID</th>';
+echo '<th>Link</th>';
 echo '<th>Name</th>';
 echo '<th>Description</th> 
 </tr>';
 while ($rrow = $dds->getNextRow()) {
     //echo '<a name="'. $rrow[0] . '"></a>';
     echo "<tr>";
-        echo '<td><a href="admin.php?p=priv&?id=' . $rrow[0] . '"><img height="20" src="Hydrogen/images/key.png"></td><td>' . $rrow[1] . '</td><td>' , $rrow[2] . "</td>";
+        echo '<td><a href="admin.php?p=priv&id=' . $rrow[0] . '"><img height="20" src="Hydrogen/images/key.png"></td><td>' . $rrow[1] . '</td><td>' , $rrow[2] . "</td>";
 		echo "</tr>
     ";
 	}

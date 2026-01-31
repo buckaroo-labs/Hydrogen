@@ -57,14 +57,16 @@ if ($action=="update") {
     //validate and perform the update, then show the results (change the action to "view")
     $newValue=sanitizePostVar('new_value');
 
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="update " . $tableName . " set " . $column . "=? where " . $keyName . "=?";
-    $stmt=$conn->prepare($sql); 
-    if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
-    $rc=$stmt->bind_param("si", $newValue, $roleID);  
-    if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-    $stmt->execute();
-    $rowCount=$stmt->affected_rows;
+    //$stmt=$appdb->prepare($sql); 
+    //if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
+    //$rc=$stmt->bind_param("si", $newValue, $roleID);  
+    //if ( false===$rc )         die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+    //$stmt->execute();
+    //$rowCount=$stmt->affected_rows;
+	$sql="update " . $tableName . " set " . $column . "='".$newValue."' where " . $keyName . "=". $roleID;
+	$appdb->setSQL($sql);
+	$rowCount=1;
     if ($rowCount==-1) {
       echo "<br><br><h2>Oops!</h2><p>There was a problem processing your update for ID " . $roleID . ": '" . $sql . "'<br>" . $rowCount . " rows updated.
       <br>New value: " . $newValue . "</p><p>Eror: " . $stmt->error . " </p>  </div></div>";
@@ -85,7 +87,7 @@ if ($action=="mapuser") {
     if (is_numeric($_GET['userid'])) $userID= $_GET['userid'];
   }
   if ( isset($roleID) and isset($userID)  ) {
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+    //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="insert ignore into m_user_role (role_id,user_id) values (?,?)";
     $stmt=$conn->prepare($sql); 
     if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
@@ -106,7 +108,7 @@ if ($action=="demapuser") {
   if ( isset($roleID) and isset($userID)  ) {
 
 
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+    //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="delete from m_user_role where role_id=? and user_id=?";
     $stmt=$conn->prepare($sql); 
     if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
@@ -126,7 +128,7 @@ if ($action=="mappriv") {
   }
   if ( isset($roleID) and isset($privID)  ) {
 
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+    //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="insert ignore into m_role_privilege (role_id,privilege_id) values (?,?)";
     $stmt=$conn->prepare($sql); 
     if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
@@ -148,7 +150,7 @@ if ($action=="demappriv") {
   if ( isset($roleID) and isset($privID)  ) {
 
 
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+    //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="delete from m_role_privilege where role_id=? and privilege_id=?";
     $stmt=$conn->prepare($sql); 
     if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));

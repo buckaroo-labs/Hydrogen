@@ -104,9 +104,10 @@ a.footer_item:link, a.footer_item:visited {
     text-decoration: none;
 }
 
-
-.rbac_table th, .rbac_table td {
+.rbac_table, .rbac_table th, .rbac_table td {
     padding: 3px;
+	border: 1px solid black;
+  	border-collapse: collapse;
 }
 
 .rbac_table tr:nth-child(even) {
@@ -115,4 +116,8 @@ a.footer_item:link, a.footer_item:visited {
 
 .rbac_table th {
     background-color: #DDDDDD;
+}
+
+img.button {
+	max-height: 25px;
 }
