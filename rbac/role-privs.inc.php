@@ -1,16 +1,16 @@
 <?php
 
-  $targetPage="admin.php?p=priv";
+  $targetPage="admin.php?p=role";
   $leftHandImage="key.png";
   $nextAction="";
   $i=0;
-  $iterations=1;
+  $iterations=2;
   $headerAdditionalText="";
   if ($action=="privs")  {
      $nextAction="&action=demappriv";
      $headerAdditionalText=" in role";
      $leftHandImage="edit/remove.jpg";
-     $targetPage="admin.php?p=role";
+     //$targetPage="admin.php?p=role";
      $maybeNot="";
      $iterations=2;
   }
@@ -37,7 +37,7 @@
         if (!$header_printed) {
 
           echo '<h4>Privileges' . $headerAdditionalText . ':  ';
-          if ($user_is_admin and $action=="view") echo '<a href="admin.php?p=role&id=' . $roleID . '&action=privs"><img height="30" src="Hydrogen/images/edit/dataentry.png"> Manage</a>';
+          if ($user_is_admin and $action=="view") echo '<a href="admin.php?p=role&id=' . $roleID . '&action=privs"><img class="button" src="Hydrogen/images/edit/dataentry.png"> Manage</a>';
           echo '</h4>
           <table>
           <tr>
@@ -56,7 +56,7 @@
           $keyID=$roleID;
         }
         echo '<tr>
-        <td><a href="' . $targetPage . '&id=' . $keyID . $additionalGet . '"><img height="20" src="Hydrogen/images/'. $leftHandImage .'"></a></td>
+        <td><a href="' . $targetPage . '&id=' . $keyID . $additionalGet . '"><img class="button" src="Hydrogen/images/'. $leftHandImage .'"></a></td>
         <td>' . $rrow[1] . '</td>
         <td>' . $rrow[2] . '</td>
         </tr>';
