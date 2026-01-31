@@ -72,9 +72,13 @@ class HTMLTable {
 		$this->fieldTypes=$fieldTypes;
 	}
 
-	public function start() {
-		//echo ('<table class="sortable"><tr>');
-		echo ('<table class="sortable w3-table-all"><tr>');
+	public function start($tableclass="w3schools") {
+		if ($tableclass=="bootstrap") {
+			echo ('<table class="sortable table"><tr>');
+		} else {
+			echo ('<table class="sortable w3-table-all"><tr>');
+		}
+
 		$arraylength=count($this->fieldNames);
 		//echo ('<th>array length: '.$arraylength.'</th>');
 		for ($field =0; $field < $arraylength; $field++) {
