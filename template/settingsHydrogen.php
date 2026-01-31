@@ -53,6 +53,9 @@ if (isset($_SESSION['username'])) {
 $navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item A","href"=>"a.php","class"=>"w3-hide-small " .$settings['color3']);
 $navbar_links[sizeof($navbar_links)]=array("name"=>"Navbar item B","href"=>"b.php","class"=>"w3-hide-small " .$settings['color3']);
 
+//GET variables to persist between page clicks
+$stateVarList=array('menu','id');
+
 //For testing:
 $testmode=true;
 if ($testmode) {
