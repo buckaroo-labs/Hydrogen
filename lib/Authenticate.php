@@ -99,6 +99,7 @@ function authenticate($uname, $password) {
 	*/
 	$success=0;
 	global $settings;
+	global $user_is_admin;
 	//if username is not clean, neutralize it
     $username=filter_var($uname,FILTER_SANITIZE_EMAIL);
 	//if ($username!=$uname) $username=filter_var($uname,FILTER_validate_email);
