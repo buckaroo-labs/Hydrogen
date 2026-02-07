@@ -152,7 +152,6 @@ if (isset($settings['login_page']) && isset($require_login) && !isset($_SESSION[
 	    header("Location: " . $settings['login_page']);
         die();
 }
-
 debug ("Template output begins");
 ob_end_flush();
 ?>
