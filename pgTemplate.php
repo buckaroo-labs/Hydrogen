@@ -107,13 +107,13 @@ function logOut() {
 }
 
 if (isset($_POST['flow'])) {
-	if ($_POST['flow']="logOut"){
+	if ($_POST['flow']=="logOut"){
       debug ("Logging out");
 			logOut();
 	}
 }
 
-if (!isset($SESSION['username'])) {
+if (!isset($_SESSION['username'])) {
 	//Handle LogIn
 	if (isset($_POST['uname']) and isset($_POST['passwd'])) {
 		debug("Username and password posted","pgTemplate");
@@ -128,17 +128,20 @@ if (!isset($SESSION['username'])) {
 			unset($_SESSION['errMsg']);
 			$done_authenticating=true;
 			debug("Successful authentication","pgTemplate");
+			
 		} else {
 			debug("Unsuccessful authentication","pgTemplate");
 		}
 
 	} else {$_POST['uname']="";  //define the variable so we can populate the form with it regardless of whether it was blank
 	} // end IF (post:username)
-}
+} 
 //Now instead of the authenticate() function we will just
 //use the 'username' token to check login status
 if (isset($_SESSION['username'])) {
-
+	if (isset($settings['admin-name']) && ($_SESSION['username']==$settings['admin-name'])) {
+		$user_is_admin=true;
+	}
 	showUsernameAndLogoutButton() ;
 	$done_authenticating=true;
 } // end IF (authenticated)

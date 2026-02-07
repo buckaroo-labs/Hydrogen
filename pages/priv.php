@@ -2,7 +2,7 @@
 if(!$user_is_admin) {
   echo '<p>Your account lacks the administrative privilege necessary to use this page.</p>';
 } else {
-$privID=0;
+$privID=1;
 if ( isset( $_GET['id'])) {
   if (is_numeric($_GET['id'])) $privID= $_GET['id'];
 }
@@ -39,7 +39,7 @@ if ($action=="update") {
     //validate and perform the update, then show the results (change the action to "view")
     $newValue=sanitizePostVar('new_value');
 
-    $conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
+    //$conn=new mysqli($settings['DEFAULT_DB_HOST'], $settings['DEFAULT_DB_USER'] , $settings['DEFAULT_DB_PASS'], $settings['DEFAULT_DB_INST']);
     $sql="update " . $tableName . " set " . $column . "=? where " . $keyName . "=?";
     $stmt=$conn->prepare($sql); 
     if ( false===$stmt )         die('prepare() failed for SQL ' . $sql . ': ' . htmlspecialchars($conn->error));
@@ -59,6 +59,6 @@ if ($action=="update") {
   }
 }
 
-if ($action=="view") include ("Hydrogen/rbac/privilege-main.inc.php");
+if ($action=="view") include ("Hydrogen/rbac/priv-main.inc.php");
 
 }

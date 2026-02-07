@@ -58,4 +58,5 @@ if ($action=="update") {
 }
 
 if ($action=="view") include ("Hydrogen/rbac/user-main.inc.php");
+if ($action=="edit") include ("Hydrogen/rbac/user-add.inc.php");
 }

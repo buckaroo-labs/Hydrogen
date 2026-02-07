@@ -16,8 +16,6 @@ if ($layout!='iframe') {
 	echo '<div class="w3-main ' . $layout .'" style="display:none;">';
 }
 ?>
-<!-- shift it to the right when the sidebar is visible -->
-
   <footer id="myFooter" >
     <div class="w3-container <?php echo $settings['color1'] ?> w3-padding-32">
       <?php if (isset($settings['footer_text1'])) echo $settings['footer_text1']; ?>

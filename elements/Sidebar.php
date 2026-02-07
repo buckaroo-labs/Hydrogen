@@ -1,4 +1,6 @@
 <?php
+//state library is needed for making menu choices persist
+include_once("Hydrogen/lib/State.php");
 //A sidebar for consistent look and feel sitewide
 //$settings['facebook_page'] = "https://www.facebook.com/pages/MyPageName/1234567890";
 if (!isset($settings['color4']))  $settings['color4']="w3-hover-blue";
@@ -31,7 +33,13 @@ if (!isset($sidebar_links)) {
 $arrlength=count($sidebar_links);
 for($x=0;$x<$arrlength;$x++)   {
   echo '<tr><td><a href="' . $sidebar_links[$x]['href'];
-  if (isset($_GET['menu'])) echo "?menu=" . $stateVar['menu'];
+  if (isset($_GET['menu'])) {
+	if (strpos($sidebar_links[$x]['href'],"?")) {
+		echo '&menu=' . $stateVar['menu'];
+	} else {
+		echo "?menu=" . $stateVar['menu'];
+	}
+  }
   echo '" class="w3-bar-item w3-button ' . $sidebar_links[$x]['class'] . '">' . $sidebar_links[$x]['name'] .
   	 '</a></td></td></tr>';
   echo "";

@@ -19,8 +19,8 @@ class SQLBuilder{
 	public function addWhere($whereCondition) {
 		//USAGE:
 		/*
-		SQLBuilder1.addWhere("my_number=6");
-		SQLBuilder1.addWhere("my_string='abc'");
+		SQLBuilder1->addWhere("my_number=6");
+		SQLBuilder1->addWhere("my_string='abc'");
 		*/
 		$this->_conditions[count($this->_conditions)] = $whereCondition;
 	}
@@ -29,7 +29,7 @@ class SQLBuilder{
 		//Maps $_POST or $_GET variables to columns of the same name
 		//USAGE: 
 		//$columns = array('size','color','quantity')
-		//addVarColumns($columns,"GET");
+		//SQLBuilder1->addVarColumns($columns,"GET");
 		$arrlength = count($vars);
 		
 		for($x = 0; $x < $arrlength; $x++) {

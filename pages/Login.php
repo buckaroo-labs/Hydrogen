@@ -68,7 +68,11 @@ function showDebugInfo() {
 
 		echo '<table><tr><td>'. $settings['uname_label']. '</td><td><input type="text" name="uname" id="id" value="';
 		echo $sanitized_uname; 
-		echo '"></td></tr><tr><td>Password </td><td><input type="password" name="passwd" id="pwd"><br><tr><td><input name="btnSubmit" type="submit" value="Log in"></td>';
+		echo '"></td></tr>
+		<tr><td>Password </td><td><input type="password" name="passwd" id="pwd"><br><tr>
+		<td><input id="remember" name="rememberme" type="checkbox"><label for="remember"> Remember me</label></td>
+		<td><input name="btnSubmit" type="submit" value="Log in"></td>
+		';
 
 
 		if (isset($_SESSION['errMsg'])) {

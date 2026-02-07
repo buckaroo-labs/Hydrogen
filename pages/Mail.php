@@ -1,5 +1,8 @@
 <?php
-require_once("Hydrogen/lib/Mail.php");
+if(!$user_is_admin) {
+  echo '<p>Your account lacks the administrative privilege necessary to use this page.</p>';
+} else {
+	require_once("Hydrogen/lib/Mail.php");
 	$instructions="";
 	$feedback="";
 	if (!file_exists('vendor/autoload.php')) {
@@ -89,5 +92,5 @@ require_once("Hydrogen/lib/Mail.php");
 			echo $default_response;
 		}
 	}
-
+}
 ?>

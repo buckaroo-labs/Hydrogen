@@ -90,7 +90,7 @@ function formatPhone($phone_string) {
 //See e.g. libPagination.php
 
 //declare a list of GET variables to be maintained and sanitized
-if (!isset($stateVarList)) $stateVarList=array('sortorder','userid','productid');
+if (!isset($stateVarList)) $stateVarList=array('menu','sortorder','userid','productid');
 $arrlength = count($stateVarList);
 $stateVar=array();
 

@@ -90,6 +90,10 @@ function lookUpUsername($username) {
 
 }
 
+function rememberMe() {
+	return (isset($_POST['rememberme']) && $_POST['rememberme']=="on"); 
+}
+
 function authenticate($uname, $password) {
 	//Change log:
 	/*
@@ -99,6 +103,7 @@ function authenticate($uname, $password) {
 	*/
 	$success=0;
 	global $settings;
+	global $user_is_admin;
 	//if username is not clean, neutralize it
     $username=filter_var($uname,FILTER_SANITIZE_EMAIL);
 	//if ($username!=$uname) $username=filter_var($uname,FILTER_validate_email);
@@ -172,12 +177,12 @@ function authenticate($uname, $password) {
 					fclose($fp);
 
 					//set a persistent login cookie
-					setPersistentLoginCookie($username) ;
+					if (rememberMe()) setPersistentLoginCookie($username) ;
 			//adding a check for the temp password mailed for registration and resets
 			} elseif (($rrow['user_count'] > 0) && password_verify($password,$rrow['temp_pwd'])) {
 					$success=1;
 					debug("Successful authentication with temp password","lib/Authenticate");
-					setPersistentLoginCookie($username) ;
+					if (rememberMe()) setPersistentLoginCookie($username) ;
 					$filepath=$settings['DATAFILE_PATH'] . '/user_login.log';
 					$fp = fopen($filepath, 'a');
 					fwrite($fp,  $username . ',' . $_SERVER['REMOTE_ADDR'] . ',' . date("D M j G:i:s T Y") . "\n");
