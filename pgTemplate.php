@@ -143,6 +143,13 @@ if (isset($_SESSION['username'])) {
 	$done_authenticating=true;
 } // end IF (authenticated)
 
+//before starting page output, we need to give whatever page is including this file a way
+// to require users to be logged in 
+if (isset($settings['login_page']) && isset($require_login) && !isset($_SESSION['username'])) {
+	    header("Location: " . $settings['login_page']);
+        die();
+}
+
 debug ("Template output begins");
 ob_end_flush();
 ?>
