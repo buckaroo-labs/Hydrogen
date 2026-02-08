@@ -102,7 +102,16 @@ function logOut() {
 
 	//2025-12-08
 	//remove the persistent login cookie data and expire it
-	setcookie($settings['JWTTokenName'], "", time() - 3600);
+	setcookie($settings['JWTTokenName'], "",
+		[
+			'expires' => time() -3600, 
+			'path' => '/',
+			'domain' =>  $_SERVER['HTTP_HOST'],
+			'secure' => true, // Use true if using HTTPS
+			'httponly' => true, // Prevent JavaScript access
+			'samesite' => 'Strict' // Adjust as needed
+		]
+	);
 
 }
 
