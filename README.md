@@ -17,11 +17,11 @@ Reusable code for page layout, building and executing SQL statements, creating d
 >* For usage examples that include a setup walkthrough, copy or link the files in "/template" to the application root as well, and then point a browser to the root (or to index.php).
 >* Install PHPMailer in the same application root (not in the Hydrogen folder): <code>composer require phpmailer/phpmailer</code> Run the template application or see the <code>Hydrogen/docs</code> folder for further configuration instructions (SMTP host, etc).
 
-## Changes planned for release 2:
+## Updates in Release 2:
 * Use JWT cookie for persistent login
 * Add external stylesheet link to page template
-* documentation
-* role-based access control
+* Documentation
+* Support for role-based access control
 
 ## Credits
 * Logo from https://www.flaticon.com/free-icons/hydrogen
