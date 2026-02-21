@@ -18,7 +18,7 @@ require_once("settingsHydrogen.php");
 session_start();
 //Most of this file deals with initial setup. The many other functions that 
 //this page will serve are accomplished using includes.
-if (array_key_exists('JWT-SECRET-KEY',$settings) && 
+if (array_key_exists('JWT_SECRET_KEY',$settings) && 
 	array_key_exists('SQLITE-SECRET-KEY',$settings) && 
 	array_key_exists('unauthenticated-app',$settings)
 	) {
@@ -29,7 +29,7 @@ if (array_key_exists('JWT-SECRET-KEY',$settings) &&
 	} 
 include "Hydrogen/pgTemplate.php";
 
-if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
+if (isset($_GET['jwtsetup']) && !array_key_exists('JWT_SECRET_KEY',$settings)) {
   //phpinfo() will help add some randomness to the key.
   ob_start();
   phpinfo();
@@ -37,7 +37,7 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
   $output = "<?php\n" . 
 "   //Changing the JWT secret key will invalidate any tokens 
    //issued by the application.\n" .
-	'   $' . "settings['JWT-SECRET-KEY']='" .$secret . "';\n";
+	'   $' . "settings['JWT_SECRET_KEY']='" .$secret . "';\n";
   $output .= "?>";
   $secretsfile = file_put_contents('settingsPasswords.php', $output.PHP_EOL , FILE_APPEND | LOCK_EX);
   
@@ -89,7 +89,7 @@ if (isset($_GET['jwtsetup']) && !array_key_exists('JWT-SECRET-KEY',$settings)) {
 @include('settingsPasswords.php');
 
 //set $greeting if minimum setup is not yet complete.
-if (empty($settings['JWT-SECRET-KEY'])) {
+if (empty($settings['JWT_SECRET_KEY'])) {
   $greeting='<h1>Check 1 of 3</h1><br>
   <ul class="setupChecklist">
     <li><span style="color:red">X</span> JWT secret key</li>
@@ -99,7 +99,7 @@ if (empty($settings['JWT-SECRET-KEY'])) {
   <p>The Hydrogen library does not detect a JWT secret key in your configuration files. Click the <q>Setup</q> button below to add an auto-generated JWT secret key to the file <code>
   settingsPasswords.php</code> in your application root, or add one yourself and return to this page if necessary to confirm.</p>
   ';
-  $greeting.='<p>Example: <code>$settings[' . "'" . "JWT-SECRET-KEY']=" . '"uvaikmu5ctbggczovgzpk5hgdgow";</code></p><br>
+  $greeting.='<p>Example: <code>$settings[' . "'" . "JWT_SECRET_KEY']=" . '"uvaikmu5ctbggczovgzpk5hgdgow";</code></p><br>
   <form>
     <input type="hidden" name="jwtsetup" value="1">
     <input type="submit" value="Setup">

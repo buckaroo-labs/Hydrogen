@@ -9,7 +9,7 @@ You won't need to include it in your own application.
 //  will be redirected to the setup page. Your application needs a unique secret key
 //  to secure login tokens and sqlite database files.
 require_once('settingsHydrogen.php');
-if (empty($settings['JWT-SECRET-KEY'])) {
+if (empty($settings['JWT_SECRET_KEY'])) {
   header("Location: admin.php");
   exit;
 }

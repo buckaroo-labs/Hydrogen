@@ -4,7 +4,7 @@ function getDBConnection3($private) {
 	//$private argument, if true, returns a database available 
 	//only to the logged-in user. ignored if user is unauthenticated.
 	$username='default';
-	$secret_key=$settings['JWT-SECRET-KEY'];
+	$secret_key=$settings['JWT_SECRET_KEY'];
 	if (!empty($settings['SQLITE-SECRET-KEY'])) $secret_key=$settings['SQLITE-SECRET-KEY'];
 	if (isset($_SESSION['username']) && $private) {
 		$username=strtolower($_SESSION['username']);
