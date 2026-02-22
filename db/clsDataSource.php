@@ -35,7 +35,7 @@ $table->finish();
 $debug[__FILE__]=true;
 include_once ('Hydrogen/lib/Debug.php');
 include_once ('settingsHydrogen.php');
-include_once ('settingsPasswords.php');
+@include_once ('settingsPasswords.php');
 
 //(This setting should come from settingsHydrogen.php, but just in case:)
 if (!isset($settings['DEFAULT_DB_TYPE'])) $settings['DEFAULT_DB_TYPE'] = "sqlite";
