@@ -2,7 +2,7 @@
 ob_start();
 
 
-//This file and the "Hydrogen/elem*.php" includes are a PHP adapatation of the HTML/CSS template at
+//This file and the "Hydrogen/elements/*.php" includes are a PHP adapatation of the HTML/CSS template at
 // https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_webpage&stacked=h
 
 //Include this file in your app's pages if you want
@@ -18,7 +18,7 @@ include "Hydrogen/pgTemplate.php";
 
 <div class="w3-main">
 
-<?php include 'Hydrogen/elements/elemLogoHeadline.php';  	 ?>
+<?php include 'Hydrogen/elements/LogoHeadline.php';  	 ?>
 
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
