@@ -95,6 +95,3 @@ $settings['DEFAULT_DB_PASS'] = "password";
 //settingsPasswords.php can also contain any values for framework testing
 // that we don't want checked into the git repo for this project. 
 // Will override anything above.
-
-
-?>
