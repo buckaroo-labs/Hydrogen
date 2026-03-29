@@ -129,7 +129,7 @@ if (!isset($_SESSION['username'])) {
 		$username=sanitizePostVar('uname'); //$_POST['uname']
 		#29-Mar-2026: since authentication is done with SQL prepared statements, we will allow any charaters 
 		//$password=sanitizePostVar('passwd'); ; 
-		$password=$_POST['passwd']
+		$password=$_POST['passwd'];
 		//the credentials are there, so attempt to authenticate
 		//using whatever method is defined in lib/Authenticate.php
 		if (authenticate($username,$password)==1) {
